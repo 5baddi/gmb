@@ -1,0 +1,148 @@
+<?php
+
+/**
+ * ClnkGO
+ *
+ * @copyright Copyright (c) 2022, BADDI Services. (https://baddi.info)
+ */
+
+namespace BADDIServices\ClnkGO\Domains;
+
+use Exception;
+use Throwable;
+use Google\client;
+use Carbon\Carbon;
+use Google\Service\Oauth2;
+use Google_Service_Oauth2;
+use Illuminate\Support\Arr;
+use BADDIServices\ClnkGO\Services\Service;
+use BADDIServices\ClnkGO\Repositories\UserRepository;
+use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
+use BADDIServices\ClnkGO\Models\ObjectValues\GoogleCredentialsObjectValue;
+
+class GoogleService extends Service
+{
+    public const string MANAGE_BUSINESS_SCOPE = 'https://www.googleapis.com/auth/business.manage';
+    public const string MANAGE_BUSINESS_PLUS_SCOPE = 'https://www.googleapis.com/auth/plus.business.manage';
+
+    public Client $client;
+
+    public function __construct(private readonly UserRepository $userRepository)
+    {
+        parent::__construct();
+
+        $this->configure();
+    }
+
+    public function generateAuthenticationURL(): string
+    {
+        return $this->client->createAuthUrl();
+    }
+
+    /**
+     * @throws \Google\Service\Exception
+     */
+    public function exchangeAuthenticationCode(string $code): ?array
+    {
+        $userCredentials = $this->client->fetchAccessTokenWithAuthCode($code);
+        if (Arr::has($userCredentials, 'error')) {
+            return null;
+        }
+
+        $oauth = new Google_Service_Oauth2($this->client);
+        $userInfo = $oauth->userinfo->get();
+        $userCredentials[UserGoogleCredentials::ACCOUNT_ID_COLUMN] = $userInfo->getId();
+
+        return $userCredentials;
+    }
+
+    public function refreshAccessToken(?UserGoogleCredentials $userCredentials = null): void
+    {
+        if (
+            ! $userCredentials instanceof UserGoogleCredentials
+            || empty($userCredentials->getUserId())
+        ) {
+            return;
+        }
+
+        try {
+            if (empty($userCredentials->getAccessToken())) {
+                throw new Exception();
+            }
+
+            $expiresAt = Carbon::parse($userCredentials->getCreated())->addSeconds($userCredentials->getExpiresIn());
+            if ($expiresAt->isFuture()) {
+                return;
+            }
+
+            $this->client->setAccessToken(json_encode([
+                'access_token'  => $userCredentials->getAccessToken(),
+                'refresh_token' => $userCredentials->getRefreshToken(),
+                'expires_in'    => $userCredentials->getExpiresIn(),
+                'created'       => $userCredentials->getCreated(),
+                'id_token'      => $userCredentials->getAttribute(UserGoogleCredentials::ID_TOKEN_COLUMN),
+                'scope'         => $userCredentials->getAttribute(UserGoogleCredentials::SCOPE_COLUMN),
+                'token_type'    => $userCredentials->getAttribute(UserGoogleCredentials::TOKEN_TYPE_COLUMN),
+            ]));
+
+            if (! $this->client->isAccessTokenExpired()) {
+                return;
+            }
+
+            $response = $this->client->fetchAccessTokenWithRefreshToken($userCredentials->getRefreshToken());
+            if (Arr::has($response, 'error')) {
+                throw new Exception();
+            }
+
+            $oauth = new Google_Service_Oauth2($this->client);
+            $userInfo = $oauth->userinfo->get();
+
+            $attributes = GoogleCredentialsObjectValue::fromArray($response)->toArray();
+            $attributes[UserGoogleCredentials::ACCOUNT_ID_COLUMN] = $userInfo->getId() ?? $userCredentials->getAccountId();
+            $attributes[UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN] = $userCredentials->getMainLocationId();
+
+            $this->userRepository->saveGoogleCredentials($userCredentials->getUserId(), $attributes);
+        } catch (Throwable) {
+            $this->userRepository->deleteGoogleCredentials($userCredentials->getUserId());
+        }
+    }
+
+    public function revokeAccessToken(?UserGoogleCredentials $userCredentials = null): void
+    {
+        if (
+            ! $userCredentials instanceof UserGoogleCredentials
+            || empty($userCredentials->getUserId())
+        ) {
+            return;
+        }
+
+        try {
+            if (! empty($userCredentials->getAccessToken())) {
+                $this->client->revokeToken($userCredentials->getAccessToken());
+            }
+        } catch (Throwable) {}
+
+        $this->userRepository->deleteGoogleCredentials($userCredentials->getUserId());
+    }
+
+    private function configure(): void
+    {
+        $this->client = new client();
+
+        try {
+            $this->client->setAuthConfig(config_path('google.json'));
+            $this->client->setApprovalPrompt('force');
+            $this->client->setAccessType('offline');
+            $this->client->setIncludeGrantedScopes(true);
+            $this->client->setRedirectUri(route('dashboard.account.gmb.callback'));
+
+            $this->client->addScope([
+                Oauth2::USERINFO_PROFILE,
+                Oauth2::USERINFO_EMAIL,
+                Oauth2::OPENID,
+                self::MANAGE_BUSINESS_SCOPE,
+                self::MANAGE_BUSINESS_PLUS_SCOPE,
+            ]);
+        } catch (Exception) {}
+    }
+}
