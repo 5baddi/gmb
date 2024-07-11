@@ -22,9 +22,9 @@
         <div>
             <h4 class="alert-title">
                 @if ($alert->type == 'error')
-                &nbsp;Something going wrong&hellip;
+                &nbsp;{{ trans('global.something_going_wrong') }}&hellip;
                 @else
-                &nbsp;Finished!
+                &nbsp;{{ trans('global.finished') }}
                 @endif
             </h4>
             <div class="text-muted">&nbsp;{{ $alert->message }}</div>

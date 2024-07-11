@@ -38,4 +38,6 @@ return [
     'unsupported_file_format' => 'Unsupported file format.',
     'all_rights_reserved' => 'All rights reserved.',
     'copyright' => 'Copyright',
+    'finished' => 'Finished !',
+    'something_going_wrong' => 'Something going wrong.',
 ];
