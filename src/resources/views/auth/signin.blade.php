@@ -46,9 +46,6 @@
                     <div>
                         <label class="form-control-label">{{ trans('global.password') }}</label>
                     </div>
-                    <div class="mb-2 d-none">{{-- TODO: show reset password next version --}}
-                        <a href="{{ route('reset') }}" class="small text-muted text-underline--dashed border-primary">{{ trans('global.reset_password') }}</a>
-                    </div>
                 </div>
                 <div class="input-group">
                     <div class="input-group-prepend">
