@@ -5,7 +5,7 @@
 </p>
 
 
-Auto-posting SaaS to manage Google My Business locations.
+Auto-posting web app to manage Google My Business locations.
 
 ![screenshot](./screenshot.png)
 
