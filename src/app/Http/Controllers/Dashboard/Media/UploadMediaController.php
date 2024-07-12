@@ -32,14 +32,11 @@ class UploadMediaController extends DashboardController
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
                 $file->move(public_path('uploads'), $fileName);
 
-                $scheduledAt = Carbon::createFromFormat(
-                    'Y-M-d H:i',
-                        sprintf(
-                            '%s %s',
-                            $request->input('scheduled_date', date('Y-M-d')),
-                            $request->input('scheduled_time', '00:00')
-                        )
-                    )
+                $scheduledAt = Carbon::parse(sprintf(
+                        '%s %s',
+                        $request->input('scheduled_date', date('Y-M-d')),
+                        $request->input('scheduled_time', '00:00')
+                    ))
                     ->toISOString();
 
                 ScheduledMedia::query()
