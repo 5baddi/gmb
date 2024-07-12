@@ -49,7 +49,7 @@
                         @endif
                     </div>
                     <div class="col-8">
-                        <label class="form-label">URL de l’appel à l’action&nbsp;<span class="text-sm text-secondary">(ce champ ne s’applique qu’aux publications avec lien de soutien à l’appel à l’action)</span></label>
+                        <label class="form-label">L’appel à l’action</label>
                         <input type="text" name="action_url" class="form-control @if ($errors->has('action_url')) is-invalid @endif" value="{{ $scheduledPost?->action_url ?? old('action_url') }}" placeholder="L’appel à l’action"/>
                         @if ($errors->has('action_url'))
                             <div class="invalid-feedback">{{ $errors->first('action_url') }}</div>
