@@ -26,11 +26,15 @@ class SaveScheduledPostController extends DashboardController
         try {
             $isInstantly = empty($request->input('scheduled_date'));
 
-            $scheduledAt = sprintf(
-                '%s %s',
-                $request->input('scheduled_date', date('d/M/Y')),
-                $request->input('scheduled_time', '00:00:00')
-            );
+            $scheduledAt = Carbon::createFromFormat(
+                    'Y-M-d H:i',
+                    sprintf(
+                        '%s %s',
+                        $request->input('scheduled_date', date('Y-M-d')),
+                        $request->input('scheduled_time', '00:00')
+                    )
+                )
+                ->toISOString();
 
             $eventStartDateTime = sprintf(
                 '%s %s',
@@ -49,7 +53,7 @@ class SaveScheduledPostController extends DashboardController
                     [ScheduledPost::ID_COLUMN => $request->input('id')],
                     [
                         ScheduledPost::USER_ID_COLUMN       => $this->user->getId(),
-                        ScheduledPost::SCHEDULED_AT_COLUMN  => Carbon::parse($scheduledAt)->toISOString(),
+                        ScheduledPost::SCHEDULED_AT_COLUMN  => $scheduledAt,
                         ScheduledPost::TOPIC_TYPE_COLUMN    => ScheduledPost::TYPES[$type] ?? ScheduledPost::STANDARD_TYPE,
                         ScheduledPost::STATE_COLUMN         => ScheduledPost::UNSPECIFIED_STATE,
                         ScheduledPost::LANGUAGE_CODE_COLUMN => ScheduledPost::DEFAULT_LANGUAGE_CODE ?? 'fr-FR', // TODO: make dynamic
@@ -69,9 +73,9 @@ class SaveScheduledPostController extends DashboardController
                         ScheduledPost::OFFER_TERMS_CONDITIONS_COLUMN
                         => $request->input(ScheduledPost::OFFER_TERMS_CONDITIONS_COLUMN),
                         ScheduledPost::EVENT_START_DATETIME_COLUMN
-                        => blank($eventStartDateTime) ? null : Carbon::parse($eventStartDateTime)->getTimestamp(),
+                        => blank($eventStartDateTime) ? null : Carbon::createFromFormat('Y-M-d H:i', $eventStartDateTime)->getTimestamp(),
                         ScheduledPost::EVENT_END_DATETIME_COLUMN
-                        => blank($eventEndDateTime) ? null : Carbon::parse($eventEndDateTime)->getTimestamp(),
+                        => blank($eventEndDateTime) ? null : Carbon::createFromFormat('Y-M-d H:i', $eventEndDateTime)->getTimestamp(),
                     ]
                 );
 
