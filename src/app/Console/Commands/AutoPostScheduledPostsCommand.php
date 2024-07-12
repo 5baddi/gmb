@@ -52,7 +52,8 @@ class AutoPostScheduledPostsCommand extends Command
 
         try {
             ScheduledPost::query()
-                ->whereDate(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", Carbon::now())
+                ->whereDate(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", Carbon::now()->format('Y-m-d'))
+                ->whereTime(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", Carbon::now()->format('H:i:s'))
                 ->where(ScheduledPost::STATE_COLUMN, '!=', ScheduledPost::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledPosts) {
                     $scheduledPosts->each(function (ScheduledPost $scheduledPost) {
