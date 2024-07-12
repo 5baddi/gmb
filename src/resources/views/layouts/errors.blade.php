@@ -28,7 +28,7 @@
             @yield('message')
           </p>
           <div class="empty-action">
-            <a href="{{ env('SAAS_URL', 'https://clnkgo.com') }}" class="btn btn-clnkgo">
+            <a href="{{ env('SAAS_URL', 'https://local-up.online') }}" class="btn btn-clnkgo">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                 <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
