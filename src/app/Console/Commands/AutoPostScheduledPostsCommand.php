@@ -51,11 +51,8 @@ class AutoPostScheduledPostsCommand extends Command
         $startTime = microtime(true);
 
         try {
-            $now = Carbon::now('GMT+1');
-
             ScheduledPost::query()
-                ->whereDate(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", $now->format('Y-m-d'))
-                ->whereTime(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", $now->format('H:i:s'))
+                ->where(ScheduledPost::SCHEDULED_AT_COLUMN, "<=", Carbon::now()->format('Y-m-d H:i:s'))
                 ->where(ScheduledPost::STATE_COLUMN, '!=', ScheduledPost::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledPosts) {
                     $scheduledPosts->each(function (ScheduledPost $scheduledPost) {
