@@ -49,9 +49,11 @@ class AutoPostScheduledMediaCommand extends Command
         $startTime = microtime(true);
 
         try {
+            $now = Carbon::now();
+
             ScheduledMedia::query()
-                ->whereDate(ScheduledMedia::SCHEDULED_AT_COLUMN, "<=", Carbon::now()->format('Y-m-d'))
-                ->whereTime(ScheduledMedia::SCHEDULED_AT_COLUMN, "<=", Carbon::now()->format('H:i:s'))
+                ->whereDate(ScheduledMedia::SCHEDULED_AT_COLUMN, "<=", $now->format('Y-m-d'))
+                ->whereTime(ScheduledMedia::SCHEDULED_AT_COLUMN, "<=", $now->format('H:i:s'))
                 ->where(ScheduledMedia::STATE_COLUMN, '!=', ScheduledMedia::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
