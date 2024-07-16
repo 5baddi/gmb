@@ -52,7 +52,7 @@ class AutoPostScheduledMediaCommand extends Command
         try {
             ScheduledMedia::query()
                 ->where(
-                    DB::raw(sprintf('(DATE_FORMAT(%s,\'%%Y-%%m-%%d %%H:%%i:%%s\')', ScheduledMedia::SCHEDULED_AT_COLUMN)),
+                    DB::raw(sprintf('(DATE_FORMAT(%s,\'%%Y-%%m-%%d %%H:%%i:%%s\'))', ScheduledMedia::SCHEDULED_AT_COLUMN)),
                     '<=',
                     Carbon::now()->format('Y-m-d H:i:s')
                 )
