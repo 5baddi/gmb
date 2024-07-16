@@ -50,9 +50,9 @@ class AutoPostScheduledMediaCommand extends Command
 
         try {
             ScheduledMedia::query()
-                ->where(
+                ->whereRaw(
                     sprintf('DATE_FORMAT(%s,\'%%Y-%%m-%%d %%H:%%i:%%s\') <= ?', ScheduledMedia::SCHEDULED_AT_COLUMN),
-                    Carbon::now()->format('Y-m-d H:i:s')
+                    [Carbon::now()->format('Y-m-d H:i:s')]
                 )
                 ->where(ScheduledMedia::STATE_COLUMN, '!=', ScheduledMedia::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledMedias) {

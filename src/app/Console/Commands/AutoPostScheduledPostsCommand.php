@@ -54,7 +54,7 @@ class AutoPostScheduledPostsCommand extends Command
             ScheduledPost::query()
                 ->whereRaw(
                     sprintf('DATE_FORMAT(%s,\'%%Y-%%m-%%d %%H:%%i:%%s\') <= ?', ScheduledPost::SCHEDULED_AT_COLUMN),
-                    Carbon::now()->format('Y-m-d H:i:s')
+                    [Carbon::now()->format('Y-m-d H:i:s')]
                 )
                 ->where(ScheduledPost::STATE_COLUMN, '!=', ScheduledPost::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledPosts) {
