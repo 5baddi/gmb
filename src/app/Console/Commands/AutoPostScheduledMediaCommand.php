@@ -7,6 +7,7 @@ use Exception;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Collection;
@@ -50,7 +51,11 @@ class AutoPostScheduledMediaCommand extends Command
 
         try {
             ScheduledMedia::query()
-                ->where(ScheduledMedia::SCHEDULED_AT_COLUMN, '<=', Carbon::now()->format('Y-m-d H:i:s'))
+                ->where(
+                    DB::raw(sprintf('(DATE_FORMAT(%s,\'%%Y-%%m-%%d %%H:%%i:%%s\')', ScheduledMedia::SCHEDULED_AT_COLUMN)),
+                    '<=',
+                    Carbon::now()->format('Y-m-d H:i:s')
+                )
                 ->where(ScheduledMedia::STATE_COLUMN, '!=', ScheduledMedia::REJECTED_STATE)
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
