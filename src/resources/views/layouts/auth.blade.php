@@ -33,5 +33,8 @@
         <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
         <script src="{{ config('baddi.hcaptcha_js_endpoint') }}" async defer></script>
         <script src="{{ asset('assets/js/baddiservices.main.js') }}"></script>
+        <script type="text/javascript">
+            @yield('script')
+        </script>
     </body>
 </html>

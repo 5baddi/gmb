@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use BADDIServices\ClnkGO\AppLogger;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
 use BADDIServices\ClnkGO\Services\UserService;
 use BADDIServices\ClnkGO\Http\Requests\SignInRequest;
@@ -70,6 +71,8 @@ class AuthenticateController extends Controller
             $this->userService->update($user, [
                 User::LAST_LOGIN_COLUMN    =>  Carbon::now()
             ]);
+
+            Session::put('timezone', $request->input('timezone', 'UTC'));
             
             return redirect()
                 ->route('dashboard')

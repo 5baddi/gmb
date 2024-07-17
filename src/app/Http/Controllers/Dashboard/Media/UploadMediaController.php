@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Session;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
@@ -32,11 +33,15 @@ class UploadMediaController extends DashboardController
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
                 $file->move(public_path('uploads'), $fileName);
 
-                $scheduledAt = Carbon::parse(sprintf(
-                        '%s %s',
-                        $request->input('scheduled_date', date('Y-M-d')),
-                        $request->input('scheduled_time', '00:00')
-                    ))
+                $scheduledAt = Carbon::parse(
+                        sprintf(
+                            '%s %s',
+                            $request->input('scheduled_date', date('Y-M-d')),
+                            $request->input('scheduled_time', '00:00')
+                        ),
+                        Session::get('timezone', 'UTC')
+                    )
+                    ->setTimezone('UTC')
                     ->toISOString();
 
                 ScheduledMedia::query()
