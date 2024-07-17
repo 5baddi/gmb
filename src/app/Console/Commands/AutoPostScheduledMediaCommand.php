@@ -56,7 +56,7 @@ class AutoPostScheduledMediaCommand extends Command
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
                         try {
                             if (Carbon::parse($scheduledMedia->scheduled_at)->isFuture()) {
-                                return;
+                                return false;
                             }
 
                             $user = $this->userService->findById(

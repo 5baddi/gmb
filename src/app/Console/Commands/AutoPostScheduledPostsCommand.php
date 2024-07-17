@@ -57,9 +57,8 @@ class AutoPostScheduledPostsCommand extends Command
                 ->chunkById(10, function (Collection $scheduledPosts) {
                     $scheduledPosts->each(function (ScheduledPost $scheduledPost) {
                         try {
-                            dd($scheduledPost->scheduled_at);
                             if (Carbon::parse($scheduledPost->scheduled_at)->isFuture()) {
-                                return;
+                                return false;
                             }
 
                             $user = $this->userService->findById($scheduledPost->getAttribute(ScheduledPost::USER_ID_COLUMN));
