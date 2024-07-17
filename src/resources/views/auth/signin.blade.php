@@ -77,7 +77,7 @@
     <div class="card-footer px-md-5"></div>
 @endsection
 
-@section('scripts')
+@section('script')
     document.addEventListener("DOMContentLoaded", function() {
         jQuery('input[name=timezone]').val(Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC');
     });
