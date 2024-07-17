@@ -58,6 +58,7 @@ class AutoPostScheduledPostsCommand extends Command
                     $scheduledPosts->each(function (ScheduledPost $scheduledPost) {
                         try {
                             $user = $this->userService->findById($scheduledPost->getAttribute(ScheduledPost::USER_ID_COLUMN));
+
                             if (
                                 ! $user instanceof User
                                 || ! $user->googleCredentials instanceof UserGoogleCredentials
