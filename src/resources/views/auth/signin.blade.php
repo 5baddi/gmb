@@ -21,6 +21,7 @@
         <span class="clearfix"></span>
         <form action="{{ route('auth.signin') }}" method="POST">
             @csrf
+            <input type="hidden" name="timezone"/>
             <div class="form-group">
                 <label class="form-control-label">{{ trans('global.email_address') }}</label>
                 <div class="input-group">
@@ -74,4 +75,10 @@
         </form>
     </div>
     <div class="card-footer px-md-5"></div>
+@endsection
+
+@section('scripts')
+    document.addEventListener("DOMContentLoaded", function() {
+        jQuery('input[name=timezone]').val(Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC');
+    });
 @endsection

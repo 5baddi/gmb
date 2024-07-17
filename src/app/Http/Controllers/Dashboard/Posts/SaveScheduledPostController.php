@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Session;
 use BADDIServices\ClnkGO\Entities\Alert;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
@@ -26,11 +27,15 @@ class SaveScheduledPostController extends DashboardController
         try {
             $isInstantly = empty($request->input('scheduled_date'));
 
-            $scheduledAt = Carbon::parse(sprintf(
-                    '%s %s',
-                    $request->input('scheduled_date', date('Y-M-d')),
-                    $request->input('scheduled_time', '00:00')
-                ))
+            $scheduledAt = Carbon::parse(
+                    sprintf(
+                        '%s %s',
+                        $request->input('scheduled_date', date('Y-M-d')),
+                        $request->input('scheduled_time', '00:00')
+                    ),
+                    Session::get('timezone', 'UTC')
+                )
+                ->setTimezone('UTC')
                 ->toISOString();
 
             $eventStartDateTime = sprintf(
@@ -70,9 +75,23 @@ class SaveScheduledPostController extends DashboardController
                         ScheduledPost::OFFER_TERMS_CONDITIONS_COLUMN
                         => $request->input(ScheduledPost::OFFER_TERMS_CONDITIONS_COLUMN),
                         ScheduledPost::EVENT_START_DATETIME_COLUMN
-                        => blank($eventStartDateTime) ? null : Carbon::parse($eventStartDateTime)->getTimestamp(),
+                        => blank($eventStartDateTime)
+                            ? null
+                            : Carbon::parse(
+                                $eventStartDateTime,
+                                Session::get('timezone', 'UTC')
+                            )
+                            ->setTimezone('UTC')
+                            ->getTimestamp(),
                         ScheduledPost::EVENT_END_DATETIME_COLUMN
-                        => blank($eventEndDateTime) ? null : Carbon::parse($eventEndDateTime)->getTimestamp(),
+                        => blank($eventEndDateTime)
+                            ? null
+                            : Carbon::parse(
+                                $eventEndDateTime,
+                                Session::get('timezone', 'UTC')
+                            )
+                            ->setTimezone('UTC')
+                            ->getTimestamp(),
                     ]
                 );
 

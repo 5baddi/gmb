@@ -35,6 +35,7 @@ class SignInRequest extends FormRequest
             User::EMAIL_COLUMN         => ['required', 'email'],
             User::PASSWORD_COLUMN      => ['required', 'string'],
             'h-captcha-response'       => [new ValidateHCaptcha()],
+            'timezone'                 => ['nullable', 'string'],
         ];
     }
 }
