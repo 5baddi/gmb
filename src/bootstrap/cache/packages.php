@@ -81,6 +81,13 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
+  'propaganistas/laravel-phone' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Propaganistas\\LaravelPhone\\PhoneServiceProvider',
+    ),
+  ),
   'stevebauman/location' => 
   array (
     'providers' => 

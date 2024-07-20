@@ -11,16 +11,16 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts;
 use Throwable;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Session;
 use BADDIServices\ClnkGO\Entities\Alert;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
+use BADDIServices\ClnkGO\Http\Requests\ScheduledPostRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class SaveScheduledPostController extends DashboardController
 {
-    public function __invoke(string $type, Request $request)
+    public function __invoke(string $type, ScheduledPostRequest $request)
     {
         abort_unless(Arr::has(ScheduledPost::TYPES, $type), Response::HTTP_NOT_FOUND);
 
