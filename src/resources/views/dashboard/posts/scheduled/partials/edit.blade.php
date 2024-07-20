@@ -24,6 +24,15 @@
                     </div>
                 </div>
                 <div class="mb-3">
+                    <small class="text-secondary">
+                        {{ trans('global.media_allowed_mimetypes') }}
+                    </small>
+                    <br/>
+                    <small class="text-secondary">
+                        {{ trans('global.media_allowed_file_size') }}
+                    </small>
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Résumé&nbsp;<span class="form-label-description" id="summary-length">0/5000</span></label>
                     <textarea name="summary" maxlength="5000" onkeyup="calculateTextLength(event, '#summary-length', '/5000')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="Summary">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
                     @if ($errors->has('summary'))
