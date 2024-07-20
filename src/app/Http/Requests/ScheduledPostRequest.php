@@ -41,6 +41,27 @@ class ScheduledPostRequest extends FormRequest
             $rules[ScheduledPost::ACTION_URL_COLUMN] = ['required', new Phone()];
         }
 
+        switch ($this->input('type')) {
+            case ScheduledPost::EVENT_TYPE:
+                $rules = array_merge(
+                    $rules,
+                    [
+                        ScheduledPost::EVENT_TITLE_COLUMN   => 'required|string|min:1|max:150',
+                        'event_start_date'                  => 'required|date|after:now',
+                        'event_start_time'                  => 'nullable|date_format:H:i',
+                        'event_end_date'                    => 'required|date|after:now',
+                        'event_end_time'                    => 'nullable|date_format:H:i',
+                    ]
+                );
+
+                break;
+        }
+
         return $rules;
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge(['type' => $this->route('type', ScheduledPost::STANDARD_TYPE)]);
     }
 }
