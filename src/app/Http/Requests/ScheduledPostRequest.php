@@ -66,6 +66,17 @@ class ScheduledPostRequest extends FormRequest
                 );
 
                 break;
+            case ScheduledPost::ALERT_TYPE:
+                $rules = array_merge(
+                    $rules,
+                    [
+                        ScheduledPost::ALERT_TYPE_COLUMN => sprintf(
+                            'required|string|in:%s', implode(',', array_keys(ScheduledPost::ALERT_TYPES))
+                        ),
+                    ]
+                );
+
+                break;
         }
 
         return $rules;
