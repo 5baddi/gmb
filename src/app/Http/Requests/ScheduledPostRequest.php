@@ -33,6 +33,8 @@ class ScheduledPostRequest extends FormRequest
                 'required|string|in:%s', implode(',', array_keys(ScheduledPost::ACTION_TYPES))
             ),
             ScheduledPost::ACTION_URL_COLUMN    => 'required|url',
+            'scheduled_date'                    => 'nullable|date|after:now',
+            'scheduled_time'                    => 'nullable|date_format:H:i',
         ];
 
         if ($this->input(ScheduledPost::ACTION_TYPE_COLUMN) === ScheduledPost::CALL_ACTION_TYPE) {
