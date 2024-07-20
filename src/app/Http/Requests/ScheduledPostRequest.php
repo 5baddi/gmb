@@ -55,6 +55,17 @@ class ScheduledPostRequest extends FormRequest
                 );
 
                 break;
+            case ScheduledPost::OFFER_TYPE:
+                $rules = array_merge(
+                    $rules,
+                    [
+                        ScheduledPost::OFFER_COUPON_CODE_COLUMN         => 'nullable|string|min:1|max:150',
+                        ScheduledPost::OFFER_REDEEM_ONLINE_URL_COLUMN   => 'nullable|url',
+                        ScheduledPost::OFFER_TERMS_CONDITIONS_COLUMN    => 'nullable|string|min:1|max:1000',
+                    ]
+                );
+
+                break;
         }
 
         return $rules;
