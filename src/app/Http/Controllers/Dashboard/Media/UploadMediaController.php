@@ -10,16 +10,16 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 
 use Throwable;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
+use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class UploadMediaController extends DashboardController
 {
-    public function __invoke(Request $request): void
+    public function __invoke(ScheduledMediaRequest $request): void
     {
         try {
             $files = $request->file('file', []);

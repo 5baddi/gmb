@@ -9,16 +9,16 @@
 namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts;
 
 use Throwable;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Models\ScheduledPostMedia;
+use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class UploadScheduledPostMediaController extends DashboardController
 {
-    public function __invoke(string $id, Request $request): void
+    public function __invoke(string $id, ScheduledMediaRequest $request): void
     {
         try {
             $files = $request->file('file', []);

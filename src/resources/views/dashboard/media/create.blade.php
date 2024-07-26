@@ -22,6 +22,15 @@
                             <button class="dz-button" type="button">{{ trans('global.drop_media_here') }}</button>
                         </div>
                     </div>
+                    <div class="mb-3">
+                        <small class="text-secondary">
+                            {{ trans('global.media_allowed_mimetypes') }}
+                        </small>
+                        <br/>
+                        <small class="text-secondary">
+                            {{ trans('global.media_allowed_file_size') }}
+                        </small>
+                    </div>
                     <div class="accordion">
                         <div class="accordion-item" id="accordion-auto-posting">
                             <h2 class="accordion-header" id="heading-1">
