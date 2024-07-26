@@ -42,4 +42,5 @@ return [
     'something_going_wrong' => 'Something going wrong.',
     'media_allowed_mimetypes' => 'Allowed file types: JPEG, PNG, GIF, BMP, TIFF, WEBP images, and MP4, QuickTime, AVI, MPEG, WMV videos',
     'media_allowed_file_size' => 'Maximum file size: 75 MB',
+    'main_location_not_set' => 'Please set your preferred location before proceeding.',
 ];

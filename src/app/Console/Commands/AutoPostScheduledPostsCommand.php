@@ -63,16 +63,16 @@ class AutoPostScheduledPostsCommand extends Command
                                 ! $user instanceof User
                                 || ! $user->googleCredentials instanceof UserGoogleCredentials
                                 || empty($user->googleCredentials->getAccessToken())
-                                || empty($user->googleCredentials->getAccountId())
-                                || empty($user->googleCredentials->getMainLocationId())
+                                || empty($scheduledPost->getAttribute(ScheduledPost::ACCOUNT_ID_COLUMN))
+                                || empty($scheduledPost->getAttribute(ScheduledPost::LOCATION_ID_COLUMN))
                             ) {
                                 throw new Exception();
                             }
 
                             $googleMyBusinessService = new GoogleMyBusinessService(
                                 $user->googleCredentials->getAccessToken(),
-                                $user->googleCredentials->getAccountId(),
-                                $user->googleCredentials->getMainLocationId()
+                                $scheduledPost->getAttribute(ScheduledPost::ACCOUNT_ID_COLUMN),
+                                $scheduledPost->getAttribute(ScheduledPost::LOCATION_ID_COLUMN)
                             );
 
                             $files = ScheduledPostMedia::query()
