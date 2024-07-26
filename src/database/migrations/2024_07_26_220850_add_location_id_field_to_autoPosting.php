@@ -13,10 +13,10 @@ class AddLocationIdFieldToAutoPosting extends Migration
      */
     public function up()
     {
-        Schema::table('scheduled_posts', function (Blueprint $table) {
-            $table->string('account_id')->after('user_id');
-            $table->string('location_id')->after('account_id');
-        });
+//        Schema::table('scheduled_posts', function (Blueprint $table) {
+//            $table->string('account_id')->after('user_id');
+//            $table->string('location_id')->after('account_id');
+//        });
 
         Schema::table('scheduled_post_media', function (Blueprint $table) {
             $table->string('account_id')->nullable()->after('scheduled_post_id');
