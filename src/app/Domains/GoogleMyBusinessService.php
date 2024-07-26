@@ -324,7 +324,7 @@ class GoogleMyBusinessService extends Service
                 return Str::endsWith($key, '.message');
             }, ARRAY_FILTER_USE_KEY);
 
-            throw new Exception(implode(PHP_EOL, $messages));
+            throw new Exception(implode(' ', $messages));
         }
 
         return $response->getStatusCode() === 200;
