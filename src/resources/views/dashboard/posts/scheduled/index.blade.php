@@ -117,7 +117,7 @@
                                                     <span class="badge bg-green text-green-fg">{{ Str::ucfirst(Str::lower($scheduledPost->state ?? '---'))  }}</span>
                                                     @break
                                                 @case('REJECTED')
-                                                    <span class="badge bg-danger text-danger-fg cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ Str::ucfirst(Str::lower($scheduledPost->reason ?? '---'))  }}">{{ trans('global.rejected') }}</span>
+                                                    <span class="badge bg-danger text-danger-fg cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="{!! Str::ucfirst(Str::lower($scheduledPost->reason ?? '---')) !!}">{{ trans('global.rejected') }}</span>
                                                     @break
                                                 @default
                                                     <span class="badge bg-orange text-orange-fg">{{ trans('global.pending') }}</span>
