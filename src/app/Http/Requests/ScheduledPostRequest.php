@@ -32,13 +32,13 @@ class ScheduledPostRequest extends FormRequest
             ScheduledPost::ACTION_TYPE_COLUMN   => sprintf(
                 'required|string|in:%s', implode(',', array_keys(ScheduledPost::ACTION_TYPES))
             ),
-            ScheduledPost::ACTION_URL_COLUMN    => 'required|url',
+            'action'                            => 'required|url',
             'scheduled_date'                    => 'nullable|date|after:now',
             'scheduled_time'                    => 'nullable|date_format:H:i',
         ];
 
         if ($this->input(ScheduledPost::ACTION_TYPE_COLUMN) === ScheduledPost::CALL_ACTION_TYPE) {
-            $rules[ScheduledPost::ACTION_URL_COLUMN] = ['required', new Phone()];
+            $rules['action'] = ['required', new Phone()];
         }
 
         switch ($this->input('type')) {
