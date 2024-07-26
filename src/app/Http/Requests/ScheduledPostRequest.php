@@ -37,7 +37,7 @@ class ScheduledPostRequest extends FormRequest
         ];
 
         if ($this->input(ScheduledPost::ACTION_TYPE_COLUMN) === ScheduledPost::CALL_ACTION_TYPE) {
-            $rules[ScheduledPost::ACTION_URL_COLUMN] = ['nullable'];
+            $rules[ScheduledPost::ACTION_URL_COLUMN] = ['nullable', 'string'];
         }
 
         switch ($this->input('type')) {
