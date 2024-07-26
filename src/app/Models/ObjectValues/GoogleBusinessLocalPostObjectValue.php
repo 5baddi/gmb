@@ -36,10 +36,16 @@ readonly class GoogleBusinessLocalPostObjectValue
         $attributes[ScheduledPost::SUMMARY_COLUMN] = $attributes[ScheduledPost::SUMMARY_COLUMN] ?? '';
 
         $callToAction = [
-            'actionType'      => $attributes[ScheduledPost::ACTION_TYPE_COLUMN] ?? ScheduledPost::LEARN_MORE_ACTION_TYPE,
+            'actionType' => $attributes[ScheduledPost::ACTION_TYPE_COLUMN]
+                ?? ScheduledPost::ACTION_TYPES[ScheduledPost::LEARN_MORE_ACTION_TYPE],
         ];
 
-        $callToActionType = ($callToAction['actionType'] === ScheduledPost::CALL_ACTION_TYPE) ? 'phoneNumber' : 'url';
+        $callToActionType = (
+                $callToAction['actionType'] === ScheduledPost::ACTION_TYPES[ScheduledPost::CALL_ACTION_TYPE]
+            )
+            ? 'phoneNumber'
+            : 'url';
+
         $callToAction[$callToActionType] = $attributes[ScheduledPost::ACTION_URL_COLUMN] ?? '';
 
         $alertType = null;
