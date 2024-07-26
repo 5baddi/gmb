@@ -63,16 +63,16 @@ class AutoPostScheduledMediaCommand extends Command
                                 ! $user instanceof User
                                 || ! $user->googleCredentials instanceof UserGoogleCredentials
                                 || empty($user->googleCredentials->getAccessToken())
-                                || empty($user->googleCredentials->getAccountId())
-                                || empty($user->googleCredentials->getMainLocationId())
+                                || empty($scheduledMedia->getAttribute(ScheduledMedia::ACCOUNT_ID_COLUMN))
+                                || empty($scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN))
                             ) {
                                 throw new Exception();
                             }
 
                             $googleMyBusinessService = new GoogleMyBusinessService(
                                 $user->googleCredentials->getAccessToken(),
-                                $user->googleCredentials->getAccountId(),
-                                $user->googleCredentials->getMainLocationId()
+                                $scheduledMedia->getAttribute(ScheduledMedia::ACCOUNT_ID_COLUMN),
+                                $scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN)
                             );
 
                             if (

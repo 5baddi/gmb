@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ScheduledPost extends ModelEntity
 {
     public const string USER_ID_COLUMN = 'user_id';
+    public const string ACCOUNT_ID_COLUMN = 'account_id';
+    public const string LOCATION_ID_COLUMN = 'location_id';
     public const string SUMMARY_COLUMN = 'summary';
     public const string ACTION_TYPE_COLUMN = 'action_type';
     public const string ACTION_URL_COLUMN = 'action_url';

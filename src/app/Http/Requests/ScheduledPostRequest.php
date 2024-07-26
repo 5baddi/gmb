@@ -9,7 +9,6 @@
 namespace BADDIServices\ClnkGO\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Propaganistas\LaravelPhone\Rules\Phone;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 
 class ScheduledPostRequest extends FormRequest
@@ -38,7 +37,7 @@ class ScheduledPostRequest extends FormRequest
         ];
 
         if ($this->input(ScheduledPost::ACTION_TYPE_COLUMN) === ScheduledPost::CALL_ACTION_TYPE) {
-            $rules[ScheduledPost::ACTION_URL_COLUMN] = ['required', new Phone()];
+            $rules[ScheduledPost::ACTION_URL_COLUMN] = ['nullable', 'string'];
         }
 
         switch ($this->input('type')) {

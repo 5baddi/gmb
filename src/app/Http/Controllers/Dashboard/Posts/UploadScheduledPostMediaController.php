@@ -22,6 +22,7 @@ class UploadScheduledPostMediaController extends DashboardController
     {
         try {
             $files = $request->file('file', []);
+
             abort_if(empty($files), Response::HTTP_UNPROCESSABLE_ENTITY);
 
             ScheduledPost::query()

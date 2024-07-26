@@ -24,6 +24,19 @@ class SaveScheduledPostController extends DashboardController
     {
         abort_unless(Arr::has(ScheduledPost::TYPES, $type), Response::HTTP_NOT_FOUND);
 
+        if (
+            empty($this->user->googleCredentials?->getAccountId())
+            || empty($this->user->googleCredentials?->getMainLocationId())
+        ) {
+            return redirect()
+                ->route('dashboard.scheduled-posts.edit', ['type' => $type])
+                ->with(
+                    'alert',
+                    new Alert(trans('global.main_location_not_set'))
+                )
+                ->withInput();
+        }
+
         try {
             $isInstantly = empty($request->input('scheduled_date'));
 
@@ -55,6 +68,8 @@ class SaveScheduledPostController extends DashboardController
                     [ScheduledPost::ID_COLUMN => $request->input('id')],
                     [
                         ScheduledPost::USER_ID_COLUMN       => $this->user->getId(),
+                        ScheduledPost::ACCOUNT_ID_COLUMN    => $this->user->googleCredentials->getAccountId(),
+                        ScheduledPost::LOCATION_ID_COLUMN   => $this->user->googleCredentials->getMainLocationId(),
                         ScheduledPost::SCHEDULED_AT_COLUMN  => $scheduledAt,
                         ScheduledPost::TOPIC_TYPE_COLUMN    => ScheduledPost::TYPES[$type] ?? ScheduledPost::STANDARD_TYPE,
                         ScheduledPost::STATE_COLUMN         => ScheduledPost::UNSPECIFIED_STATE,

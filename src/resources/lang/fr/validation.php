@@ -152,4 +152,5 @@ return [
 
     'attributes' => [],
 
+    'phone' => 'Le champ :attribute doit être un numéro valide.',
 ];

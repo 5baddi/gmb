@@ -25,6 +25,12 @@ class UploadMediaController extends DashboardController
             $files = $request->file('file', []);
             abort_if(empty($files), Response::HTTP_UNPROCESSABLE_ENTITY);
 
+            abort_if(
+                empty($this->user->googleCredentials?->getAccountId())
+                || empty($this->user->googleCredentials?->getMainLocationId()),
+                Response::HTTP_BAD_REQUEST
+            );
+
             foreach ($files as $file) {
                 if (! $file instanceof UploadedFile) {
                     continue;
@@ -46,10 +52,12 @@ class UploadMediaController extends DashboardController
 
                 ScheduledMedia::query()
                     ->create([
-                        ScheduledMedia::USER_ID_COLUMN  => $this->user->getId(),
-                        ScheduledMedia::TYPE_COLUMN     => ScheduledMedia::PHOTO_TYPE,
-                        ScheduledMedia::PATH_COLUMN     => sprintf('uploads/%s', $fileName),
-                        ScheduledMedia::STATE_COLUMN    => ScheduledMedia::UNSPECIFIED_STATE,
+                        ScheduledMedia::USER_ID_COLUMN      => $this->user->getId(),
+                        ScheduledMedia::ACCOUNT_ID_COLUMN   => $this->user->googleCredentials->getAccountId(),
+                        ScheduledMedia::LOCATION_ID_COLUMN  => $this->user->googleCredentials->getMainLocationId(),
+                        ScheduledMedia::TYPE_COLUMN         => ScheduledMedia::PHOTO_TYPE,
+                        ScheduledMedia::PATH_COLUMN         => sprintf('uploads/%s', $fileName),
+                        ScheduledMedia::STATE_COLUMN        => ScheduledMedia::UNSPECIFIED_STATE,
                         ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
                     ]);
             }

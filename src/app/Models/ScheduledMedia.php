@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ScheduledMedia extends ModelEntity
 {
     public const string USER_ID_COLUMN = 'user_id';
+    public const string ACCOUNT_ID_COLUMN = 'account_id';
+    public const string LOCATION_ID_COLUMN = 'location_id';
     public const string PATH_COLUMN = 'path';
     public const string TYPE_COLUMN = 'type';
     public const string STATE_COLUMN = 'state';
