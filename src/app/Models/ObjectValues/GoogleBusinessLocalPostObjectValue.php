@@ -40,13 +40,9 @@ readonly class GoogleBusinessLocalPostObjectValue
                 ?? ScheduledPost::ACTION_TYPES[ScheduledPost::LEARN_MORE_ACTION_TYPE],
         ];
 
-        $callToActionType = (
-                $callToAction['actionType'] === ScheduledPost::ACTION_TYPES[ScheduledPost::CALL_ACTION_TYPE]
-            )
-            ? 'phoneNumber'
-            : 'url';
-
-        $callToAction[$callToActionType] = $attributes[ScheduledPost::ACTION_URL_COLUMN] ?? '';
+        if ($callToAction['actionType'] !== ScheduledPost::ACTION_TYPES[ScheduledPost::CALL_ACTION_TYPE]) {
+            $callToAction['url'] = $attributes[ScheduledPost::ACTION_URL_COLUMN] ?? '';
+        }
 
         $alertType = null;
         if ($attributes[ScheduledPost::TOPIC_TYPE_COLUMN] === ScheduledPost::ALERT_TYPE) {

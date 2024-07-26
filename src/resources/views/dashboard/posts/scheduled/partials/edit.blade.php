@@ -59,9 +59,9 @@
                     </div>
                     <div class="col-8">
                         <label class="form-label">L’appel à l’action</label>
-                        <input type="text" name="action" class="form-control @if ($errors->has('action')) is-invalid @endif" value="{{ $scheduledPost?->action_url ?? old('action') }}" placeholder="L’appel à l’action"/>
-                        @if ($errors->has('action'))
-                            <div class="invalid-feedback">{{ $errors->first('action') }}</div>
+                        <input type="text" name="action_url" class="form-control @if ($errors->has('action_url')) is-invalid @endif" value="{{ $scheduledPost?->action_url ?? old('action_url') }}" placeholder="L’appel à l’action"/>
+                        @if ($errors->has('action_url'))
+                            <div class="invalid-feedback">{{ $errors->first('action_url') }}</div>
                         @endif
                     </div>
                 </div>
