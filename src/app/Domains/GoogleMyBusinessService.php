@@ -12,6 +12,7 @@ use Throwable;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use GuzzleHttp\Exception\GuzzleException;
 use BADDIServices\ClnkGO\Services\Service;
 use BADDIServices\ClnkGO\Models\ObjectValues\GoogleBusinessLocalPostObjectValue;
@@ -319,7 +320,11 @@ class GoogleMyBusinessService extends Service
 
         $results = json_decode($response->getBody()->getContents(), true);
         if (Arr::has($results, 'error')) {
-            throw new Exception(Arr::get($results, 'error.details.0.errorDetails.0.message'));
+            $messages = array_filter(Arr::dot($results), function ($key) {
+                return Str::endsWith($key, '.message');
+            }, ARRAY_FILTER_USE_KEY);
+
+            throw new Exception(implode('\n', $messages));
         }
 
         return $response->getStatusCode() === 200;
