@@ -106,7 +106,7 @@
                                     <td>{{ Str::ucfirst(Str::lower(($scheduledPost->topic_type ?? '---'))) }}</td>
                                     <td>{{ substr($scheduledPost->summary ?? '---', 0, 50) }}</td>
                                     <td>{{ Str::ucfirst(Str::lower(Str::replace('_', ' ', $scheduledPost->action_type ?? 'LEARN_MORE'))) }}</td>
-                                    <td>{{ $scheduledPost->scheduled_at?->format('d M Y H:i') }}</td>
+                                    <td>{{ $scheduledPost->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}</td>
                                     <td>
                                         <div class="flex-nowrap">
                                             @switch(Str::upper($scheduledPost->state ?? '---'))
