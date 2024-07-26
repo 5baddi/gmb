@@ -38,7 +38,7 @@ class ScheduledPostRequest extends FormRequest
         ];
 
         if ($this->input(ScheduledPost::ACTION_TYPE_COLUMN) === ScheduledPost::CALL_ACTION_TYPE) {
-            $rules['action'] = ['required', new Phone()];
+            $rules['action'] = ['required', (new Phone())->lenient()];
         }
 
         switch ($this->input('type')) {
