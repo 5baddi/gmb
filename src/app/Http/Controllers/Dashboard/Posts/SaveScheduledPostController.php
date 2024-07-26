@@ -78,7 +78,7 @@ class SaveScheduledPostController extends DashboardController
                         ScheduledPost::ACTION_TYPE_COLUMN   => ScheduledPost::ACTION_TYPES[
                             $request->input(ScheduledPost::ACTION_TYPE_COLUMN, ScheduledPost::LEARN_MORE_ACTION_TYPE)
                         ],
-                        ScheduledPost::ACTION_URL_COLUMN    => $request->input(ScheduledPost::ACTION_URL_COLUMN, ''),
+                        ScheduledPost::ACTION_URL_COLUMN    => $request->input('action', ''),
                         ScheduledPost::EVENT_TITLE_COLUMN   => $request->input(ScheduledPost::EVENT_TITLE_COLUMN, ''),
                         ScheduledPost::ALERT_TYPE_COLUMN    => ScheduledPost::ALERT_TYPES[
                             $request->input(ScheduledPost::ALERT_TYPE_COLUMN, 'none')
