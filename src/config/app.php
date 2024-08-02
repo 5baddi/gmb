@@ -176,6 +176,7 @@ return [
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Stevebauman\Location\LocationServiceProvider::class,
+        Onecentlin\Adminer\ServiceProvider::class,
 
         /*
          * Application Service Providers...

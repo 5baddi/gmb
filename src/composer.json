@@ -27,6 +27,7 @@
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^8.40",
         "laravel/tinker": "^2.5",
+        "onecentlin/laravel-adminer": "^7.0",
         "propaganistas/laravel-phone": "^4.4",
         "spatie/laravel-robots-middleware": "^1.3",
         "stevebauman/location": "^6.5",

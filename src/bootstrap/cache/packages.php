@@ -81,6 +81,13 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
+  'onecentlin/laravel-adminer' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Onecentlin\\Adminer\\ServiceProvider',
+    ),
+  ),
   'propaganistas/laravel-phone' => 
   array (
     'providers' => 
