@@ -28,7 +28,7 @@ class ScheduledMediaRequest extends FormRequest
         return [
             'file'           => 'required|array|min:1',
             'file.*'         => 'required|file|mimetypes:image/jpeg,image/png,image/gif,image/bmp,image/tiff,image/webp,video/mp4,video/quicktime,video/x-msvideo,video/mpeg,video/x-ms-wmv|max:75000',
-            'scheduled_date' => 'nullable|date|after:now',
+            'scheduled_date' => 'nullable|date|after_or_equal:now',
             'scheduled_time' => 'nullable|date_format:H:i',
         ];
     }

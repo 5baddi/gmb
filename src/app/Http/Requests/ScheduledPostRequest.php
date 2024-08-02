@@ -32,7 +32,7 @@ class ScheduledPostRequest extends FormRequest
                 'required|string|in:%s', implode(',', array_keys(ScheduledPost::ACTION_TYPES))
             ),
             ScheduledPost::ACTION_URL_COLUMN    => 'required|url',
-            'scheduled_date'                    => 'nullable|date|after:now',
+            'scheduled_date'                    => 'nullable|date|after_or_equal:now',
             'scheduled_time'                    => 'nullable|date_format:H:i',
         ];
 
@@ -46,9 +46,9 @@ class ScheduledPostRequest extends FormRequest
                     $rules,
                     [
                         ScheduledPost::EVENT_TITLE_COLUMN   => 'required|string|min:1|max:150',
-                        'event_start_date'                  => 'required|date|after:now',
+                        'event_start_date'                  => 'required|date|after_or_equal:now',
                         'event_start_time'                  => 'nullable|date_format:H:i',
-                        'event_end_date'                    => 'required|date|after:now',
+                        'event_end_date'                    => 'required|date|after_or_equal:now',
                         'event_end_time'                    => 'nullable|date_format:H:i',
                     ]
                 );
