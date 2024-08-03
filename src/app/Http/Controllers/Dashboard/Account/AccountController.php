@@ -37,7 +37,8 @@ class AccountController extends DashboardController
                     )
                 )
                 ->withHeaders([
-                    'Gmb-Next' => $accountLocations['nextPageToken'] ?? null
+                    'Gmb-Next' => ($request->query('next') !== $accountLocations['nextPageToken'])
+                        ? $accountLocations['nextPageToken'] : null,
                 ]);
         }
 
