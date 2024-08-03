@@ -7,7 +7,7 @@ return [
     |--------------------------------------------------------------------------
     |
     */
-    'enabled' => env('ADMINER_ENABLED', true),
+    'enabled' => env('ADMINER_ENABLED', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -19,7 +19,7 @@ return [
     | ATTENTION: Please only enable autologin with authenticated protection
     |
     */
-    'autologin' => env('ADMINER_AUTO_LOGIN', true),
+    'autologin' => env('ADMINER_AUTO_LOGIN', false),
 
     /*
     |--------------------------------------------------------------------------
