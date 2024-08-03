@@ -33,8 +33,8 @@
                     </small>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Résumé&nbsp;<span class="form-label-description" id="summary-length">0/5000</span></label>
-                    <textarea name="summary" maxlength="5000" onkeyup="calculateTextLength(event, '#summary-length', '/5000')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="Summary">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
+                    <label class="form-label">Résumé&nbsp;<span class="form-label-description" id="summary-length">0/1500</span></label>
+                    <textarea name="summary" maxlength="1500" onkeyup="calculateTextLength(event, '#summary-length', '/1500')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="Summary">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
                     @if ($errors->has('summary'))
                         <div class="invalid-feedback">{{ $errors->first('summary') }}</div>
                     @endif

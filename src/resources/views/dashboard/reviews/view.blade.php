@@ -90,8 +90,8 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mt-3">
-                                        <label class="form-label">Reply&nbsp;<span class="form-label-description" id="review-reply-length">{{ strlen(old('reply') ?? $review['reviewReply']['comment'] ?? '') }}/4000</span></label>
-                                        <textarea onkeyup="calculateTextLength(event, '#review-reply-length', '/4000')" class="form-control" name="reply" rows="15" maxlength="4000" placeholder="{{ trans('dashboard.write_reply') }}">{{ old('reply') ?? $review['reviewReply']['comment'] ?? '' }}</textarea>
+                                        <label class="form-label">Reply&nbsp;<span class="form-label-description" id="review-reply-length">{{ strlen(old('reply') ?? $review['reviewReply']['comment'] ?? '') }}/1500</span></label>
+                                        <textarea onkeyup="calculateTextLength(event, '#review-reply-length', '/1500')" class="form-control" name="reply" rows="15" maxlength="1500" placeholder="{{ trans('dashboard.write_reply') }}">{{ old('reply') ?? $review['reviewReply']['comment'] ?? '' }}</textarea>
                                     </div>
                                 </div>
                             </div>
