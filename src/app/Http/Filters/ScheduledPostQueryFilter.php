@@ -20,4 +20,11 @@ class ScheduledPostQueryFilter extends QueryFilter
 
         $this->builder->where(ScheduledPost::USER_ID_COLUMN, $filter);
     }
+
+    public function setUser(?string $user = null): self
+    {
+        $this->request->merge(['user' => $user]);
+
+        return $this;
+    }
 }

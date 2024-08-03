@@ -22,7 +22,7 @@ class ScheduledPostsController extends DashboardController
         ScheduledPostQueryFilter $queryFilter,
         ScheduledPostRepository $scheduledPostRepository
     ): View|Factory {
-        $request->merge(['user' => $this->user->getId()]);
+        $queryFilter->setUser($this->user->getId());
 
         $scheduledPosts = $scheduledPostRepository->paginate($queryFilter);
 
