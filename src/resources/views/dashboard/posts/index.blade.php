@@ -10,6 +10,7 @@
             @include('dashboard.posts.partials.gallery')
         </div>
         @if(! empty($posts['nextPageToken']))
+            <input name="gmb_next" type="hidden" value="{{ $posts['nextPageToken'] }}"/>
             <div class="row mt-3">
                 <div class="col">
                     <a id="load-more-btn" href="javascript:void(0);" onclick="loadMorePosts()"
@@ -36,12 +37,14 @@
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard') }}"),
-    data: { tab: 'gmb', next: '{{ $posts['nextPageToken'] ?? null }}'},
+    data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
     }
     }).done(function(data, textStatus, jqXHR) {
     let next = jqXHR.getResponseHeader('Gmb-Next');
+
+    jQuery('input[name=gmb_next]').val(next);
     $('#posts-container').append(data);
 
     if (next.length === 0) {

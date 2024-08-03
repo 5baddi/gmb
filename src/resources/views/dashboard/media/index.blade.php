@@ -22,6 +22,7 @@
             @include('dashboard.media.partials.gallery')
         </div>
         @if(! empty($media['nextPageToken']))
+            <input name="gmb_next" type="hidden" value="{{ $media['nextPageToken'] }}"/>
             <div class="row mt-3">
                 <div class="col">
                     <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreMedia()"
@@ -48,12 +49,14 @@
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard.media') }}"),
-    data: { tab: 'gmb', next: '{{ $media['nextPageToken'] ?? null }}'},
+    data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
     }
     }).done(function(data, textStatus, jqXHR) {
     let next = jqXHR.getResponseHeader('Gmb-Next');
+
+    jQuery('input[name=gmb_next]').val(next);
     $('#media-container').append(data);
 
     if (next.length === 0) {

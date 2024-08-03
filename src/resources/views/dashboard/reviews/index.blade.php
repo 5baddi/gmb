@@ -11,6 +11,7 @@
         </div>
     </div>
     @if(! empty($reviews['nextPageToken']))
+        <input name="gmb_next" type="hidden" value="{{ $media['nextPageToken'] }}"/>
         <div class="row mt-3">
             <div class="col">
                 <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreReviews()"
@@ -36,12 +37,14 @@
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard.reviews') }}"),
-    data: { tab: 'gmb', next: '{{ $media['nextPageToken'] ?? null }}'},
+    data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
     }
     }).done(function(data, textStatus, jqXHR) {
     let next = jqXHR.getResponseHeader('Gmb-Next');
+
+    jQuery('input[name=gmb_next]').val(next);
     $('#reviews-container').append(data);
 
     if (next.length === 0) {

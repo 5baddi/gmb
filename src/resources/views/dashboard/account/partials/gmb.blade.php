@@ -89,6 +89,7 @@
                     </table>
                 </div>
                 @if(! empty($accountLocationsNextToken))
+                    <input name="gmb_next" type="hidden" value="{{ $accountLocationsNextToken }}"/>
                     <div class="card-footer text-center">
                         <div class="card-actions">
                             <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreLocations()"
@@ -117,12 +118,14 @@
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard.account') }}"),
-    data: { tab: 'gmb', next: '{{ $accountLocationsNextToken }}'},
+    data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
     }
     }).done(function(data, textStatus, jqXHR) {
     let next = jqXHR.getResponseHeader('Gmb-Next');
+
+    jQuery('input[name=gmb_next]').val(next);
     $('#locations-container').parent().append(data);
 
     if (next.length === 0) {
