@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Services\UserService;
+use BADDIServices\ClnkGO\Domains\GoogleService;
 use BADDIServices\ClnkGO\Models\ScheduledPostMedia;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
 use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
@@ -38,7 +39,10 @@ class AutoPostScheduledPostsCommand extends Command
      *
      * @return void
      */
-    public function __construct(private readonly UserService $userService) {
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly GoogleService $googleService
+    ) {
         parent::__construct();
     }
 
@@ -54,6 +58,7 @@ class AutoPostScheduledPostsCommand extends Command
             ScheduledPost::query()
                 ->where(ScheduledPost::SCHEDULED_AT_COLUMN, '<=', Carbon::now()->format('Y-m-d H:i:s'))
                 ->where(ScheduledPost::STATE_COLUMN, '!=', ScheduledPost::REJECTED_STATE)
+                ->orderBy(ScheduledPost::USER_ID_COLUMN)
                 ->chunkById(10, function (Collection $scheduledPosts) {
                     $scheduledPosts->each(function (ScheduledPost $scheduledPost) {
                         try {
@@ -68,6 +73,9 @@ class AutoPostScheduledPostsCommand extends Command
                             ) {
                                 throw new Exception();
                             }
+
+                            $this->googleService->refreshAccessToken($user->googleCredentials);
+                            $user->load(['googleCredentials']);
 
                             $googleMyBusinessService = new GoogleMyBusinessService(
                                 $user->googleCredentials->getAccessToken(),

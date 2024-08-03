@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Services\UserService;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
+use BADDIServices\ClnkGO\Domains\GoogleService;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
 use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
 
@@ -36,7 +37,10 @@ class AutoPostScheduledMediaCommand extends Command
      *
      * @return void
      */
-    public function __construct(private readonly UserService $userService) {
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly GoogleService $googleService
+    ) {
         parent::__construct();
     }
 
@@ -52,6 +56,7 @@ class AutoPostScheduledMediaCommand extends Command
             ScheduledMedia::query()
                 ->where(ScheduledMedia::SCHEDULED_AT_COLUMN, '<=', Carbon::now()->format('Y-m-d H:i:s'))
                 ->where(ScheduledMedia::STATE_COLUMN, '!=', ScheduledMedia::REJECTED_STATE)
+                ->orderBy(ScheduledMedia::USER_ID_COLUMN)
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
                         try {
@@ -68,6 +73,9 @@ class AutoPostScheduledMediaCommand extends Command
                             ) {
                                 throw new Exception();
                             }
+
+                            $this->googleService->refreshAccessToken($user->googleCredentials);
+                            $user->load(['googleCredentials']);
 
                             $googleMyBusinessService = new GoogleMyBusinessService(
                                 $user->googleCredentials->getAccessToken(),
