@@ -14,7 +14,7 @@ class ScheduledPostQueryFilter extends QueryFilter
 {
     public function user(?string $filter = null)
     {
-        if (empty($filter)) {
+        if (blank($filter)) {
             return;
         }
 
