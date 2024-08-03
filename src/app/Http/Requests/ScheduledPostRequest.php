@@ -27,7 +27,7 @@ class ScheduledPostRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            ScheduledPost::SUMMARY_COLUMN       => 'required|string|min:1|max:5000',
+            ScheduledPost::SUMMARY_COLUMN       => 'required|string|min:1|max:1500',
             ScheduledPost::ACTION_TYPE_COLUMN   => sprintf(
                 'required|string|in:%s', implode(',', array_keys(ScheduledPost::ACTION_TYPES))
             ),
