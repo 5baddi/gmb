@@ -8,6 +8,7 @@
 
 namespace BADDIServices\ClnkGO\Models;
 
+use Illuminate\Support\Facades\URL;
 use BADDIServices\ClnkGO\Entities\ModelEntity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -25,8 +26,20 @@ class ScheduledPostMedia extends ModelEntity
         self::VIDEO_TYPE    => 'VIDEO',
     ];
 
+    /**
+     * @var string[]
+     */
+    protected $appends = ['url'];
+
     public function scheduledPost(): BelongsTo
     {
         return $this->belongsTo(ScheduledPost::class, ScheduledPost::ID_COLUMN);
+    }
+
+    public function getUrlAttribute(): string
+    {
+        $path = $this->getAttribute(self::PATH_COLUMN);
+
+        return empty($path) ? '#' : URL::asset($path);
     }
 }

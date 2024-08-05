@@ -117,7 +117,7 @@
 @endsection
 
 @section('script')
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", async () => {
         let dropzoneInstance = new Dropzone("#upload-scheduled-post-media", {
             url: '{{ route('dashboard.scheduled-posts.upload.media', ['id' => $id]) }}',
             dictRemoveFile: '{{ trans('global.remove_file') }}',
@@ -135,5 +135,18 @@
                 }
             }
         });
+
+        let urls = {!! json_encode(array_map(fn ($media) => $media['url'] ?? '#', $scheduledPost?->media->toArray() ?? [])) !!};
+
+        for (const url of urls) {
+            try {
+                let response = await fetch(url);
+                let blob = await response.blob();
+                let fileName = url.split('/').pop();
+                let file = new File([blob], fileName, { type: blob.type });
+
+                dropzoneInstance.addFile(file);
+            } catch {}
+        }
     })
 @endsection

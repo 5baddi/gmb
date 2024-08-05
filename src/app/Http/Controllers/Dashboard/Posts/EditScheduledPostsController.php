@@ -24,6 +24,7 @@ class EditScheduledPostsController extends DashboardController
         abort_unless(Arr::has(ScheduledPost::TYPES, $type), Response::HTTP_NOT_FOUND);
 
         $scheduledPost = ScheduledPost::query()
+            ->with(['media'])
             ->find($id);
 
         if ($scheduledPost instanceof ScheduledPost) {
