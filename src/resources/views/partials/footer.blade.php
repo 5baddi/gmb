@@ -8,7 +8,7 @@
               {{ trans('copyright') }} &copy; {{ date('Y') }} {{ trans('All rights reserved') }}
             </li>
             <li class="list-inline-item">
-              <a href="https://baddi.info" class="link-secondary" rel="noopener">v1.0.0</a>
+              <a href="https://baddi.info" class="link-secondary" rel="noopener">v1.0.8</a>
             </li>
           </ul>
         </div>
