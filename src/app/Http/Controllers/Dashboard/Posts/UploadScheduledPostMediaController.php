@@ -44,10 +44,13 @@ class UploadScheduledPostMediaController extends DashboardController
                 $file->move(public_path('uploads'), $fileName);
 
                 ScheduledPostMedia::query()
-                    ->create([
-                        ScheduledPostMedia::SCHEDULED_POST_ID_COLUMN => $id,
-                        ScheduledPostMedia::PATH_COLUMN => sprintf('uploads/%s', $fileName)
-                    ]);
+                    ->firstOrCreate(
+                        [ScheduledPostMedia::SCHEDULED_POST_ID_COLUMN => $id],
+                        [
+                            ScheduledPostMedia::SCHEDULED_POST_ID_COLUMN => $id,
+                            ScheduledPostMedia::PATH_COLUMN => sprintf('uploads/%s', $fileName)
+                        ]
+                    );
             }
         } catch (Throwable){
             abort(Response::HTTP_INTERNAL_SERVER_ERROR);
