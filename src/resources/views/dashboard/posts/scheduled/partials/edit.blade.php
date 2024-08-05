@@ -129,6 +129,21 @@
             headers: {
                 'X-CSRF-TOKEN': $('input[name="_token"]').val()
             },
+            init: function () {
+                this.on('removedfile', function(file) {
+                    fetch(
+                        '{{ route('dashboard.scheduled-posts.delete.media', ['id' => $id]) }}',
+                        {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                            },
+                            body: JSON.stringify({ filename: file.name })
+                        }
+                    );
+                });
+            },
             error: function (file) {
                 if (file.accepted === false) {
                     alert("{{ trans('global.unsupported_file_format') }}");
