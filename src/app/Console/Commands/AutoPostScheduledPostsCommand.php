@@ -67,7 +67,7 @@ class AutoPostScheduledPostsCommand extends Command
                             if (
                                 ! $user instanceof User
                                 || ! $user->googleCredentials instanceof UserGoogleCredentials
-                                || empty($user->googleCredentials->getAccessToken())
+                                || empty($user->googleCredentials?->getAccessToken())
                                 || empty($scheduledPost->getAttribute(ScheduledPost::ACCOUNT_ID_COLUMN))
                                 || empty($scheduledPost->getAttribute(ScheduledPost::LOCATION_ID_COLUMN))
                             ) {

@@ -67,7 +67,7 @@ class AutoPostScheduledMediaCommand extends Command
                             if (
                                 ! $user instanceof User
                                 || ! $user->googleCredentials instanceof UserGoogleCredentials
-                                || empty($user->googleCredentials->getAccessToken())
+                                || empty($user->googleCredentials?->getAccessToken())
                                 || empty($scheduledMedia->getAttribute(ScheduledMedia::ACCOUNT_ID_COLUMN))
                                 || empty($scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN))
                             ) {
