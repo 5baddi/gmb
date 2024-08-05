@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Google\Service\Oauth2;
 use Google_Service_Oauth2;
 use Illuminate\Support\Arr;
+use BADDIServices\ClnkGO\AppLogger;
 use BADDIServices\ClnkGO\Services\Service;
 use BADDIServices\ClnkGO\Repositories\UserRepository;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
@@ -67,7 +68,7 @@ class GoogleService extends Service
 
         try {
             if (empty($userCredentials->getAccessToken())) {
-                throw new Exception();
+                return;
             }
 
             $expiresAt = Carbon::parse($userCredentials->getCreated())->addSeconds($userCredentials->getExpiresIn());
@@ -91,7 +92,13 @@ class GoogleService extends Service
 
             $response = $this->client->fetchAccessTokenWithRefreshToken($userCredentials->getRefreshToken());
             if (Arr::has($response, 'error')) {
-                throw new Exception();
+                AppLogger::info(
+                    'Error while refreshing google access token',
+                    'google:refresh-access-token',
+                    array_merge($response, $userCredentials?->toArray() ?? [])
+                );
+
+                return;
             }
 
             $oauth = new Google_Service_Oauth2($this->client);
@@ -102,8 +109,12 @@ class GoogleService extends Service
             $attributes[UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN] = $userCredentials->getMainLocationId();
 
             $this->userRepository->saveGoogleCredentials($userCredentials->getUserId(), $attributes);
-        } catch (Throwable) {
-            $this->userRepository->deleteGoogleCredentials($userCredentials->getUserId());
+        } catch (Throwable $e) {
+            AppLogger::error(
+                $e,
+                'google:refresh-access-token',
+                $userCredentials?->toArray() ?? []
+            );
         }
     }
 
