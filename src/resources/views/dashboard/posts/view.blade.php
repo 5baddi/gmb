@@ -96,6 +96,7 @@
             </div>
         </div>
         <div class="col-sm-6 col-lg-4">
+            @if(sizeof($post['media'] ?? []) > 0)
             <div class="card">
                 <div class="card-body">
                     <section id="post-media-carousel" class="splide">
@@ -111,6 +112,7 @@
                     </section>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 @endsection
