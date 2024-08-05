@@ -20,6 +20,7 @@ class ScheduledMedia extends ModelEntity
     public const string PATH_COLUMN = 'path';
     public const string TYPE_COLUMN = 'type';
     public const string STATE_COLUMN = 'state';
+    public const string REASON_COLUMN = 'reason';
     public const string SCHEDULED_AT_COLUMN = 'scheduled_at';
 
     public const string PHOTO_TYPE = 'photo';

@@ -175,26 +175,29 @@ class GoogleMyBusinessService extends Service
         }
     }
 
-    public function createBusinessLocationMedia(array $media): bool
+    public function createBusinessLocationMedia(array $media): array|false
     {
         if (empty($this->accountId) || empty($this->mainLocationId)) {
             return false;
         }
 
-        try {
-            $response = $this->client->post(
-                sprintf(self::LOCATION_MEDIA_ENDPOINT, $this->accountId, $this->mainLocationId),
-                [
-                    'body'  => json_encode($media),
-                ]
-            );
+        $response = $this->client->post(
+            sprintf(self::LOCATION_MEDIA_ENDPOINT, $this->accountId, $this->mainLocationId),
+            [
+                'body'  => json_encode($media),
+            ]
+        );
 
-            $results = json_decode($response->getBody()->getContents(), true);
+        $results = json_decode($response->getBody()->getContents(), true);
+        if (Arr::has($results, 'error')) {
+            $messages = array_filter(Arr::dot($results), function ($key) {
+                return Str::endsWith($key, '.message');
+            }, ARRAY_FILTER_USE_KEY);
 
-            return ! Arr::has($results, 'error') && $response->getStatusCode() === 200;
-        } catch (Throwable) {
-            return false;
+            throw new Exception(implode(' ', $messages));
         }
+
+        return $results;
     }
 
     public function deleteBusinessLocationMedia(string $id): bool

@@ -71,7 +71,7 @@ class AutoPostScheduledPostsCommand extends Command
                                 || empty($scheduledPost->getAttribute(ScheduledPost::ACCOUNT_ID_COLUMN))
                                 || empty($scheduledPost->getAttribute(ScheduledPost::LOCATION_ID_COLUMN))
                             ) {
-                                throw new Exception();
+                                return true;
                             }
 
                             $this->googleService->refreshAccessToken($user->googleCredentials);

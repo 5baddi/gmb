@@ -30,10 +30,5 @@ class AddAccountAndLocationIdFieldToAutoPosting extends Migration
             $table->dropColumn('account_id');
             $table->dropColumn('location_id');
         });
-
-        Schema::table('scheduled_post_media', function (Blueprint $table) {
-            $table->dropColumn('account_id');
-            $table->dropColumn('location_id');
-        });
     }
 }

@@ -71,7 +71,7 @@ class AutoPostScheduledMediaCommand extends Command
                                 || empty($scheduledMedia->getAttribute(ScheduledMedia::ACCOUNT_ID_COLUMN))
                                 || empty($scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN))
                             ) {
-                                throw new Exception();
+                                return true;
                             }
 
                             $this->googleService->refreshAccessToken($user->googleCredentials);
@@ -83,23 +83,22 @@ class AutoPostScheduledMediaCommand extends Command
                                 $scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN)
                             );
 
-                            if (
-                                ! $googleMyBusinessService->createBusinessLocationMedia([
-                                    'locationAssociation'   => [
-                                        'category'          => 'ADDITIONAL',
-                                    ],
-                                    'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
-                                    'sourceUrl'             => URL::asset(
-                                        $scheduledMedia->getAttribute(ScheduledMedia::PATH_COLUMN)
-                                    ),
-                                ])
-                            ) {
-                                throw new Exception();
-                            }
+                            $googleMyBusinessService->createBusinessLocationMedia([
+                                'locationAssociation'   => [
+                                    'category'          => 'ADDITIONAL',
+                                ],
+                                'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
+                                'sourceUrl'             => URL::asset(
+                                    $scheduledMedia->getAttribute(ScheduledMedia::PATH_COLUMN)
+                                ),
+                            ]);
 
                             $scheduledMedia->forceDelete();
-                        } catch (Throwable) {
-                            $scheduledMedia->update([ScheduledMedia::STATE_COLUMN => ScheduledMedia::REJECTED_STATE]);
+                        } catch (Throwable $e) {
+                            $scheduledMedia->update([
+                                ScheduledMedia::STATE_COLUMN     => ScheduledMedia::REJECTED_STATE,
+                                ScheduledMedia::REASON_COLUMN    => $e->getMessage(),
+                            ]);
                         }
                     });
                 });
