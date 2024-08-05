@@ -14,6 +14,11 @@ Route::middleware(['auth'])
     ->name('dashboard.posts')
     ->prefix('dashboard/posts')
     ->group(function() {
-        Route::get('/{id}', ViewPostController::class)->name('.view');
+        Route::get(
+                '/{accountId}/{locationId?}/{postId?}',
+                ViewPostController::class
+            )
+            ->name('.view');
+
         Route::delete('/{id}', DeletePostController::class)->name('.delete');
     });

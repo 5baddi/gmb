@@ -31,6 +31,7 @@ class ScheduledPost extends ModelEntity
     public const string EVENT_END_DATETIME_COLUMN = 'event_end_datetime';
     public const string SCHEDULED_AT_COLUMN = 'scheduled_at';
     public const string REASON_COLUMN = 'reason';
+    public const string ONLINE_ID_COLUMN = 'online_id';
 
     public const string STANDARD_TYPE = 'standard';
     public const string EVENT_TYPE = 'event';

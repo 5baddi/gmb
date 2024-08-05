@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLocationIdFieldToAutoPosting extends Migration
+class AddOnlineIdFieldToAutoPosting extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,13 @@ class AddLocationIdFieldToAutoPosting extends Migration
     public function up()
     {
         Schema::table('scheduled_posts', function (Blueprint $table) {
-            $table->string('account_id')->after('user_id');
-            $table->string('location_id')->after('account_id');
+            $table->string('online_id')->nullable()->after('state');
         });
 
-        Schema::table('scheduled_post_media', function (Blueprint $table) {
-            $table->string('account_id')->nullable()->after('scheduled_post_id');
+        Schema::table('scheduled_media', function (Blueprint $table) {
+            $table->string('account_id')->nullable()->after('user_id');
             $table->string('location_id')->nullable()->after('account_id');
+            $table->string('online_id')->nullable()->after('state');
         });
     }
 
@@ -32,13 +32,13 @@ class AddLocationIdFieldToAutoPosting extends Migration
     public function down()
     {
         Schema::table('scheduled_posts', function (Blueprint $table) {
-            $table->dropColumn('account_id');
-            $table->dropColumn('location_id');
+            $table->dropColumn('online_id');
         });
 
-        Schema::table('scheduled_post_media', function (Blueprint $table) {
+        Schema::table('scheduled_media', function (Blueprint $table) {
             $table->dropColumn('account_id');
             $table->dropColumn('location_id');
+            $table->dropColumn('online_id');
         });
     }
 }

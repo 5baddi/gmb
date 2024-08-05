@@ -15,9 +15,9 @@ use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class ViewPostController extends DashboardController
 {
-    public function __invoke(string $id): View|Factory
+    public function __invoke(string $accountId, string $locationId, string $postId): View|Factory
     {
-        $post = $this->googleMyBusinessService->getBusinessLocationPost($id);
+        $post = $this->googleMyBusinessService->getBusinessLocationPost($accountId, $locationId, $postId);
         abort_if(empty($post), Response::HTTP_NOT_FOUND);
 
         return $this->render(

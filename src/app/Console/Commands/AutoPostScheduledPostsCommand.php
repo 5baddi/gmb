@@ -110,15 +110,15 @@ class AutoPostScheduledPostsCommand extends Command
                                 )
                             );
 
-                            if (! $googleMyBusinessService->createScheduledPost($localPost)) {
-                                throw new Exception();
-                            }
+                            $googleLocalPost = $googleMyBusinessService->createScheduledPost($localPost);
 
-                            ScheduledPostMedia::query()
-                                ->where([ScheduledPostMedia::SCHEDULED_POST_ID_COLUMN => $scheduledPost->getId()])
-                                ->forceDelete();
-
-                            $scheduledPost->forceDelete();
+                            $scheduledPost->update([
+                                ScheduledPost::STATE_COLUMN     => strtolower(
+                                    $googleLocalPost[ScheduledPost::STATE_COLUMN] ?? ScheduledPost::REJECTED_STATE
+                                ),
+                                ScheduledPost::ONLINE_ID_COLUMN => $googleLocalPost['name'] ?? null,
+                                ScheduledPost::REASON_COLUMN    => null,
+                            ]);
                         } catch (Throwable $e) {
                             $scheduledPost->update([
                                 ScheduledPost::STATE_COLUMN     => ScheduledPost::REJECTED_STATE,

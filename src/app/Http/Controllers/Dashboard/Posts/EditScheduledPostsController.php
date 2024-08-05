@@ -44,7 +44,7 @@ class EditScheduledPostsController extends DashboardController
                     trans(sprintf('global.%s', $type))
                 ))),
                 'type'          => $type,
-                'id'            => Uuid::uuid4()->toString(),
+                'id'            => $id ?? Uuid::uuid4()->toString(),
                 'scheduledPost' => $scheduledPost,
             ]
         );

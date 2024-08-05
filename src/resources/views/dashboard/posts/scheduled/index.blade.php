@@ -126,10 +126,17 @@
                                     </td>
                                     <td>
                                         <div class="btn-list flex-nowrap">
-                                            {{--                                    TODO: --}}
-                                            {{--                                    <a href="{{ route('dashboard.scheduled-posts.edit', ['type' => strtolower($scheduledPost->topic_type), 'id' => $scheduledPost->id]) }}" class="btn btn-sm btn-default" title="Edit">--}}
-                                            {{--                                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>--}}
-                                            {{--                                    </a>--}}
+                                            @if(! blank($scheduledPost->online_id))
+                                                @php($onlineId = explode('/', $scheduledPost->online_id))
+                                                <a href="{{ route('dashboard.posts.view', ['accountId' => $onlineId[1], 'locationId' => $onlineId[3], 'postId' => $onlineId[5]]) }}" class="btn btn-sm btn-outline-green" title="{{ trans('global.view') }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path></svg>
+                                                </a>
+                                            @endif
+                                            @if(in_array(strtolower($scheduledPost->state), ['unspecified', 'rejected']))
+                                                <a href="{{ route('dashboard.scheduled-posts.edit', ['type' => strtolower($scheduledPost->topic_type), 'id' => $scheduledPost->id]) }}" class="btn btn-sm btn-default" title="Edit">
+                                                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                                                </a>
+                                            @endif
                                             <form action="{{ route('dashboard.scheduled-posts.delete', ['id' => $scheduledPost->id]) }}"
                                                   method="POST" style="display: inline;">
                                                 @method('DELETE')

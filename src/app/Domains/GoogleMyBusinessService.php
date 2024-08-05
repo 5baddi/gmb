@@ -108,15 +108,11 @@ class GoogleMyBusinessService extends Service
         }
     }
 
-    public function getBusinessLocationPost(string $id): array
+    public function getBusinessLocationPost(string $accountId, string $locationId, string $postId): array
     {
-        if (empty($this->accountId) || empty($this->mainLocationId) || empty($id)) {
-            return [];
-        }
-
         try {
             $response = $this->client->get(
-                sprintf(self::LOCATION_POST_ENDPOINT, $this->accountId, $this->mainLocationId, $id)
+                sprintf(self::LOCATION_POST_ENDPOINT, $accountId, $locationId, $postId)
             );
 
             $results = json_decode($response->getBody()->getContents(), true);
@@ -307,7 +303,7 @@ class GoogleMyBusinessService extends Service
     /**
      * @throws GuzzleException|Exception
      */
-    public function createScheduledPost(GoogleBusinessLocalPostObjectValue $values): bool
+    public function createScheduledPost(GoogleBusinessLocalPostObjectValue $values): array|false
     {
         if (empty($this->accountId) || empty($this->mainLocationId)) {
             return false;
@@ -327,7 +323,7 @@ class GoogleMyBusinessService extends Service
             throw new Exception(implode(' ', $messages));
         }
 
-        return $response->getStatusCode() === 200;
+        return $results;
     }
 
     private function configure(): void
