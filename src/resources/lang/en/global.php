@@ -44,4 +44,6 @@ return [
     'media_allowed_file_size' => 'Maximum file size: 75 MB',
     'main_location_not_set' => 'Please set your preferred location before proceeding.',
     'view' => 'View',
+    'posted' => 'Posted',
+    'edit' => 'Edit',
 ];

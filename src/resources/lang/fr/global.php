@@ -44,4 +44,6 @@ return [
     'media_allowed_file_size' => 'Taille maximale du fichier : 75 Mo',
     'main_location_not_set' => 'Veuillez définir votre emplacement préféré avant de continuer.',
     'view' => 'Voir',
+    'posted' => 'Posté',
+    'edit' => 'Modifier',
 ];
