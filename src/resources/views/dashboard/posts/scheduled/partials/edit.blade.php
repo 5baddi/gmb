@@ -1,3 +1,7 @@
+@php
+    use BADDIServices\ClnkGO\Models\ScheduledPost;
+@endphp
+
 @extends('layouts.dashboard')
 
 @section('title')
@@ -42,16 +46,17 @@
                 <div class="row mb-3">
                     <div class="col-4">
                         <label class="form-label">Type d’appel à l’action</label>
+                        @php($ctaType = strtolower($scheduledPost?->action_type ?? ScheduledPost::CALL_ACTION_TYPE))
                         <select name="action_type" class="form-select @if ($errors->has('action_type')) is-invalid @endif">
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'book') selected @endif value="book">Réserver un rendez-vous, une table, etc</option>
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'order') selected @endif value="order">Commander quelque chose</option>
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'shop') selected @endif value="shop">Parcourir un catalogue de produits</option>
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'learn_more') selected @endif value="learn_more">En savoir plus</option>
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'sign_up') selected @endif value="sign_up">S'inscrire/s'inscrire/rejoindre quelque chose</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'book') selected @endif value="book">Réserver un rendez-vous, une table, etc</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'order') selected @endif value="order">Commander quelque chose</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'shop') selected @endif value="shop">Parcourir un catalogue de produits</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'learn_more') selected @endif value="learn_more">En savoir plus</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'sign_up') selected @endif value="sign_up">S'inscrire/s'inscrire/rejoindre quelque chose</option>
                             @if($type === 'offer')
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'get_offer') selected @endif value="get_offer">Offre</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'get_offer') selected @endif value="get_offer">Offre</option>
                             @endif
-                            <option @if (($scheduledPost?->action_type ?? old('action_type')) === 'call' || empty(($scheduledPost?->action_type ?? old('action_type')))) selected @endif value="call">Appeler l'établissement</option>
+                            <option @if (($ctaType ?? old('action_type')) === 'call' || empty(($ctaType ?? old('action_type')))) selected @endif value="call">Appeler l'établissement</option>
                         </select>
                         @if ($errors->has('action_type'))
                             <div class="invalid-feedback">{{ $errors->first('action_type') }}</div>
