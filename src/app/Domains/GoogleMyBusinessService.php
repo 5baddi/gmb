@@ -13,6 +13,7 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use BADDIServices\ClnkGO\AppLogger;
 use GuzzleHttp\Exception\GuzzleException;
 use BADDIServices\ClnkGO\Services\Service;
 use BADDIServices\ClnkGO\Models\ObjectValues\GoogleBusinessLocalPostObjectValue;
@@ -189,7 +190,14 @@ class GoogleMyBusinessService extends Service
         );
 
         $results = json_decode($response->getBody()->getContents(), true);
+
         if (Arr::has($results, 'error')) {
+            AppLogger::info(
+                'Error while posting media',
+                'google-my-business:create-media',
+                array_merge($results, ['payload' => $media])
+            );
+
             $messages = array_filter(Arr::dot($results), function ($key) {
                 return Str::endsWith($key, '.message');
             }, ARRAY_FILTER_USE_KEY);
@@ -318,7 +326,14 @@ class GoogleMyBusinessService extends Service
         );
 
         $results = json_decode($response->getBody()->getContents(), true);
+
         if (Arr::has($results, 'error')) {
+            AppLogger::info(
+                'Error while posting local post',
+                'google-my-business:create-local-post',
+                array_merge($results, ['payload' => $values->toArray()])
+            );
+
             $messages = array_filter(Arr::dot($results), function ($key) {
                 return Str::endsWith($key, '.message');
             }, ARRAY_FILTER_USE_KEY);
