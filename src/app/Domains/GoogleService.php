@@ -102,10 +102,15 @@ class GoogleService extends Service
                 return;
             }
 
+            $attributes = GoogleCredentialsObjectValue::fromArray($response)->toArray();
+
             $attributes = array_merge(
-                GoogleCredentialsObjectValue::fromArray($response)->toArray(),
+                $attributes,
                 [
-                    UserGoogleCredentials::REFRESH_TOKEN_COLUMN     => $userCredentials->getRefreshToken(),
+                    UserGoogleCredentials::REFRESH_TOKEN_COLUMN
+                    => blank($attributes[UserGoogleCredentials::REFRESH_TOKEN_COLUMN] ?? null)
+                        ? $userCredentials->getRefreshToken()
+                        : $attributes[UserGoogleCredentials::REFRESH_TOKEN_COLUMN],
                     UserGoogleCredentials::ACCOUNT_ID_COLUMN        => $userCredentials->getAccountId(),
                     UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN  => $userCredentials->getMainLocationId(),
                 ]
