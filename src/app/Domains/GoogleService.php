@@ -102,12 +102,14 @@ class GoogleService extends Service
                 return;
             }
 
-            $oauth = new Google_Service_Oauth2($this->client);
-            $userInfo = $oauth->userinfo->get();
-
-            $attributes = GoogleCredentialsObjectValue::fromArray($response)->toArray();
-            $attributes[UserGoogleCredentials::ACCOUNT_ID_COLUMN] = $userInfo->getId() ?? $userCredentials->getAccountId();
-            $attributes[UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN] = $userCredentials->getMainLocationId();
+            $attributes = array_merge(
+                GoogleCredentialsObjectValue::fromArray($response)->toArray(),
+                [
+                    UserGoogleCredentials::REFRESH_TOKEN_COLUMN     => $userCredentials->getRefreshToken(),
+                    UserGoogleCredentials::ACCOUNT_ID_COLUMN        => $userCredentials->getAccountId(),
+                    UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN  => $userCredentials->getMainLocationId(),
+                ]
+            );
 
             $this->userRepository->saveGoogleCredentials($userCredentials->getUserId(), $attributes);
         } catch (Throwable $e) {
