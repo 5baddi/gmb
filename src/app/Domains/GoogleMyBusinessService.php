@@ -138,6 +138,16 @@ class GoogleMyBusinessService extends Service
                 sprintf(self::LOCATION_POST_ENDPOINT, $this->accountId, $this->mainLocationId, $id)
             );
 
+            $results = json_decode($response->getBody()->getContents(), true);
+
+            if (Arr::has($results, 'error')) {
+                AppLogger::info(
+                    'Error while deleting local post',
+                    'google-my-business:delete-local-post',
+                    array_merge($results, ['id' => $id])
+                );
+            }
+
             return $response->getStatusCode() === 200 ;
         } catch (Throwable) {
             return false;
@@ -176,6 +186,9 @@ class GoogleMyBusinessService extends Service
         }
     }
 
+    /**
+     * @throws GuzzleException|Exception
+     */
     public function createBusinessLocationMedia(array $media): array|false
     {
         if (empty($this->accountId) || empty($this->mainLocationId)) {

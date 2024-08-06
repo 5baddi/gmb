@@ -18,7 +18,14 @@ class DeletePostController extends DashboardController
     {
         if (! $this->googleMyBusinessService->deleteBusinessLocationPost($id)) {
             return redirect()
-                ->route('dashboard.posts.view', ['id' => $id])
+                ->route(
+                    'dashboard.posts.view',
+                    [
+                        'accountId'     => $this->user->googleCredentials->getAccountId(),
+                        'locationId'    => $this->user->googleCredentials->getMainLocationId(),
+                        'postId'        => $id,
+                    ]
+                )
                 ->with(
                     'alert',
                     new Alert(trans('global.deleting_post_error'))
