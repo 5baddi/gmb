@@ -55,7 +55,7 @@ class AutoPostScheduledMediaCommand extends Command
         try {
             ScheduledMedia::query()
                 ->where(ScheduledMedia::SCHEDULED_AT_COLUMN, '<=', Carbon::now()->format('Y-m-d H:i:s'))
-                ->where(ScheduledMedia::STATE_COLUMN, '!=', ScheduledMedia::REJECTED_STATE)
+                ->where(ScheduledMedia::STATE_COLUMN, ScheduledMedia::UNSPECIFIED_STATE)
                 ->orderBy(ScheduledMedia::USER_ID_COLUMN)
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
