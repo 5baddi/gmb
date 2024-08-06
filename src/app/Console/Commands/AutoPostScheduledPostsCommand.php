@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Services\UserService;
@@ -118,6 +119,19 @@ class AutoPostScheduledPostsCommand extends Command
                                 ScheduledPost::ONLINE_ID_COLUMN => $googleLocalPost['name'] ?? null,
                                 ScheduledPost::REASON_COLUMN    => null,
                             ]);
+
+                            $files->each(function(ScheduledPostMedia $file) {
+                                $path = $file->getAttribute(ScheduledPostMedia::PATH_COLUMN);
+                                if (empty($path)) {
+                                    return true;
+                                }
+
+                                Storage::delete($path);
+
+                                $file->forceDelete();
+
+                                return true;
+                            });
                         } catch (Throwable $e) {
                             $scheduledPost->update([
                                 ScheduledPost::STATE_COLUMN     => ScheduledPost::REJECTED_STATE,
