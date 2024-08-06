@@ -99,6 +99,8 @@ class AutoPostScheduledMediaCommand extends Command
                                 ScheduledMedia::REASON_COLUMN    => $e->getMessage(),
                             ]);
                         }
+
+                        return true;
                     });
                 });
         } catch (Throwable $e) {

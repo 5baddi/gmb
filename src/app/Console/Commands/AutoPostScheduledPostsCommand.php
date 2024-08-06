@@ -138,6 +138,8 @@ class AutoPostScheduledPostsCommand extends Command
                                 ScheduledPost::REASON_COLUMN    => $e->getMessage(),
                             ]);
                         }
+
+                        return true;
                     });
                 });
         } catch (Throwable $e) {
