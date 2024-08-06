@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Throwable;
-use Exception;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Console\Command;
