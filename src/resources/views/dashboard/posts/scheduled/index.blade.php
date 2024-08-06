@@ -105,6 +105,9 @@
                             </tr>
                         @else
                             @foreach($scheduledPosts as $scheduledPost)
+                                @if(blank($scheduledPost->topic_type ?? ''))
+                                    @continue
+                                @endif
                                 <tr>
                                     <td>{{ Str::ucfirst(Str::lower(($scheduledPost->topic_type ?? '---'))) }}</td>
                                     <td>{{ substr($scheduledPost->summary ?? '---', 0, 50) }}</td>
