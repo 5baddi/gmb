@@ -89,6 +89,27 @@
       });
     });
 
+    jQuery(() => {
+      jQuery('input[name=preferred-location]').on('keyup', debounce(() => {
+        let locationName = jQuery('input[name=preferred-location]').val();
+
+        if (typeof locationName !== 'string' || locationName.length === 0) {
+          return;
+        }
+
+        let selectedLocation = jQuery('#account-locations option').filter(function() {
+          return this.value === locationName;
+        })
+
+        let selectedLocationId = selectedLocation.data('location-id');
+        if (typeof selectedLocationId !== 'number') {
+          return;
+        }
+
+        console.log(selectedLocationId);
+      }, 1000));
+    });
+
     @yield('script')
     </script>
   </body>
