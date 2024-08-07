@@ -97,7 +97,10 @@
         <div class="navbar-nav flex-row order-md-last">
              <div class="d-none d-md-flex">
               <div class="nav-item dropdown d-none d-md-flex me-3">
-                  <input name="preferred-location" type="text" class="form-control" list="account-locations" placeholder="Select preferred location"/>
+                  <div class="form-floating">
+                      <input name="preferred-location" type="text" class="form-control" list="account-locations" placeholder="Select preferred location"/>
+                      <label for="preferred-location">Preferred location</label>
+                  </div>
                   <datalist id="account-locations">
                       <option value="Demo" data-location-id="333">
                       <option value="Demo 2" data-location-id="222">
