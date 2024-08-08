@@ -11,7 +11,7 @@
         </div>
     </div>
     @if(! empty($reviews['nextPageToken']))
-        <input name="gmb_next" type="hidden" value="{{ $media['nextPageToken'] }}"/>
+        <input name="gmb_next" type="hidden" value="{{ $reviews['nextPageToken'] }}"/>
         <div class="row mt-3">
             <div class="col">
                 <a id="load-more-btn" href="javascript:void(0);" onclick="loadMoreReviews()"
