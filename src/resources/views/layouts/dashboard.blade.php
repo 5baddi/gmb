@@ -89,6 +89,14 @@
       });
     });
 
+    jQuery('#account-locations option').each(function() {
+      if (jQuery(this).data('location-id') !== '{{ $user->googleCredentials?->getMainLocationId() ?? '' }}') {
+        return;
+      }
+
+      jQuery('input[name=preferred-location]').val(jQuery(this).val());
+    })
+
     jQuery(() => {
       jQuery('input[name=preferred-location]').on('keyup', debounce(() => {
         let locationName = jQuery('input[name=preferred-location]').val();
@@ -99,7 +107,7 @@
 
         let selectedLocation = jQuery('#account-locations option').filter(function() {
           return this.value === locationName;
-        })
+        });
 
         let selectedLocationId = selectedLocation.data('location-id');
         if (typeof selectedLocationId !== 'number') {

@@ -46,4 +46,10 @@ return [
     'view' => 'Voir',
     'posted' => 'Posté',
     'edit' => 'Modifier',
+    'main_location' => 'Emplacement préféré',
+    'set_main_location' => 'Veuillez définir votre emplacement préféré',
+    'error_connect_gmb' => 'Une erreur s\'est produite lors de la sauvegarde du compte en se connectant à votre compte Google My Business !',
+    'gmb_connected' => 'Connexion réussie à votre compte Google My Business.',
+    'missing_google_auth_code' => 'Code d\'authentification Google manquant.',
+    'google_auth_failed' => 'Échec de l\'authentification Google.',
 ];

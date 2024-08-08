@@ -98,12 +98,16 @@
              <div class="d-none d-md-flex">
               <div class="nav-item dropdown d-none d-md-flex me-3">
                   <div class="form-floating">
-                      <input name="preferred-location" type="text" class="form-control" list="account-locations" placeholder="Select preferred location"/>
-                      <label for="preferred-location">Preferred location</label>
+                      <input name="preferred-location" type="text" class="form-control" list="account-locations" placeholder="{{ trans('global.set_main_location') }}"/>
+                      <label for="preferred-location">{{ trans('global.main_location') }}</label>
                   </div>
                   <datalist id="account-locations">
-                      <option value="Demo" data-location-id="333">
-                      <option value="Demo 2" data-location-id="222">
+                      @foreach($userAccountLocations as $userAccountLocation)
+                      @if(empty($userAccountLocation['title'] ?? null) || empty($userAccountLocation['location_id'] ?? null))
+                          @continue
+                      @endif
+                        <option value="{{ $userAccountLocation['title'] }}" data-location-id="{{ $userAccountLocation['location_id'] }}">
+                      @endforeach
                   </datalist>
 {{--                <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications">--}}
 {{--                  <!-- Download SVG icon from http://tabler-icons.io/i/bell -->--}}

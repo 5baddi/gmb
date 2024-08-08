@@ -23,12 +23,12 @@ class GoogleMyBusinessCallbackController extends DashboardController
         try {
             $code = $request->query('code');
             if (empty($code)) {
-                throw new Exception('Missing google authentication code.');
+                throw new Exception(trans('global.missing_google_auth_code'));
             }
 
             $googleCredentials = $this->googleService->exchangeAuthenticationCode($code);
             if (empty($googleCredentials)) {
-                throw new Exception('Google authentication failed.');
+                throw new Exception(trans('global.google_auth_failed'));
             }
 
             $this->userService->saveGoogleCredentials(
@@ -39,13 +39,13 @@ class GoogleMyBusinessCallbackController extends DashboardController
             return redirect()->route('dashboard.account', ['tab' => $request->query('tab', 'gmb')])
                 ->with(
                     'alert',
-                    new Alert('Successfully connected to your google my business account.', 'success')
+                    new Alert(trans('global.gmb_connected'), 'success')
                 );
         } catch (Throwable){
             return redirect()->route('dashboard.account', ['tab' => $request->query('tab', 'gmb')])
                 ->with(
                     'alert',
-                    new Alert('An occurred error while saving account connecting to your google my business account!')
+                    new Alert(trans('global.error_connect_gmb'))
                 );
         }
     }
