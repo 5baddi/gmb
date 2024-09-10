@@ -110,12 +110,18 @@
         });
 
         let selectedLocationId = selectedLocation.data('location-id');
-        if (typeof selectedLocationId !== 'number') {
+        if (typeof selectedLocationId === 'undefined') {
           return;
         }
 
-        console.log(selectedLocationId);
-      }, 1000));
+        $.ajax({
+          type: "GET",
+          url: `{{ route('dashboard.account.locations.main') }}?name=${selectedLocationId}`
+        })
+        .done(function(data, textStatus, jqXHR) {
+          window.location.reload();
+        });
+      }, 500));
     });
 
     @yield('script')
