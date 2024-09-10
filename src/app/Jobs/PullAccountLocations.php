@@ -15,7 +15,10 @@ class PullAccountLocations implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public function __construct(private string $userId, private readonly GoogleCredentialsObjectValue $googleCredentials) {}
+    public function __construct(
+        private readonly string $userId,
+        private readonly GoogleCredentialsObjectValue $googleCredentials
+    ) {}
 
     public function handle(): void
     {
