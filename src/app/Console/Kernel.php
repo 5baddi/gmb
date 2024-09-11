@@ -52,7 +52,7 @@ class Kernel extends ConsoleKernel
 
         $schedule
             ->command('user:refresh-google-access-token')
-            ->hourly()
+            ->everyMinute()
             ->withoutOverlapping();
     }
 
