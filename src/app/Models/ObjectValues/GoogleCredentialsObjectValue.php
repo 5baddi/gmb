@@ -29,6 +29,21 @@ readonly class GoogleCredentialsObjectValue
         return get_object_vars($this);
     }
 
+    public function getId(): string
+    {
+        return $this->id_token;
+    }
+
+    public function getAccountId(): string
+    {
+        return $this->account_id;
+    }
+
+    public function getAccessToken(): string
+    {
+        return $this->access_token;
+    }
+
     public static function fromArray(array $attributes): self
     {
         return new self(

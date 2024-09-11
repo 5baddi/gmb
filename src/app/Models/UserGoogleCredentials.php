@@ -23,8 +23,6 @@ class UserGoogleCredentials extends ModelEntity
     public const string CREATED_COLUMN = 'created';
     public const string MAIN_LOCATION_ID_COLUMN = 'main_location_id';
 
-    public $timestamps = false;
-
     public function getUserId(): string
     {
         return (string) $this->getAttribute(self::USER_ID_COLUMN);

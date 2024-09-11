@@ -11,8 +11,9 @@ namespace BADDIServices\ClnkGO\Repositories;
 use Carbon\Carbon;
 use App\Models\User;
 use BADDIServices\ClnkGO\App;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use BADDIServices\ClnkGO\Http\Filters\QueryFilter;
-use BADDIServices\ClnkGO\Models\UserLinkedEmail;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -80,36 +81,6 @@ class UserRepository
                         User::CUSTOMER_ID_COLUMN => $customerId
                     ])
                     ->first();
-    }
-    
-    public function findLinkedEmailById(string $linkedEmailId): ?UserLinkedEmail
-    {
-        return UserLinkedEmail::query()
-            ->find($linkedEmailId);
-    }
-    
-    public function findLinkedEmailByToken(string $linkedEmailToken): ?UserLinkedEmail
-    {
-        return UserLinkedEmail::query()
-            ->where([UserLinkedEmail::CONFIRMATION_TOKEN_COLUMN => $linkedEmailToken])
-            ->first();
-    }
-    
-    public function confirmLinkedEmailById(string $linkedEmailId): bool
-    {
-        return UserLinkedEmail::query()
-            ->find($linkedEmailId)
-            ->update([
-                UserLinkedEmail::CONFIRMATION_TOKEN_COLUMN  => null,
-                UserLinkedEmail::CONFIRMED_AT_COLUMN        => Carbon::now(),
-            ]) === 1;
-    }
-    
-    public function removeLinkedEmailById(string $linkedEmailId): bool
-    {
-        return (bool) UserLinkedEmail::query()
-            ->find($linkedEmailId)
-            ->delete();
     }
 
     public function create(array $attributes): User
@@ -205,25 +176,9 @@ class UserRepository
             ->delete() > 0;
     }
 
-    public function saveLinkedEmail(string $userId, string $email): UserLinkedEmail
+    public function saveGoogleCredentials(string $userId, array $credentials): Builder|Model
     {
-        return UserLinkedEmail::query()
-            ->updateOrCreate(
-                [
-                    UserLinkedEmail::EMAIL_COLUMN               => $email
-                ],
-                [
-                    UserLinkedEmail::EMAIL_COLUMN               => $email,
-                    UserLinkedEmail::USER_ID_COLUMN             => $userId,
-                    UserLinkedEmail::CONFIRMATION_TOKEN_COLUMN  => Str::substr(md5($email), 0, 60)
-                ]
-            );
-    }
-
-    public function saveGoogleCredentials(string $userId, array $credentials): void
-    {
-        // For now credentials aren't multiple
-        UserGoogleCredentials::query()
+        return UserGoogleCredentials::query()
             ->updateOrCreate(
                 [UserGoogleCredentials::USER_ID_COLUMN => $userId],
                 array_merge($credentials, [UserGoogleCredentials::USER_ID_COLUMN => $userId])
@@ -232,7 +187,6 @@ class UserRepository
 
     public function deleteGoogleCredentials(string $userId): void
     {
-        // For now credentials aren't multiple
         UserGoogleCredentials::query()
             ->where([UserGoogleCredentials::USER_ID_COLUMN => $userId])
             ->delete();

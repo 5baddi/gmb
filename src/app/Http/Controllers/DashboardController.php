@@ -12,10 +12,10 @@ use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\Factory;
-use BADDIServices\ClnkGO\Models\Pack;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use BADDIServices\ClnkGO\Services\UserService;
 use BADDIServices\ClnkGO\Domains\GoogleService;
+use BADDIServices\ClnkGO\Models\AccountLocation;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -32,7 +32,7 @@ class DashboardController extends BaseController
     protected GoogleMyBusinessService $googleMyBusinessService;
 
     protected User $user;
-    
+
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
@@ -41,8 +41,6 @@ class DashboardController extends BaseController
             $this->user = Auth::id() !== null ? $this->userService->findById(Auth::id()) : null;
 
             $this->googleService = app(GoogleService::class);
-            $this->googleService->refreshAccessToken($this->user->googleCredentials);
-            $this->user->load(['googleCredentials']); // reload user google credentials
 
             $this->googleMyBusinessService = new GoogleMyBusinessService(
                 $this->user->googleCredentials?->getAccessToken(),
@@ -61,8 +59,14 @@ class DashboardController extends BaseController
 
     private function defaultData(): array
     {
+        $accountLocations = AccountLocation::query()
+            ->where(AccountLocation::USER_ID_COLUMN, $this->user->getId())
+            ->get()
+            ->toArray();
+
         return [
-            'user' => $this->user,
+            'user'                  => $this->user,
+            'userAccountLocations'  => $accountLocations,
         ];
     }
 }

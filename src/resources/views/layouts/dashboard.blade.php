@@ -89,6 +89,41 @@
       });
     });
 
+    jQuery('#account-locations option').each(function() {
+      if (jQuery(this).data('location-id') !== '{{ $user->googleCredentials?->getMainLocationId() ?? '' }}') {
+        return;
+      }
+
+      jQuery('input[name=preferred-location]').val(jQuery(this).val());
+    })
+
+    jQuery(() => {
+      jQuery('input[name=preferred-location]').on('keyup', debounce(() => {
+        let locationName = jQuery('input[name=preferred-location]').val();
+
+        if (typeof locationName !== 'string' || locationName.length === 0) {
+          return;
+        }
+
+        let selectedLocation = jQuery('#account-locations option').filter(function() {
+          return this.value === locationName;
+        });
+
+        let selectedLocationId = selectedLocation.data('location-id');
+        if (typeof selectedLocationId === 'undefined') {
+          return;
+        }
+
+        $.ajax({
+          type: "GET",
+          url: `{{ route('dashboard.account.locations.main') }}?name=${selectedLocationId}`
+        })
+        .done(function(data, textStatus, jqXHR) {
+          window.location.reload();
+        });
+      }, 500));
+    });
+
     @yield('script')
     </script>
   </body>

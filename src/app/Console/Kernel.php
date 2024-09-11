@@ -7,6 +7,7 @@ use Bugsnag\BugsnagLaravel\OomBootstrapper;
 use App\Console\Commands\AutoPostScheduledPostsCommand;
 use App\Console\Commands\AutoPostScheduledMediaCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Console\Commands\RefreshGoogleAccessTokenCommand;
 use App\Console\Commands\RemoveOutdatedDraftScheduledPostsCommand;
 
 class Kernel extends ConsoleKernel
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         AutoPostScheduledPostsCommand::class,
         AutoPostScheduledMediaCommand::class,
         RemoveOutdatedDraftScheduledPostsCommand::class,
+        RefreshGoogleAccessTokenCommand::class,
     ];
 
     /**
@@ -46,6 +48,11 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command('remove:outdated-draft-scheduled-posts')
             ->dailyAt('00:00:00')
+            ->withoutOverlapping();
+
+        $schedule
+            ->command('user:refresh-google-access-token')
+            ->everyMinute()
             ->withoutOverlapping();
     }
 
