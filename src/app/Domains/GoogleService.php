@@ -67,10 +67,6 @@ class GoogleService extends Service
         }
 
         try {
-            if (empty($userCredentials->getAccessToken())) {
-                return;
-            }
-
             $expiresAt = Carbon::parse($userCredentials->getCreated())->addSeconds($userCredentials->getExpiresIn());
             if ($expiresAt->isFuture()) {
                 return;
