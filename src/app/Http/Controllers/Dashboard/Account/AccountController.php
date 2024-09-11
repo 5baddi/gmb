@@ -44,7 +44,7 @@ class AccountController extends DashboardController
         return $this->render(
             'dashboard.account.index',
             [
-                'title'         => 'Compte',
+                'title'         => trans('global.account'),
                 'tab'           => $request->query('tab', 'gmb'),
                 'user'          => $this->user,
                 'callbackURL'   => $callbackURL,
