@@ -50,11 +50,11 @@ class RefreshGoogleAccessTokenCommand extends Command
         try {
             UserGoogleCredentials::query()
                 ->whereNotNull(UserGoogleCredentials::REFRESH_TOKEN_COLUMN)
-                ->Where(
-                    UserGoogleCredentials::UPDATED_AT_COLUMN,
-                    '>',
-                    Carbon::now()->subHour()->format('Y-m-d H:i:s')
-                )
+//                ->Where(
+//                    UserGoogleCredentials::UPDATED_AT_COLUMN,
+//                    '>',
+//                    Carbon::now()->subHour()->format('Y-m-d H:i:s')
+//                )
                 ->chunkById(10, function (Collection $usersGoogleCredentials) {
                     $usersGoogleCredentials->each(function (UserGoogleCredentials $userGoogleCredentials) {
                         $this->googleService->refreshAccessToken($userGoogleCredentials);
