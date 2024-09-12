@@ -53,7 +53,7 @@
     function loadMoreLocations() {
     $.ajax({
     type: "GET",
-    url: new URL("{{ route('dashboard.reviews') }}"),
+    url: new URL("{{ route('dashboard.reviews', ['has_replies' => request()->get('has_replies')]) }}"),
     data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
