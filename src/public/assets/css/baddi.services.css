@@ -297,3 +297,11 @@ svg {
     /* progress bar covers file name */
     display: none !important;
 }
+
+.pointer-cursor {
+    cursor: pointer !important;
+}
+
+.form-check-input:checked {
+    background-color: #cf2517 !important;
+}

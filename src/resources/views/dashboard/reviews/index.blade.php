@@ -5,7 +5,24 @@
 @endsection
 
 @section('content')
-    <div class="row row-cards">
+    <div class="row g-2 align-items-center">
+        <div class="col">
+            <h2 class="page-title">
+                {{ trans('global.reviews') }}
+            </h2>
+        </div>
+        <div class="col-auto ms-auto d-print-none">
+            <div class="btn-list">
+                <span class="form-check-label">{{ trans('global.answered') }}</span>
+                <form action="{{ route('dashboard.reviews') }}">
+                <label class="form-check form-check-single form-switch p-0">
+                  <input name="has_replies" value="1" onchange="this.form.submit()" class="form-check-input pointer-cursor" type="checkbox" @if(request()->boolean('has_replies')) checked @endif/>
+                </label>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cards mt-2">
         <div class="space-y" id="reviews-container">
             @include('dashboard.reviews.partials.list')
         </div>

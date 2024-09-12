@@ -8,16 +8,23 @@
 
 namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Reviews;
 
+use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
-use App\Http\Requests\PaginationRequest;
+use App\Http\Requests\PaginatedReviewsRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class IndexController extends DashboardController
 {
-    public function __invoke(PaginationRequest $request): View|Response
+    public function __invoke(PaginatedReviewsRequest $request): View|Response
     {
         $reviews = $this->googleMyBusinessService->getBusinessLocationReviews($request->query('next'));
+
+        if (Arr::has($reviews, 'reviews') && $request->boolean('has_replies')) {
+            $reviews['reviews'] = array_filter($reviews['reviews'], function ($review) {
+                return ! empty($review['reviewReply'] ?? null);
+            });
+        }
 
         if ($request->has('next')) {
             return response(

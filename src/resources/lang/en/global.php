@@ -55,4 +55,5 @@ return [
     'take_action' => 'Take action',
     'unauthenticated_gmb_title' => 'Manual Re-Authentication Required',
     'unauthenticated_gmb_description' => 'We\'re unable to access your Google Business account, you may need to manually re-authenticate.',
+    'answered' => 'Answered',
 ];
