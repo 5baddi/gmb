@@ -12,6 +12,7 @@ use Throwable;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\Session;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
@@ -77,7 +78,13 @@ class UploadMediaController extends DashboardController
                         => $request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN),
                     ]);
             }
-        } catch (Throwable){
+        } catch (Throwable $e){
+            AppLogger::error(
+                $e,
+                'scheduled-media:upload-new-media',
+                ['payload' => $request->toArray()]
+            );
+
             abort(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
