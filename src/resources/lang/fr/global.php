@@ -52,4 +52,7 @@ return [
     'gmb_connected' => 'Connexion réussie à votre compte Google My Business.',
     'missing_google_auth_code' => 'Code d\'authentification Google manquant.',
     'google_auth_failed' => 'Échec de l\'authentification Google.',
+    'take_action' => 'Agir',
+    'unauthenticated_gmb_title' => 'Ré-authentification manuelle requise',
+    'unauthenticated_gmb_description' => 'Nous ne pouvons pas accéder à votre compte Google Business, vous devrez peut-être vous ré-authentifier manuellement.',
 ];

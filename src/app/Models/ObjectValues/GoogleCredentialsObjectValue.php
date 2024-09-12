@@ -20,6 +20,7 @@ readonly class GoogleCredentialsObjectValue
         private string $scope,
         private string $token_type,
         private int $expires_in,
+        private bool $is_expired,
         private int $created,
         private string $main_location_id
     ) {}
@@ -54,6 +55,7 @@ readonly class GoogleCredentialsObjectValue
             $attributes[UserGoogleCredentials::SCOPE_COLUMN] ?? '',
             $attributes[UserGoogleCredentials::TOKEN_TYPE_COLUMN] ?? '',
             $attributes[UserGoogleCredentials::EXPIRES_IN_COLUMN] ?? 0,
+            ($attributes[UserGoogleCredentials::IS_EXPIRED_COLUMN] ?? false) === true,
             $attributes[UserGoogleCredentials::CREATED_COLUMN] ?? 0,
             $attributes[UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN] ?? ''
         );
