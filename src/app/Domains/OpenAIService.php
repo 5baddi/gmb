@@ -9,6 +9,7 @@
 namespace BADDIServices\ClnkGO\Domains;
 
 use Throwable;
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use BADDIServices\ClnkGO\AppLogger;
@@ -46,6 +47,12 @@ class OpenAIService extends Service
             $results = json_decode($response->getBody()->getContents(), true);
 
             if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['choices'])) {
+                AppLogger::error(
+                    new Exception('Open AI text generation failed!'),
+                    'open-ai:generate-text',
+                    ['payload' => func_get_args(), 'response' => $results]
+                );
+
                 return [];
             }
 
