@@ -95,7 +95,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-nav flex-row order-md-last">
-            @if(sizeof($userAccountLocations) > 0 && ! $user->googleCredentials->isExpired())
+            @if(sizeof($userAccountLocations) > 0 && $user->isGoogleAccountAuthenticated())
              <div class="d-none d-md-flex">
               <div class="nav-item dropdown d-none d-md-flex me-3">
                   <div class="form-floating">
