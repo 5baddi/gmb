@@ -60,4 +60,5 @@ return [
     'daily' => 'Daily',
     '3_days' => 'Three days',
     'weekly' => 'Weekly',
+    'view_review' => 'View review',
 ];

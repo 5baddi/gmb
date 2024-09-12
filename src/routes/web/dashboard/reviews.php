@@ -8,10 +8,8 @@
 
 use Illuminate\Support\Facades\Route;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Reviews\IndexController;
-use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media\DeleteMediaController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Reviews\ViewReviewController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Reviews\SaveReviewController;
-use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Reviews\GenerateReviewReplyController;
 
 Route::middleware(['auth'])
     ->name('dashboard.reviews')

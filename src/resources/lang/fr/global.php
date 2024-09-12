@@ -60,4 +60,5 @@ return [
     'daily' => 'Quotidiennement',
     '3_days' => 'Trois jours',
     'weekly' => 'Hebdomadaire',
+    'view_review' => 'voir l\'avis',
 ];

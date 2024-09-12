@@ -23,7 +23,7 @@ class ViewReviewController extends DashboardController
         return $this->render(
             'dashboard.reviews.view',
             [
-                'title'     => 'View review',
+                'title'     => trans('global.view_review'),
                 'reviewId'  => $id,
                 'review'    => $review,
             ]

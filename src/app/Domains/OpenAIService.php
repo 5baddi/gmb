@@ -11,6 +11,7 @@ namespace BADDIServices\ClnkGO\Domains;
 use Throwable;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use BADDIServices\ClnkGO\AppLogger;
 use BADDIServices\ClnkGO\Services\Service;
 
 class OpenAIService extends Service
@@ -49,7 +50,13 @@ class OpenAIService extends Service
             }
 
             return $results['choices'];
-        } catch (Throwable) {
+        } catch (Throwable $e) {
+            AppLogger::error(
+                $e,
+                'open-ai:generate-text',
+                ['payload' => func_get_args()]
+            );
+
             return [];
         }
     }
