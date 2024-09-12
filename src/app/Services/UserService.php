@@ -12,15 +12,13 @@ use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use App\Jobs\PullAccountLocations;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Pagination\LengthAwarePaginator;
-use BADDIServices\ClnkGO\Models\UserLinkedEmail;
 use BADDIServices\ClnkGO\Http\Filters\QueryFilter;
 use BADDIServices\ClnkGO\Repositories\UserRepository;
-use BADDIServices\ClnkGO\Events\LinkedEmail\LinkedEmailConfirmationMail;
 use BADDIServices\ClnkGO\Models\ObjectValues\GoogleCredentialsObjectValue;
 
 class UserService
@@ -90,26 +88,6 @@ class UserService
     public function findByCustomerId(int $customerId): ?User
     {
         return $this->userRepository->findByCustomerId($customerId);
-    }
-    
-    public function findLinkedEmailById(string $linkedEmailId): ?UserLinkedEmail
-    {
-        return $this->userRepository->findLinkedEmailById($linkedEmailId);
-    }
-    
-    public function findLinkedEmailByToken(string $linkedEmailToken): ?UserLinkedEmail
-    {
-        return $this->userRepository->findLinkedEmailByToken($linkedEmailToken);
-    }
-    
-    public function removeLinkedEmail(UserLinkedEmail $linkedEmail): bool
-    {
-        return $this->userRepository->removeLinkedEmailById($linkedEmail->getId());
-    }
-    
-    public function confirmLinkedEmail(UserLinkedEmail $linkedEmail): bool
-    {
-        return $this->userRepository->confirmLinkedEmailById($linkedEmail->getId());
     }
 
     public function create(array $attributes): User
@@ -220,20 +198,10 @@ class UserService
         return $this->userRepository->removeResetPasswordToken($token);
     }
 
-    public function saveLinkedEmail(User $user, string $email): UserLinkedEmail
-    {   
-        $linkedEmail = $this->userRepository->saveLinkedEmail($user->getId(), strtolower($email));
-
-        Event::dispatch(new LinkedEmailConfirmationMail($linkedEmail->getId()));
-
-        return $linkedEmail;
-    }
-
     public function saveGoogleCredentials(User $user, GoogleCredentialsObjectValue $credentials): void
     {
         $this->userRepository->saveGoogleCredentials($user->getId(), $credentials->toArray());
 
-        // TODO: dispatch pull google my business data
-//        Event::dispatch(new LinkedEmailConfirmationMail($user->getId()));
+        PullAccountLocations::dispatch($user->getId(), $credentials);
     }
 }

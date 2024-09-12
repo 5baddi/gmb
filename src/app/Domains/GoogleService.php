@@ -67,10 +67,6 @@ class GoogleService extends Service
         }
 
         try {
-            if (empty($userCredentials->getAccessToken())) {
-                return;
-            }
-
             $expiresAt = Carbon::parse($userCredentials->getCreated())->addSeconds($userCredentials->getExpiresIn());
             if ($expiresAt->isFuture()) {
                 return;
@@ -93,8 +89,8 @@ class GoogleService extends Service
             $response = $this->client->fetchAccessTokenWithRefreshToken($userCredentials->getRefreshToken());
 
             if (Arr::has($response, 'error')) {
-                AppLogger::info(
-                    'Error while refreshing google access token',
+                AppLogger::error(
+                    new Exception('Error while refreshing google access token'),
                     'google:refresh-access-token',
                     array_merge($response, ['payload' => $userCredentials?->toArray() ?? []])
                 );
