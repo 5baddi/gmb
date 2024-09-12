@@ -41,8 +41,6 @@ class UploadMediaController extends DashboardController
                 )
                 ->setTimezone('UTC');
 
-            $scheduledFrequency = 0;
-
             foreach ($files as $file) {
                 if (! $file instanceof UploadedFile) {
                     continue;
@@ -53,20 +51,18 @@ class UploadMediaController extends DashboardController
 
                 switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
                     case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addDays($scheduledFrequency);
+                        $scheduledAt = $scheduledAt->addDay();
 
                         break;
                     case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addDays($scheduledFrequency * 3);
+                        $scheduledAt = $scheduledAt->addDays(3);
 
                         break;
                     case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addWeeks($scheduledFrequency);
+                        $scheduledAt = $scheduledAt->addWeek();
 
                         break;
                 }
-
-                $scheduledFrequency++;
 
                 ScheduledMedia::query()
                     ->create([
