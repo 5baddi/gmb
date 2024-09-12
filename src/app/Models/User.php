@@ -134,6 +134,6 @@ class User extends Authenticatable
 
     public function isGoogleAccountAuthenticated(): bool
     {
-        return $this->googleCredentials instanceof UserGoogleCredentials;
+        return $this->googleCredentials instanceof UserGoogleCredentials && ! $this->googleCredentials->isExpired();
     }
 }

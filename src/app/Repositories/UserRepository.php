@@ -230,6 +230,13 @@ class UserRepository
             );
     }
 
+    public function markGoogleCredentialsAsExpired(string $userId, bool $expired = true): bool
+    {
+        return (bool) UserGoogleCredentials::query()
+            ->where(UserGoogleCredentials::USER_ID_COLUMN, $userId)
+            ->update([UserGoogleCredentials::IS_EXPIRED_COLUMN => $expired]);
+    }
+
     public function deleteGoogleCredentials(string $userId): void
     {
         // For now credentials aren't multiple

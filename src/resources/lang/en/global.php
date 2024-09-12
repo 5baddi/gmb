@@ -46,4 +46,13 @@ return [
     'view' => 'View',
     'posted' => 'Posted',
     'edit' => 'Edit',
+    'main_location' => 'Preferred location',
+    'set_main_location' => 'Please set your preferred location',
+    'error_connect_gmb' => 'An occurred error while saving account connecting to your google my business account!',
+    'gmb_connected' => 'Successfully connected to your google my business account.',
+    'missing_google_auth_code' => 'Missing google authentication code.',
+    'google_auth_failed' => 'Google authentication failed.',
+    'take_action' => 'Take action',
+    'unauthenticated_gmb_title' => 'Manual Re-Authentication Required',
+    'unauthenticated_gmb_description' => 'We\'re unable to access your Google Business account, you may need to manually re-authenticate.',
 ];
