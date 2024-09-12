@@ -41,7 +41,7 @@
                             <div id="collapse-1" class="accordion-collapse collapse" data-bs-parent="#accordion-auto-posting" style="">
                                 <div class="accordion-body pt-3">
                                     <div class="row">
-                                        <div class="col-8">
+                                        <div class="col-4">
                                             <label class="form-label">{{ trans('global.scheduled_date') }}</label>
                                             <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ old('scheduled_date') }}"/>
                                             @if ($errors->has('scheduled_date'))
@@ -53,6 +53,17 @@
                                             <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ old('scheduled_time') }}"/>
                                             @if ($errors->has('scheduled_time'))
                                                 <div class="invalid-feedback">{{ $errors->first('scheduled_time') }}</div>
+                                            @endif
+                                        </div>
+                                        <div class="col-4">
+                                            <label class="form-label">{{ trans('global.frequency') }}</label>
+                                            <select name="scheduled_frequency" class="form-select @if ($errors->has('scheduled_frequency')) is-invalid @endif">
+                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === 'daily' || empty(($scheduledPost?->frequency ?? old('frequency')))) selected @endif value="daily">{{ trans('global.daily') }}</option>
+                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === '3_days') selected @endif value="3_days">{{ trans('global.3_days') }}</option>
+                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === 'weekly') selected @endif value="weekly">{{ trans('global.weekly') }}</option>
+                                            </select>
+                                            @if ($errors->has('scheduled_frequency'))
+                                                <div class="invalid-feedback">{{ $errors->first('scheduled_frequency') }}</div>
                                             @endif
                                         </div>
                                     </div>

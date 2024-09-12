@@ -31,6 +31,18 @@ class UploadMediaController extends DashboardController
                 Response::HTTP_BAD_REQUEST
             );
 
+            $scheduledAt = Carbon::parse(
+                    sprintf(
+                        '%s %s',
+                        $request->input('scheduled_date', date('Y-M-d')),
+                        $request->input('scheduled_time', '00:00')
+                    ),
+                    Session::get('timezone', 'UTC')
+                )
+                ->setTimezone('UTC');
+
+            $scheduledFrequency = 0;
+
             foreach ($files as $file) {
                 if (! $file instanceof UploadedFile) {
                     continue;
@@ -39,16 +51,22 @@ class UploadMediaController extends DashboardController
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
                 $file->move(public_path('uploads'), $fileName);
 
-                $scheduledAt = Carbon::parse(
-                        sprintf(
-                            '%s %s',
-                            $request->input('scheduled_date', date('Y-M-d')),
-                            $request->input('scheduled_time', '00:00')
-                        ),
-                        Session::get('timezone', 'UTC')
-                    )
-                    ->setTimezone('UTC')
-                    ->toISOString();
+                switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
+                    case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
+                        $scheduledAt = $scheduledAt->addDays($scheduledFrequency);
+
+                        break;
+                    case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
+                        $scheduledAt = $scheduledAt->addDays($scheduledFrequency * 3);
+
+                        break;
+                    case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
+                        $scheduledAt = $scheduledAt->addWeeks($scheduledFrequency);
+
+                        break;
+                }
+
+                $scheduledFrequency++;
 
                 ScheduledMedia::query()
                     ->create([
@@ -58,7 +76,9 @@ class UploadMediaController extends DashboardController
                         ScheduledMedia::TYPE_COLUMN         => ScheduledMedia::PHOTO_TYPE,
                         ScheduledMedia::PATH_COLUMN         => sprintf('uploads/%s', $fileName),
                         ScheduledMedia::STATE_COLUMN        => ScheduledMedia::UNSPECIFIED_STATE,
-                        ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
+                        ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt->toISOString(),
+                        ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN
+                        => $request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN),
                     ]);
             }
         } catch (Throwable){

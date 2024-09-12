@@ -56,4 +56,8 @@ return [
     'unauthenticated_gmb_title' => 'Manual Re-Authentication Required',
     'unauthenticated_gmb_description' => 'We\'re unable to access your Google Business account, you may need to manually re-authenticate.',
     'answered' => 'Answered',
+    'frequency' => 'Frequency',
+    'daily' => 'Daily',
+    '3_days' => 'Three days',
+    'weekly' => 'Weekly',
 ];

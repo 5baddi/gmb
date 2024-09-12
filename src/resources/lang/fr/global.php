@@ -56,4 +56,8 @@ return [
     'unauthenticated_gmb_title' => 'Ré-authentification manuelle requise',
     'unauthenticated_gmb_description' => 'Nous ne pouvons pas accéder à votre compte Google Business, vous devrez peut-être vous ré-authentifier manuellement.',
     'answered' => 'Répondu',
+    'frequency' => 'Fréquence',
+    'daily' => 'Quotidiennement',
+    '3_days' => 'Trois jours',
+    'weekly' => 'Hebdomadaire',
 ];

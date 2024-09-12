@@ -22,6 +22,7 @@ class ScheduledMedia extends ModelEntity
     public const string STATE_COLUMN = 'state';
     public const string REASON_COLUMN = 'reason';
     public const string SCHEDULED_AT_COLUMN = 'scheduled_at';
+    public const string SCHEDULED_FREQUENCY_COLUMN = 'scheduled_frequency';
 
     public const string PHOTO_TYPE = 'photo';
     public const string VIDEO_TYPE = 'video';
@@ -37,6 +38,16 @@ class ScheduledMedia extends ModelEntity
     public const array STATES = [
         self::UNSPECIFIED_STATE => 'UNSPECIFIED',
         self::REJECTED_STATE    => 'REJECTED',
+    ];
+
+    public const string DAILY_SCHEDULED_FREQUENCY = 'daily';
+    public const string EVERY_3_DAYS_SCHEDULED_FREQUENCY = '3_days';
+    public const string WEEKLY_SCHEDULED_FREQUENCY = 'weekly';
+
+    public const array SCHEDULED_FREQUENCIES = [
+        self::DAILY_SCHEDULED_FREQUENCY,
+        self::EVERY_3_DAYS_SCHEDULED_FREQUENCY,
+        self::WEEKLY_SCHEDULED_FREQUENCY,
     ];
 
     public function user(): BelongsTo
