@@ -20,8 +20,13 @@ class UserGoogleCredentials extends ModelEntity
     public const string SCOPE_COLUMN = 'scope';
     public const string TOKEN_TYPE_COLUMN = 'token_type';
     public const string EXPIRES_IN_COLUMN = 'expires_in';
+    public const string IS_EXPIRED_COLUMN = 'is_expired';
     public const string CREATED_COLUMN = 'created';
     public const string MAIN_LOCATION_ID_COLUMN = 'main_location_id';
+
+    protected $casts = [
+        self::IS_EXPIRED_COLUMN => 'boolean',
+    ];
 
     public function getUserId(): string
     {
@@ -51,6 +56,11 @@ class UserGoogleCredentials extends ModelEntity
     public function getExpiresIn(): int
     {
         return (int) $this->getAttribute(self::EXPIRES_IN_COLUMN);
+    }
+
+    public function isExpired(): bool
+    {
+        return (bool) $this->getAttribute(self::IS_EXPIRED_COLUMN);
     }
 
     public function getCreated(): int

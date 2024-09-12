@@ -52,4 +52,7 @@ return [
     'gmb_connected' => 'Successfully connected to your google my business account.',
     'missing_google_auth_code' => 'Missing google authentication code.',
     'google_auth_failed' => 'Google authentication failed.',
+    'take_action' => 'Take action',
+    'unauthenticated_gmb_title' => 'Manual Re-Authentication Required',
+    'unauthenticated_gmb_description' => 'We\'re unable to access your Google Business account, you may need to manually re-authenticate.',
 ];

@@ -95,6 +95,8 @@ class GoogleService extends Service
                     array_merge($response, ['payload' => $userCredentials?->toArray() ?? []])
                 );
 
+                $this->userRepository->markGoogleCredentialsAsExpired($userCredentials->getUserId());
+
                 return;
             }
 
@@ -119,6 +121,8 @@ class GoogleService extends Service
                 'google:refresh-access-token',
                 $userCredentials?->toArray() ?? []
             );
+
+            $this->userRepository->markGoogleCredentialsAsExpired($userCredentials->getUserId());
         }
     }
 
