@@ -32,6 +32,8 @@ class UploadMediaController extends DashboardController
                 Response::HTTP_BAD_REQUEST
             );
 
+            $isInstantly = empty($request->input('scheduled_date'));
+
             $scheduledAt = Carbon::parse(
                     sprintf(
                         '%s %s',
@@ -50,19 +52,21 @@ class UploadMediaController extends DashboardController
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
                 $file->move(public_path('uploads'), $fileName);
 
-                switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
-                    case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addDay();
+                if (! $isInstantly) {
+                    switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
+                        case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
+                            $scheduledAt = $scheduledAt->addDay();
 
-                        break;
-                    case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addDays(3);
+                            break;
+                        case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
+                            $scheduledAt = $scheduledAt->addDays(3);
 
-                        break;
-                    case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
-                        $scheduledAt = $scheduledAt->addWeek();
+                            break;
+                        case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
+                            $scheduledAt = $scheduledAt->addWeek();
 
-                        break;
+                            break;
+                    }
                 }
 
                 ScheduledMedia::query()
@@ -75,7 +79,7 @@ class UploadMediaController extends DashboardController
                         ScheduledMedia::STATE_COLUMN        => ScheduledMedia::UNSPECIFIED_STATE,
                         ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt->toISOString(),
                         ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN
-                        => $request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN),
+                        => $isInstantly ? null : $request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN),
                     ]);
             }
         } catch (Throwable $e){
