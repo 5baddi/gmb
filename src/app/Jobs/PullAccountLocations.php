@@ -48,7 +48,7 @@ class PullAccountLocations implements ShouldQueue
                             AccountLocation::USER_ID_COLUMN     => $this->userId,
                             AccountLocation::ACCOUNT_ID_COLUMN  => $this->googleCredentials->getAccountId(),
                             AccountLocation::LOCATION_ID_COLUMN => $locationId,
-                            AccountLocation::TITLE_COLUMN       => $location['name'] ?? $location['title'],
+                            AccountLocation::TITLE_COLUMN       => $location['title'],
                             AccountLocation::DESCRIPTION_COLUMN => $location['profile']['description'] ?? null,
                         ]
                     );
