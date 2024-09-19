@@ -50,6 +50,7 @@ class RefreshGoogleAccessTokenCommand extends Command
         try {
             UserGoogleCredentials::query()
                 ->whereNotNull(UserGoogleCredentials::REFRESH_TOKEN_COLUMN)
+                ->where(UserGoogleCredentials::IS_EXPIRED_COLUMN, '=', false)
                 ->Where(
                     UserGoogleCredentials::UPDATED_AT_COLUMN,
                     '>',
