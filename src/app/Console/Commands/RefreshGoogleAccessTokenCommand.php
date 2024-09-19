@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Throwable;
 use Carbon\Carbon;
-use Google_Service_Directory;
 use Illuminate\Console\Command;
 use App\Jobs\PullAccountLocations;
 use BADDIServices\ClnkGO\AppLogger;
@@ -45,13 +44,6 @@ class RefreshGoogleAccessTokenCommand extends Command
      */
     public function handle(): int
     {
-        /** @var GoogleService $googleService */
-        $googleService = app(GoogleService::class);
-
-        $service = new Google_Service_Directory($googleService->client);
-        dd($service);
-
-        die();
         $this->info("Start refreshing users google access tokens");
         $startTime = microtime(true);
 
