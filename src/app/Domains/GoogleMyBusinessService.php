@@ -24,7 +24,7 @@ class GoogleMyBusinessService extends Service
 
     public const string BASE_API_URI = 'https://mybusinessaccountmanagement.googleapis.com';
 
-    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusinessbusinessinformation.googleapis.com/v1/accounts/%s/locations?readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
+    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusinessbusinessinformation.googleapis.com/v1/accounts/%s/locations?filter=locationState.isDisabled=false&readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
     public const string LOCATION_POSTS_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts';
     public const string LOCATION_POST_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts/%s';
     public const string LOCATION_MEDIA_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/media';
