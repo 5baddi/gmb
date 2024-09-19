@@ -47,9 +47,12 @@ class RefreshGoogleAccessTokenCommand extends Command
     {
         /** @var GoogleService $googleService */
         $googleService = app(GoogleService::class);
-
+$googleService->client->setAccessToken('ya29.a0AcM612xuHkFp8mG8DgQPz_oKXbiKwitRtkcxqJPgWEmf9bsEVn50BHIkvpGi9G5qKu1xNx3w0MUturTUGAT1jYPeUVaasc910yGa7AL2OVHEQsM_SUYztvCD1tqSESAZ5FvEWLP8UOGyONoAa2bP0K16yQuCwrRLE67SVFMuqwaCgYKAU0SARISFQHGX2Mi2WWrgoqIksrEUoibuTrJuw0177');
         $service = new Google_Service_Directory($googleService->client);
-        dd($service);
+        dd($service->users->listUsers(array(
+            'customer' => 'my_customer',
+            'query' => 'isAdmin=true'
+        )));
 
         die();
         $this->info("Start refreshing users google access tokens");
