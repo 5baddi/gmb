@@ -62,6 +62,7 @@ class GoogleService extends Service
         if (
             ! $userCredentials instanceof UserGoogleCredentials
             || empty($userCredentials->getUserId())
+            || $userCredentials->isExpired()
         ) {
             return;
         }
