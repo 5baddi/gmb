@@ -181,13 +181,7 @@ class UserRepository
         return UserGoogleCredentials::query()
             ->updateOrCreate(
                 [UserGoogleCredentials::USER_ID_COLUMN => $userId],
-                array_merge(
-                    $credentials,
-                    [
-                        UserGoogleCredentials::USER_ID_COLUMN       => $userId,
-                        UserGoogleCredentials::UPDATED_AT_COLUMN    => Carbon::now(),
-                    ]
-                )
+                array_merge($credentials, [UserGoogleCredentials::USER_ID_COLUMN => $userId])
             );
     }
 
