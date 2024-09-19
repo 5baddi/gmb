@@ -51,7 +51,8 @@ class RefreshGoogleAccessTokenCommand extends Command
 $googleService->client->setAccessToken('ya29.a0AcM612xuHkFp8mG8DgQPz_oKXbiKwitRtkcxqJPgWEmf9bsEVn50BHIkvpGi9G5qKu1xNx3w0MUturTUGAT1jYPeUVaasc910yGa7AL2OVHEQsM_SUYztvCD1tqSESAZ5FvEWLP8UOGyONoAa2bP0K16yQuCwrRLE67SVFMuqwaCgYKAU0SARISFQHGX2Mi2WWrgoqIksrEUoibuTrJuw0177');
         $oauth = new Google_Service_Oauth2($googleService->client);
         $userInfo = $oauth->userinfo->get();
-        die($userInfo);
+        dd($userInfo);
+        die();
         $this->info("Start refreshing users google access tokens");
         $startTime = microtime(true);
 
