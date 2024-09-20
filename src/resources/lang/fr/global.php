@@ -61,4 +61,5 @@ return [
     '3_days' => 'Trois jours',
     'weekly' => 'Hebdomadaire',
     'view_review' => 'voir l\'avis',
+    'review_content_missing' => 'Impossible de générer une réponse. La critique fournie ne contient aucun contenu ! Veuillez vous assurer que la critique inclut du texte avant de soumettre.',
 ];

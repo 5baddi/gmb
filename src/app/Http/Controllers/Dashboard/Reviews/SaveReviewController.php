@@ -56,19 +56,19 @@ class SaveReviewController extends DashboardController
 
     private function generateReviewReply(string $id, Request $request): RedirectResponse
     {
-        if (! $request->has('review')) {
+        if (empty($request->input('review'))) {
             return redirect()
                 ->route('dashboard.reviews.view', ['id' => $id])
                 ->withInput()
                 ->with(
                     'alert',
-                    new Alert(trans('An error occurred while reading the review comment!'))
+                    new Alert(trans('global.review_content_missing'))
                 );
         }
 
         $choices = $this->openAIService->generateTextCompletions(
             trans('dashboard.review_reply_prompt'),
-            $request->input('review', ''),
+            $request->input('review'),
             $this->user->getId()
         );
 

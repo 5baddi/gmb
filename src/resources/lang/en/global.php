@@ -61,4 +61,5 @@ return [
     '3_days' => 'Three days',
     'weekly' => 'Weekly',
     'view_review' => 'View review',
+    'review_content_missing' => 'Unable to generate a reply. The review provided does not contain any content! Please ensure the review includes text before submitting.',
 ];
