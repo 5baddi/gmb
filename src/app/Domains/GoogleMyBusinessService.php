@@ -282,11 +282,18 @@ class GoogleMyBusinessService extends Service
             );
 
             $results = json_decode($response->getBody()->getContents(), true);
-            if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['reviewId'])) {
-                return [];
+
+            if (Arr::has($results, 'error')) {
+                AppLogger::info(
+                    'Error while fetching review',
+                    'google-my-business:fetch-review',
+                    array_merge($results, ['payload' => func_get_args()])
+                );
             }
 
-            return $results ?? [];
+            return ($response->getStatusCode() !== 200 || ! Arr::has($results, ['reviewId']))
+                ? []
+                : $results;
         } catch (Throwable) {
             return [];
         }
