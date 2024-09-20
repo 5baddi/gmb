@@ -15,7 +15,7 @@
     @foreach ($elements as $element)
         @if (is_array($element))
             @foreach ($element as $page => $url)
-                <li class="page-item @if($page == $paginator->currentPage())active @endif"><a class="page-link @if($paginator->currentPage())btn-clnkgo @endif" href="{{ $url }}">{{ $page }}</a></li>
+                <li class="page-item @if($page == $paginator->currentPage())active @endif"><a class="page-link @if($page == $paginator->currentPage())btn-clnkgo @endif" href="{{ $url }}">{{ $page }}</a></li>
             @endforeach
         @endif
     @endforeach
