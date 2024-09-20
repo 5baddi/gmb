@@ -50,7 +50,7 @@
 @endsection
 
 @section('script')
-    function loadMoreLocations() {
+    function loadMoreReviews() {
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard.reviews', ['has_replies' => request()->get('has_replies')]) }}"),

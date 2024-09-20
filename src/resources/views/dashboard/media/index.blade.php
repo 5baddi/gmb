@@ -45,7 +45,7 @@
 @endsection
 
 @section('script')
-    function loadMoreLocations() {
+    function loadMoreMedia() {
     $.ajax({
     type: "GET",
     url: new URL("{{ route('dashboard.media') }}"),

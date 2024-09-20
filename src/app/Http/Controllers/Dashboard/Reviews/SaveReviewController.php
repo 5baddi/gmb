@@ -56,7 +56,7 @@ class SaveReviewController extends DashboardController
 
     private function generateReviewReply(string $id, Request $request): RedirectResponse
     {
-        if (empty($request->input('review'))) {
+        if (! $request->has('review')) {
             return redirect()
                 ->route('dashboard.reviews.view', ['id' => $id])
                 ->withInput()
