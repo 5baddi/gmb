@@ -314,11 +314,18 @@ class GoogleMyBusinessService extends Service
             );
 
             $results = json_decode($response->getBody()->getContents(), true);
-            if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['comment'])) {
-                return [];
+
+            if (Arr::has($results, 'error')) {
+                AppLogger::info(
+                    'Error while updating review reply',
+                    'google-my-business:update-review-reply',
+                    array_merge($results, ['payload' => func_get_args()])
+                );
             }
 
-            return $results ?? [];
+            return ($response->getStatusCode() !== 200 || ! Arr::has($results, ['comment']))
+                ? []
+                : $results;
         } catch (Throwable) {
             return [];
         }
