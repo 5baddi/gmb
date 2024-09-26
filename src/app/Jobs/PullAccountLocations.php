@@ -31,7 +31,7 @@ class PullAccountLocations implements ShouldQueue
             $response = $this->googleMyBusinessService->getBusinessAccounts(
                 $response['nextPageToken'] ?? null
             );
-dd($response);
+
             foreach ($response['accounts'] ?? [] as $account) {
                 $this->pullAccountLocations(Str::remove('accounts/', $account['name'] ?? ''));
             }
