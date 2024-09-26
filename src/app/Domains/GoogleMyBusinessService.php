@@ -24,7 +24,8 @@ class GoogleMyBusinessService extends Service
 
     public const string BASE_API_URI = 'https://mybusinessaccountmanagement.googleapis.com';
 
-    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusinessbusinessinformation.googleapis.com/v1/accounts/%s/locations?readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
+    public const string ACCOUNTS_ENDPOINT = 'https://mybusinessaccountmanagement.googleapis.com/v1/accounts';
+    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations?readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
     public const string LOCATION_POSTS_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts';
     public const string LOCATION_POST_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts/%s';
     public const string LOCATION_MEDIA_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/media';
@@ -37,12 +38,48 @@ class GoogleMyBusinessService extends Service
 
     public function __construct(
         private readonly ?string $accessToken = null,
-        private readonly ?string $accountId = null,
+        private ?string $accountId = null,
         private readonly ?string $mainLocationId = null
     ) {
         parent::__construct();
 
         $this->configure();
+    }
+
+    public function getBusinessAccounts(
+        ?string $nextPageToken = null,
+        int $limit = self::DEFAULT_PAGINATION_LIMIT
+    ): array {
+        try {
+            $endpoint = sprintf(
+                '%s&pageSize=%d',
+                self::ACCOUNTS_ENDPOINT,
+                $limit
+            );
+
+            if (! empty($nextPageToken)) {
+                $endpoint = sprintf('%s&pageToken=%s', $endpoint, $nextPageToken);
+            }
+
+            $response = $this->client->get($endpoint);
+            $results = json_decode($response->getBody()->getContents(), true);
+
+            if (Arr::has($results, 'error')) {
+                AppLogger::info(
+                    'Error while fetching accounts',
+                    'google-my-business:accounts-list',
+                    array_merge(get_object_vars($this), $results, func_get_args())
+                );
+            }
+
+            if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['accounts'])) {
+                return [];
+            }
+
+            return $results;
+        } catch (Throwable) {
+            return [];
+        }
     }
 
     public function getBusinessAccountLocations(
@@ -66,6 +103,14 @@ class GoogleMyBusinessService extends Service
 
             $response = $this->client->get($endpoint);
             $results = json_decode($response->getBody()->getContents(), true);
+
+            if (Arr::has($results, 'error')) {
+                AppLogger::info(
+                    'Error while fetching account locations',
+                    'google-my-business:account-locations-list',
+                    array_merge(get_object_vars($this), $results, func_get_args())
+                );
+            }
 
             if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['locations'])) {
                 return [];
@@ -144,7 +189,7 @@ class GoogleMyBusinessService extends Service
                 AppLogger::info(
                     'Error while deleting local post',
                     'google-my-business:delete-local-post',
-                    array_merge($results, ['id' => $id])
+                    array_merge(get_object_vars($this), $results, func_get_args())
                 );
             }
 
@@ -208,7 +253,7 @@ class GoogleMyBusinessService extends Service
             AppLogger::info(
                 'Error while posting media',
                 'google-my-business:create-media',
-                array_merge($results, ['payload' => $media])
+                array_merge(get_object_vars($this), $results, func_get_args())
             );
 
             $messages = array_filter(Arr::dot($results), function ($key) {
@@ -287,7 +332,7 @@ class GoogleMyBusinessService extends Service
                 AppLogger::info(
                     'Error while fetching review',
                     'google-my-business:fetch-review',
-                    array_merge($results, ['payload' => func_get_args()])
+                    array_merge(get_object_vars($this), $results, func_get_args())
                 );
             }
 
@@ -326,7 +371,7 @@ class GoogleMyBusinessService extends Service
                 AppLogger::info(
                     'Error while updating review reply',
                     'google-my-business:update-review-reply',
-                    array_merge($results, ['payload' => func_get_args()])
+                    array_merge(get_object_vars($this), $results, func_get_args())
                 );
             }
 
@@ -358,7 +403,7 @@ class GoogleMyBusinessService extends Service
             AppLogger::info(
                 'Error while posting local post',
                 'google-my-business:create-local-post',
-                array_merge($results, ['payload' => $values->toArray()])
+                array_merge(get_object_vars($this), $results, func_get_args())
             );
 
             $messages = array_filter(Arr::dot($results), function ($key) {
@@ -369,6 +414,13 @@ class GoogleMyBusinessService extends Service
         }
 
         return $results;
+    }
+
+    public function setAccountId(string $accountId): self
+    {
+        $this->accountId = $accountId;
+
+        return $this;
     }
 
     private function configure(): void

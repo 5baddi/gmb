@@ -22,25 +22,6 @@ class AccountController extends DashboardController
             ? null
             : $this->googleService->generateAuthenticationURL();
 
-        $accountLocations = is_null($callbackURL)
-            ? $this->googleMyBusinessService->getBusinessAccountLocations($request->query('next'))
-            : [];
-
-        if ($request->has('next')) {
-            return response(
-                    $this->render(
-                        'dashboard.account.partials.locations-table',
-                        [
-                            'user'              => $this->user,
-                            'accountLocations'  => $accountLocations['locations'] ?? [],
-                        ]
-                    )
-                )
-                ->withHeaders([
-                    'Gmb-Next' => $accountLocations['nextPageToken'] ?? null,
-                ]);
-        }
-
         return $this->render(
             'dashboard.account.index',
             [
@@ -48,8 +29,6 @@ class AccountController extends DashboardController
                 'tab'           => $request->query('tab', 'gmb'),
                 'user'          => $this->user,
                 'callbackURL'   => $callbackURL,
-                'accountLocations'          => $accountLocations['locations'] ?? [],
-                'accountLocationsNextToken' => $accountLocations['nextPageToken'] ?? null,
             ]
         );
     }

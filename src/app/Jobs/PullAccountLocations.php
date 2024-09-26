@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,6 +16,8 @@ class PullAccountLocations implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private GoogleMyBusinessService $googleMyBusinessService;
+
     public function __construct(
         private readonly string $userId,
         private readonly GoogleCredentialsObjectValue $googleCredentials
@@ -22,13 +25,25 @@ class PullAccountLocations implements ShouldQueue
 
     public function handle(): void
     {
-        $googleMyBusinessService = new GoogleMyBusinessService(
-            $this->googleCredentials->getAccessToken(),
-            $this->googleCredentials->getAccountId()
-        );
+        $this->googleMyBusinessService = new GoogleMyBusinessService($this->googleCredentials->getAccessToken());
 
         do {
-            $response = $googleMyBusinessService->getBusinessAccountLocations(
+            $response = $this->googleMyBusinessService->getBusinessAccounts(
+                $response['nextPageToken'] ?? null
+            );
+dd($response);
+            foreach ($response['accounts'] ?? [] as $account) {
+                $this->pullAccountLocations(Str::remove('accounts/', $account['name'] ?? ''));
+            }
+        } while (! empty($response['nextPageToken']));
+    }
+
+    private function pullAccountLocations(string $accountId): void
+    {
+        do {
+            $this->googleMyBusinessService->setAccountId($accountId);
+
+            $response = $this->googleMyBusinessService->getBusinessAccountLocations(
                 $response['nextPageToken'] ?? null
             );
 
