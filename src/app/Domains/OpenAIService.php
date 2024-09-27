@@ -50,7 +50,7 @@ class OpenAIService extends Service
 
             $response = $this->client->post(self::TEXT_GENERATION_ENDPOINT, ['body' => json_encode($payload)]);
             $results = json_decode($response->getBody()->getContents(), true);
-dd($payload, $results);
+
             if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['choices'])) {
                 AppLogger::error(
                     new Exception('Open AI text generation failed!'),

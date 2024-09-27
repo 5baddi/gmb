@@ -82,7 +82,7 @@ class SaveReviewController extends DashboardController
                 );
         }
 
-        $request->merge(['reply' => $choices[0]['text']]);
+        $request->merge(['reply' => $choices[0]['message']['content'] ?? '']);
 
         return redirect()
             ->route('dashboard.reviews.view', ['id' => $id])
