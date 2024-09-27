@@ -112,6 +112,7 @@ class GoogleService extends Service
                         : $attributes[UserGoogleCredentials::REFRESH_TOKEN_COLUMN],
                     UserGoogleCredentials::ACCOUNT_ID_COLUMN        => $userCredentials->getAccountId(),
                     UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN  => $userCredentials->getMainLocationId(),
+                    UserGoogleCredentials::IS_EXPIRED_COLUMN        => false,
                 ]
             );
 
