@@ -52,13 +52,13 @@ class GoogleMyBusinessService extends Service
     ): array {
         try {
             $endpoint = sprintf(
-                '%s&pageSize=%d',
+                '%s?pageSize=%d',
                 self::ACCOUNTS_ENDPOINT,
                 $limit
             );
 
             if (! empty($nextPageToken)) {
-                $endpoint = sprintf('%s?pageToken=%s', $endpoint, $nextPageToken);
+                $endpoint = sprintf('%s&pageToken=%s', $endpoint, $nextPageToken);
             }
 
             $response = $this->client->get($endpoint);
