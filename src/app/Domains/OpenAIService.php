@@ -19,7 +19,7 @@ class OpenAIService extends Service
 {
     public const string BASE_API_URI = 'https://api.openai.com';
 
-    public const string TEXT_GENERATION_ENDPOINT = '/v1/chat/completion';
+    public const string TEXT_GENERATION_ENDPOINT = '/v1/chat/completions';
 
     private Client $client;
 
