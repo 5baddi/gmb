@@ -14,7 +14,7 @@
                             <div class="avatar avatar-md avatar-rounded" style="background-image: url({{ $review['reviewer']['profilePhotoUrl'] ?? asset('assets/img/no-image.svg') }})"></div>
                         </div>
                     </div>
-                    <form class="col" action="{{ route('dashboard.reviews.reply.update', ['id' => $reviewId]) }}" method="POST">
+                    <form class="col" action="{{ route('dashboard.reviews.reply.update', ['id' => $reviewId, 'reviewer' => $review['reviewer']['displayName'] ?? '']) }}" method="POST">
                         @csrf
                         <div class="card-body ps-0">
                             <div class="row">

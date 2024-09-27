@@ -30,8 +30,12 @@ class OpenAIService extends Service
         $this->configure();
     }
 
-    public function generateTextCompletions(string $prompt, string $text, ?string $userId = null): array
-    {
+    public function generateTextCompletions(
+        string $prompt,
+        string $text,
+        ?string $userName = null,
+        ?string $userId = null
+    ): array {
         try {
             $payload = [
                 'model'         => 'gpt-4-turbo',
@@ -43,6 +47,10 @@ class OpenAIService extends Service
                 ],
                 'max_tokens'    => 150,
             ];
+
+            if (! blank($userName)) {
+                $payload['messages'][0]['name'] = $userName;
+            }
 
             if (! empty($userId)) {
                 $payload['user'] = $userId;
