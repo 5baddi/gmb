@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Domains\GoogleService;
 use BADDIServices\ClnkGO\Models\AccountLocation;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
+use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
 use BADDIServices\ClnkGO\Models\ObjectValues\GoogleCredentialsObjectValue;
 
 class RefreshGoogleAccessTokenCommand extends Command
@@ -51,13 +52,19 @@ class RefreshGoogleAccessTokenCommand extends Command
             UserGoogleCredentials::query()
                 ->whereNotNull(UserGoogleCredentials::REFRESH_TOKEN_COLUMN)
                 ->where(UserGoogleCredentials::IS_EXPIRED_COLUMN, '=', false)
-                ->Where(
-                    UserGoogleCredentials::UPDATED_AT_COLUMN,
-                    '<=',
-                    Carbon::now()->subHour()->format('Y-m-d H:i:s')
-                )
+//                ->Where(
+//                    UserGoogleCredentials::UPDATED_AT_COLUMN,
+//                    '<=',
+//                    Carbon::now()->subHour()->format('Y-m-d H:i:s')
+//                )
                 ->chunkById(10, function (Collection $usersGoogleCredentials) {
                     $usersGoogleCredentials->each(function (UserGoogleCredentials $userGoogleCredentials) {
+                        $googleMyBusinessService = new GoogleMyBusinessService($userGoogleCredentials->getAccessToken());
+
+                        $response = $googleMyBusinessService->getBusinessAccounts(
+                            $response['nextPageToken'] ?? null
+                        );
+                        dd($response);
                         $this->googleService->refreshAccessToken($userGoogleCredentials);
 
                         $accountLocations = AccountLocation::query()
