@@ -63,7 +63,7 @@ class GoogleMyBusinessService extends Service
 
             $response = $this->client->get($endpoint);
             $results = json_decode($response->getBody()->getContents(), true);
-dd($results, $response, $endpoint);
+
             if (Arr::has($results, 'error')) {
                 AppLogger::info(
                     'Error while fetching accounts',
