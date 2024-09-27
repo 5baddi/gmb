@@ -242,7 +242,7 @@ return [
     'reply'             => 'Reply',
     'commented'         => 'Commented',
     'write_reply'       => 'Write your reply',
-    'review_reply_prompt' => 'Write a professional reply in the same language written in to the following customer review',
+    'review_reply_prompt' => 'Write a professional reply to the following customer review in the same language it is written in',
     'save_post'         => 'Save post',
     'disconnect_gmb_question' => 'Are you sure you want to disconnect your google business account ?',
 ];
