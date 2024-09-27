@@ -34,7 +34,7 @@ class OpenAIService extends Service
     {
         try {
             $payload = [
-                'model'         => 'gpt-3.5-turbo-instruct',
+                'model'         => 'gpt-4-turbo',
                 'prompt'        => sprintf('%s: %s', $prompt, $text),
                 'max_tokens'    => 150,
             ];
@@ -45,7 +45,7 @@ class OpenAIService extends Service
 
             $response = $this->client->post(self::TEXT_GENERATION_ENDPOINT, ['body' => json_encode($payload)]);
             $results = json_decode($response->getBody()->getContents(), true);
-
+dd($payload, $results);
             if ($response->getStatusCode() !== 200 || ! Arr::has($results, ['choices'])) {
                 AppLogger::error(
                     new Exception('Open AI text generation failed!'),
