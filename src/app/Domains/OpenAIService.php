@@ -36,8 +36,10 @@ class OpenAIService extends Service
             $payload = [
                 'model'         => 'gpt-4-turbo',
                 'messages'      => [
-                    'role'      => 'user',
-                    'content'   => sprintf('%s: %s', $prompt, $text),
+                    [
+                        'role'      => 'user',
+                        'content'   => sprintf('%s: %s', $prompt, $text),
+                    ]
                 ],
                 'max_tokens'    => 150,
             ];
