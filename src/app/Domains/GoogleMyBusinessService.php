@@ -58,7 +58,7 @@ class GoogleMyBusinessService extends Service
             );
 
             if (! empty($nextPageToken)) {
-                $endpoint = sprintf('%s&pageToken=%s', $endpoint, $nextPageToken);
+                $endpoint = sprintf('%s?pageToken=%s', $endpoint, $nextPageToken);
             }
 
             $response = $this->client->get($endpoint);
