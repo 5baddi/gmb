@@ -75,9 +75,21 @@ class GoogleService extends Service
 
             $this->client->setAccessToken(json_encode([
                 'access_token'  => $userCredentials->getAccessToken(),
+                'refresh_token' => $userCredentials->getRefreshToken(),
+                'expires_in'    => $userCredentials->getExpiresIn(),
+                'created'       => $userCredentials->getCreated(),
+                'id_token'      => $userCredentials->getAttribute(UserGoogleCredentials::ID_TOKEN_COLUMN),
+                'scope'         => $userCredentials->getAttribute(UserGoogleCredentials::SCOPE_COLUMN),
+                'token_type'    => $userCredentials->getAttribute(UserGoogleCredentials::TOKEN_TYPE_COLUMN),
             ]));
 
             if (! $this->client->isAccessTokenExpired()) {
+                return;
+            }
+
+            if (empty($userCredentials->getRefreshToken())) {
+                $this->userRepository->markGoogleCredentialsAsExpired($userCredentials->getUserId());
+
                 return;
             }
 
