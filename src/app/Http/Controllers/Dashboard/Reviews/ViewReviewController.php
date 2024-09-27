@@ -19,7 +19,7 @@ class ViewReviewController extends DashboardController
     {
         $review = $this->googleMyBusinessService->getBusinessLocationReview($id);
         abort_if(empty($review), Response::HTTP_NOT_FOUND);
-dd($review);
+dump($review);
         return $this->render(
             'dashboard.reviews.view',
             [
