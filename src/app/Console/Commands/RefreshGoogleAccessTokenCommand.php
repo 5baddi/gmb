@@ -52,9 +52,9 @@ class RefreshGoogleAccessTokenCommand extends Command
                 ->whereNotNull(UserGoogleCredentials::REFRESH_TOKEN_COLUMN)
                 ->where(UserGoogleCredentials::IS_EXPIRED_COLUMN, '=', false)
                 ->Where(
-                    UserGoogleCredentials::UPDATED_AT_COLUMN,
+                    UserGoogleCredentials::CREATED_COLUMN,
                     '<=',
-                    Carbon::now()->subHour()->format('Y-m-d H:i:s')
+                    Carbon::now()->subHour()->getTimestamp()
                 )
                 ->chunkById(10, function (Collection $usersGoogleCredentials) {
                     $usersGoogleCredentials->each(function (UserGoogleCredentials $userGoogleCredentials) {
