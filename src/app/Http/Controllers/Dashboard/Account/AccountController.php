@@ -18,17 +18,13 @@ class AccountController extends DashboardController
 {
     public function __invoke(Request $request): Factory|View|Response
     {
-        $callbackURL = $this->user->isGoogleAccountAuthenticated()
-            ? null
-            : $this->googleService->generateAuthenticationURL();
-
         return $this->render(
             'dashboard.account.index',
             [
                 'title'         => trans('global.account'),
                 'tab'           => $request->query('tab', 'gmb'),
                 'user'          => $this->user,
-                'callbackURL'   => $callbackURL,
+                'callbackURL'   => $this->googleService->generateAuthenticationURL(),
             ]
         );
     }
