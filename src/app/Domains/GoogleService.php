@@ -54,7 +54,7 @@ class GoogleService extends Service
         $userInfo = $oauth->userinfo->get();
         $userCredentials[UserGoogleCredentials::ACCOUNT_ID_COLUMN] = $userInfo->getId();
 
-        return $userCredentials;
+        return GoogleCredentialsObjectValue::fromArray($userCredentials)->toArray();
     }
 
     public function refreshAccessToken(?UserGoogleCredentials $userCredentials = null): void
@@ -84,12 +84,6 @@ class GoogleService extends Service
             ]));
 
             if (! $this->client->isAccessTokenExpired()) {
-                return;
-            }
-
-            if (empty($userCredentials->getRefreshToken())) {
-                $this->userRepository->markGoogleCredentialsAsExpired($userCredentials->getUserId());
-
                 return;
             }
 
