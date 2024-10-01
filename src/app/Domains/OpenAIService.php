@@ -49,7 +49,7 @@ class OpenAIService extends Service
             ];
 
             if (! blank($userName)) {
-                $payload['messages'][0]['name'] = $userName;
+                $payload['messages'][0]['name'] = trim(explode(' ', $userName)[0] ?? '');
             }
 
             if (! empty($userId)) {
