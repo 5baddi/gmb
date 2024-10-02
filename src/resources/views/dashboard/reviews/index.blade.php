@@ -53,7 +53,7 @@
     function loadMoreReviews() {
     $.ajax({
     type: "GET",
-    url: new URL("{{ route('dashboard.reviews', ['has_replies' => request()->get('has_replies')]) }}"),
+    url: new URL(`{{ route('dashboard.reviews', ['has_replies' => '']) }}${$('input[name=has_replies]').is(':checked') ? 1 : 0}`),
     data: { tab: 'gmb', next: jQuery('input[name=gmb_next]').val() },
     beforeSend: function(xhr) {
     $('#load-more-btn').addClass('disabled');
