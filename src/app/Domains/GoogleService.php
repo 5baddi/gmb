@@ -101,22 +101,19 @@ class GoogleService extends Service
                 return;
             }
 
-            $attributes = GoogleCredentialsObjectValue::fromArray($response)->toArray();
+            $attributes = GoogleCredentialsObjectValue::fromArray(array_merge(
+                    $response,
+                    [
+                        UserGoogleCredentials::REFRESH_TOKEN_COLUMN
+                        => blank($response[UserGoogleCredentials::REFRESH_TOKEN_COLUMN] ?? null)
+                            ? $userCredentials->getRefreshToken()
+                            : $response[UserGoogleCredentials::REFRESH_TOKEN_COLUMN],
+                        UserGoogleCredentials::ACCOUNT_ID_COLUMN        => $userCredentials->getAccountId(),
+                        UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN  => $userCredentials->getMainLocationId(),
+                    ]
+                ));
 
-            $attributes = array_merge(
-                $attributes,
-                [
-                    UserGoogleCredentials::REFRESH_TOKEN_COLUMN
-                    => blank($attributes[UserGoogleCredentials::REFRESH_TOKEN_COLUMN] ?? null)
-                        ? $userCredentials->getRefreshToken()
-                        : $attributes[UserGoogleCredentials::REFRESH_TOKEN_COLUMN],
-                    UserGoogleCredentials::ACCOUNT_ID_COLUMN        => $userCredentials->getAccountId(),
-                    UserGoogleCredentials::MAIN_LOCATION_ID_COLUMN  => $userCredentials->getMainLocationId(),
-                    UserGoogleCredentials::IS_EXPIRED_COLUMN        => false,
-                ]
-            );
-
-            $this->userRepository->saveGoogleCredentials($userCredentials->getUserId(), $attributes);
+            $this->userRepository->saveGoogleCredentials($userCredentials->getUserId(), $attributes->toArray());
         } catch (Throwable $e) {
             AppLogger::error(
                 $e,

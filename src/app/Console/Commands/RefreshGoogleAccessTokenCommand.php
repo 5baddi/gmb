@@ -58,7 +58,7 @@ class RefreshGoogleAccessTokenCommand extends Command
                 )
                 ->chunkById(10, function (Collection $usersGoogleCredentials) {
                     $usersGoogleCredentials->each(function (UserGoogleCredentials $userGoogleCredentials) {
-//                        $this->googleService->refreshAccessToken($userGoogleCredentials);
+                        $this->googleService->refreshAccessToken($userGoogleCredentials);
 
                         $accountLocations = AccountLocation::query()
                             ->where(AccountLocation::USER_ID_COLUMN, $userGoogleCredentials->getUserId())
