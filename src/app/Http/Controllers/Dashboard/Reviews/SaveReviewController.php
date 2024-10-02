@@ -72,7 +72,7 @@ class SaveReviewController extends DashboardController
             $this->user->getId()
         );
 
-        if (! Arr::has($choices[0] ?? [], 'text')) {
+        if (! Arr::has($choices[0] ?? [], 'message')) {
             return redirect()
                 ->route('dashboard.reviews.view', ['id' => $id])
                 ->withInput()
