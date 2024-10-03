@@ -18,7 +18,7 @@ return [
     'standard'          => 'Standard',
     'event'             => 'Event',
     'offer'             => 'Offer',
-    'Alert'             => 'alert',
+    'alert'             => 'Alert',
     'media'             => 'Media',
     'reviews'           => 'Reviews',
     'create_new'        => 'Create new',
