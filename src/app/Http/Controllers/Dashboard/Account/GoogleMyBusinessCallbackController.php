@@ -30,7 +30,7 @@ class GoogleMyBusinessCallbackController extends DashboardController
             if (empty($googleCredentials)) {
                 throw new Exception(trans('global.google_auth_failed'));
             }
-dd(GoogleCredentialsObjectValue::fromArray($googleCredentials));
+
             $this->userService->saveGoogleCredentials(
                 $this->user,
                 GoogleCredentialsObjectValue::fromArray($googleCredentials)
