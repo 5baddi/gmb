@@ -12,6 +12,7 @@ use Throwable;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use BADDIServices\ClnkGO\Entities\Alert;
+use BADDIServices\ClnkGO\Models\AccountLocation;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class GoogleMyBusinessDisconnectController extends DashboardController
@@ -20,6 +21,10 @@ class GoogleMyBusinessDisconnectController extends DashboardController
     {
         try {
             $this->googleService->revokeAccessToken($this->user->googleCredentials);
+
+            AccountLocation::query()
+                ->where(AccountLocation::USER_ID_COLUMN, $this->user->getId())
+                ->forceDelete();
 
             return redirect()->route('dashboard.account', ['tab' => $request->query('tab', 'gmb')])
                 ->with(
