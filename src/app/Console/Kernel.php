@@ -29,11 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule
-            ->command('queue:work --queue=default --timeout=10000 --tries=3 --daemon')
+        $schedule->command('queue:work --stop-when-empty')
             ->everyMinute()
-            ->withoutOverlapping()
-            ->runInBackground();
+            ->withoutOverlapping();
 
         $schedule
             ->command('auto-post:scheduled-posts')
