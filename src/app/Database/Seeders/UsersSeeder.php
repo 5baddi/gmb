@@ -25,21 +25,21 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-//        $this->userService->create([
-//            User::FIRST_NAME_COLUMN     => "Mohamed",
-//            User::LAST_NAME_COLUMN      => "BADDI",
-//            User::EMAIL_COLUMN          => "project@baddi.info",
-//            User::PASSWORD_COLUMN       => "baddidev",
-//            User::IS_SUPERADMIN_COLUMN  => true,
-//        ]);
-//
-//        $this->userService->create([
-//            User::FIRST_NAME_COLUMN     => "Super",
-//            User::LAST_NAME_COLUMN      => "Admin",
-//            User::EMAIL_COLUMN          => "admin@local-up.online",
-//            User::PASSWORD_COLUMN       => "changeme",
-//            User::IS_SUPERADMIN_COLUMN  => true,
-//        ]);
+        $this->userService->create([
+            User::FIRST_NAME_COLUMN     => "Mohamed",
+            User::LAST_NAME_COLUMN      => "BADDI",
+            User::EMAIL_COLUMN          => "project@baddi.info",
+            User::PASSWORD_COLUMN       => "baddidev",
+            User::IS_SUPERADMIN_COLUMN  => true,
+        ]);
+
+        $this->userService->create([
+            User::FIRST_NAME_COLUMN     => "Super",
+            User::LAST_NAME_COLUMN      => "Admin",
+            User::EMAIL_COLUMN          => "admin@local-up.online",
+            User::PASSWORD_COLUMN       => "changeme",
+            User::IS_SUPERADMIN_COLUMN  => true,
+        ]);
 
         $this->userService->create([
             User::FIRST_NAME_COLUMN     => "Yahya",
