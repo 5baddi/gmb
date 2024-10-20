@@ -25,7 +25,7 @@ class GoogleMyBusinessService extends Service
     public const string BASE_API_URI = 'https://mybusinessaccountmanagement.googleapis.com';
 
     public const string ACCOUNTS_ENDPOINT = 'https://mybusinessaccountmanagement.googleapis.com/v1/accounts';
-    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations?readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
+    public const string ACCOUNT_LOCATIONS_ENDPOINT = 'https://mybusinessbusinessinformation.googleapis.com/v1/accounts/%s/locations?readMask=name,title,storeCode,regularHours,languageCode,phoneNumbers,categories,storefrontAddress,websiteUri,regularHours,specialHours,serviceArea,labels,adWordsLocationExtensions,latlng,openInfo,metadata,profile,relationshipData,moreHours';
     public const string LOCATION_POSTS_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts';
     public const string LOCATION_POST_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/localPosts/%s';
     public const string LOCATION_MEDIA_ENDPOINT = 'https://mybusiness.googleapis.com/v4/accounts/%s/locations/%s/media';
@@ -103,6 +103,7 @@ class GoogleMyBusinessService extends Service
 
             $response = $this->client->get($endpoint);
             $results = json_decode($response->getBody()->getContents(), true);
+            dump($results, $response, $endpoint);
 
             if (Arr::has($results, 'error')) {
                 AppLogger::info(
