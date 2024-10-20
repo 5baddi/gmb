@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule
-            ->command('queue:work --queue=default,tweets,cpa --timeout=2000 --sleep=3 --tries=3 --daemon')
+            ->command('queue:work --queue=default --timeout=10000 --tries=3 --daemon')
             ->everyMinute()
             ->withoutOverlapping()
             ->runInBackground();
