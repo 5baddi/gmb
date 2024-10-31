@@ -62,4 +62,8 @@ return [
     'weekly' => 'Hebdomadaire',
     'view_review' => 'voir l\'avis',
     'review_content_missing' => 'Impossible de générer une réponse. La critique fournie ne contient aucun contenu ! Veuillez vous assurer que la critique inclut du texte avant de soumettre.',
+    'upload_new_media' => 'Télécharger de nouveaux médias',
+    'view_scheduled_media' => 'Voir les médias programmés',
+    'no_results_found' => 'No results found',
+    'no_results_found_description' => 'Il semble qu\'il n\'y ait pas de données disponibles pour le moment. Veuillez effectuer une action et revenir plus tard !',
 ];

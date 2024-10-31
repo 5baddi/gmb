@@ -62,4 +62,8 @@ return [
     'weekly' => 'Weekly',
     'view_review' => 'View review',
     'review_content_missing' => 'Unable to generate a reply. The review provided does not contain any content! Please ensure the review includes text before submitting.',
+    'upload_new_media' => 'Upload new media',
+    'view_scheduled_media' => 'View scheduled media',
+    'no_results_found' => 'No results found',
+    'no_results_found_description' => 'It looks like there\'s no data available at the moment. Please make an action and check back later!',
 ];

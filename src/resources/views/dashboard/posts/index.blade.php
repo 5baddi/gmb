@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @if(sizeof($posts) > 0)
+    @if(sizeof($posts ?? []) > 0)
         <div class="row row-cards row-deck" id="posts-container">
             @include('dashboard.posts.partials.gallery')
         </div>
@@ -29,6 +29,8 @@
                 </div>
             </div>
         @endif
+    @else
+    @include('dashboard.errors.empty')
     @endif
 @endsection
 

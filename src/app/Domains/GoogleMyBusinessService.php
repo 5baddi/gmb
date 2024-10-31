@@ -103,7 +103,6 @@ class GoogleMyBusinessService extends Service
 
             $response = $this->client->get($endpoint);
             $results = json_decode($response->getBody()->getContents(), true);
-            dump($results, $response, $endpoint);
 
             if (Arr::has($results, 'error')) {
                 AppLogger::info(
