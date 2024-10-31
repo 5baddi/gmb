@@ -71,4 +71,6 @@ return [
     'no_scheduled_media_found'  => 'Il n\'y a pas de médias programmées pour le moment',
     'confirm_delete_scheduled_post'  => 'Êtes-vous sûr de vouloir supprimer ce post programmé ?',
     'confirm_delete_scheduled_media'  => 'Êtes-vous sûr de vouloir supprimer ce média programmé ?',
+    'scheduled_media_deleted' => 'Le média programmé a été supprimé avec succès.',
+    'scheduled_post_deleted' => 'Le post programmé a été supprimé avec succès.',
 ];

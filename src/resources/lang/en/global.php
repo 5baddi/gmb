@@ -71,4 +71,6 @@ return [
     'no_scheduled_media_found'  => 'There are no media scheduled at this time',
     'confirm_delete_scheduled_post'  => 'Are you sure you want to delete this scheduled post ?',
     'confirm_delete_scheduled_media'  => 'Are you sure you want to delete this scheduled media ?',
+    'scheduled_media_deleted' => 'Scheduled media has been deleted successfully.',
+    'scheduled_post_deleted' => 'Scheduled post has been deleted successfully.',
 ];

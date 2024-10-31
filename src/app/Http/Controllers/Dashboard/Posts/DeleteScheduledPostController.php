@@ -33,7 +33,7 @@ class DeleteScheduledPostController extends DashboardController
         return redirect()->route('dashboard.scheduled.posts')
             ->with(
                 'alert',
-                new Alert('Your scheduled post has been deleted successfully', 'success')
+                new Alert(trans('global.scheduled_post_deleted'), 'success')
             );
     }
 }

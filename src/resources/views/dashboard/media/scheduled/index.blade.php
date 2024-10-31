@@ -33,7 +33,6 @@
                     <table class="table table-vcenter table-mobile-md card-table">
                         <thead>
                             <tr>
-                                <th>{{ trans('global.frequency') }}</th>
                                 <th>{{ trans('global.media') }}</th>
                                 <th>{{ trans('dashboard.event.scheduled_at') }}</th>
                                 <th>État</th>
@@ -48,11 +47,11 @@
                                 </tr>
                             @else
                                 @foreach ($scheduledMedia as $media)
+                                    @php($mediaName = preg_replace('/\d+_/', '', basename($media->path), 1))
                                     <tr>
-                                        <td>{{ trans(sprintf('global.%s', $media->scheduled_frequency)) }}</td>
                                         <td>
                                             <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                title="{{ basename($media->path) }}">{{ Str::substr(basename($media->path), 0, 100) }}&nbsp;{{ Str::length($media->path) > 100 ? '...' : '' }}</span>
+                                                title="{{ $mediaName }}">{{ Str::substr($mediaName, 0, 100) }}&nbsp;{{ Str::length($mediaName) > 100 ? '...' : '' }}</span>
                                         </td>
                                         <td>{{ $media->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}
                                         </td>
@@ -94,7 +93,7 @@
                                                     </a>
                                                 @endif
                                                 <form
-                                                    action="{{ route('dashboard.scheduled.posts.delete', ['id' => $media->id]) }}"
+                                                    action="{{ route('dashboard.scheduled.media.delete', ['id' => $media->id]) }}"
                                                     method="POST" style="display: inline;">
                                                     @method('DELETE')
                                                     @csrf
