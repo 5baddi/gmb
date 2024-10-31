@@ -7,14 +7,13 @@
 @section('content')
     <div class="row align-items-center mb-3">
         <div class="col"></div>
-        <!-- Page title actions -->
         <div class="col-auto ms-auto d-print-none">
             <div class="btn-list">
                 <a href="{{ route('dashboard.media.new') }}" class="btn btn-clnkgo btn-icon">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
                     &nbsp;{{ trans('global.upload_new_media') }}
                 </a>
-                <a href="{{ route('dashboard.media.new') }}" class="btn btn-default btn-icon">
+                <a href="{{ route('dashboard.scheduled.media') }}" class="btn btn-default btn-icon">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-time"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /><path d="M18 16.496v1.504l1 1" /></svg>
                     &nbsp;{{ trans('global.view_scheduled_media') }}
                 </a>

@@ -50,6 +50,10 @@ class ScheduledMedia extends ModelEntity
         self::WEEKLY_SCHEDULED_FREQUENCY,
     ];
 
+    protected $dates = [
+        self::SCHEDULED_AT_COLUMN,
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, User::ID_COLUMN);

@@ -10,7 +10,6 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory;
-use App\Http\Requests\PaginationRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 use BADDIServices\ClnkGO\Repositories\ScheduledPostRepository;
 use BADDIServices\ClnkGO\Http\Filters\ScheduledPostQueryFilter;
@@ -18,7 +17,6 @@ use BADDIServices\ClnkGO\Http\Filters\ScheduledPostQueryFilter;
 class ScheduledPostsController extends DashboardController
 {
     public function __invoke(
-        PaginationRequest $request,
         ScheduledPostQueryFilter $queryFilter,
         ScheduledPostRepository $scheduledPostRepository
     ): View|Factory {

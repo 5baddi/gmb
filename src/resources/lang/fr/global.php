@@ -66,4 +66,9 @@ return [
     'view_scheduled_media' => 'Voir les médias programmés',
     'no_results_found' => 'No results found',
     'no_results_found_description' => 'Il semble qu\'il n\'y ait pas de données disponibles pour le moment. Veuillez effectuer une action et revenir plus tard !',
+    'load_more' => 'Charger plus',
+    'scheduled_media' => 'Médias programmés',
+    'no_scheduled_media_found'  => 'Il n\'y a pas de médias programmées pour le moment',
+    'confirm_delete_scheduled_post'  => 'Êtes-vous sûr de vouloir supprimer ce post programmé ?',
+    'confirm_delete_scheduled_media'  => 'Êtes-vous sûr de vouloir supprimer ce média programmé ?',
 ];

@@ -15,7 +15,7 @@
 @section('content')
 <div class="row row-cards">
     <div class="col-12">
-        <form class="card" method="POST" action="{{ route('dashboard.scheduled-posts.save', ['type' => $type]) }}" enctype="multipart/form-data">
+        <form class="card" method="POST" action="{{ route('dashboard.scheduled.posts.save', ['type' => $type]) }}" enctype="multipart/form-data">
             @csrf
             <input name="id" value="{{ $id }}" hidden/>
             <div class="card-header">
@@ -119,7 +119,7 @@
 @section('script')
     document.addEventListener("DOMContentLoaded", async () => {
         let dropzoneInstance = new Dropzone("#upload-scheduled-post-media", {
-            url: '{{ route('dashboard.scheduled-posts.upload.media', ['id' => $id]) }}',
+            url: '{{ route('dashboard.scheduled.posts.upload.media', ['id' => $id]) }}',
             dictRemoveFile: '{{ trans('global.remove_file') }}',
             dictCancelUpload: 'Annuler le téléchargement',
             dictCancelUploadConfirmation: 'Êtes-vous sûr de vouloir annuler ce téléchargement ?',
@@ -132,7 +132,7 @@
             init: function () {
                 this.on('removedfile', function(file) {
                     fetch(
-                        '{{ route('dashboard.scheduled-posts.delete.media', ['id' => $id]) }}',
+                        '{{ route('dashboard.scheduled.posts.delete.media', ['id' => $id]) }}',
                         {
                             method: 'DELETE',
                             headers: {

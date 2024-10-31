@@ -29,7 +29,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end" style="">
                             <a class="dropdown-item"
-                               href="{{ route('dashboard.scheduled-posts.edit', ['type' => 'standard']) }}">
+                               href="{{ route('dashboard.scheduled.posts.edit', ['type' => 'standard']) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round"
@@ -43,7 +43,7 @@
                                 &nbsp;{{ trans('global.standard') }}
                             </a>
                             <a class="dropdown-item"
-                               href="{{ route('dashboard.scheduled-posts.edit', ['type' => 'event']) }}">
+                               href="{{ route('dashboard.scheduled.posts.edit', ['type' => 'event']) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round"
@@ -57,7 +57,7 @@
                                 &nbsp;{{ trans('global.event') }}
                             </a>
                             <a class="dropdown-item"
-                               href="{{ route('dashboard.scheduled-posts.edit', ['type' => 'offer']) }}">
+                               href="{{ route('dashboard.scheduled.posts.edit', ['type' => 'offer']) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round"
@@ -71,7 +71,7 @@
                                 &nbsp;{{ trans('global.offer') }}
                             </a>
                             <a class="dropdown-item"
-                               href="{{ route('dashboard.scheduled-posts.edit', ['type' => 'alert']) }}">
+                               href="{{ route('dashboard.scheduled.posts.edit', ['type' => 'alert']) }}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                      stroke-linejoin="round"
@@ -136,17 +136,17 @@
                                                 </a>
                                             @endif
                                             @if(in_array(Str::lower($scheduledPost->state), ['unspecified', 'rejected']))
-                                                <a href="{{ route('dashboard.scheduled-posts.edit', ['type' => Str::lower($scheduledPost->topic_type ?? ScheduledPost::STANDARD_TYPE), 'id' => $scheduledPost->id]) }}" class="btn btn-sm btn-default" title="{{ trans('global.edit') }}">
+                                                <a href="{{ route('dashboard.scheduled.posts.edit', ['type' => Str::lower($scheduledPost->topic_type ?? ScheduledPost::STANDARD_TYPE), 'id' => $scheduledPost->id]) }}" class="btn btn-sm btn-default" title="{{ trans('global.edit') }}">
                                                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
                                                 </a>
                                             @endif
-                                            <form action="{{ route('dashboard.scheduled-posts.delete', ['id' => $scheduledPost->id]) }}"
+                                            <form action="{{ route('dashboard.scheduled.posts.delete', ['id' => $scheduledPost->id]) }}"
                                                   method="POST" style="display: inline;">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-icon btn-danger"
                                                         title="Delete"
-                                                        onclick="return confirm('Are you sure you want to delete this scheduled post ?')">
+                                                        onclick="return confirm('{{ trans('global.confirm_delete_scheduled_post') }}')">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                          viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

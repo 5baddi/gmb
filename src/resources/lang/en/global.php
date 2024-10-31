@@ -66,4 +66,9 @@ return [
     'view_scheduled_media' => 'View scheduled media',
     'no_results_found' => 'No results found',
     'no_results_found_description' => 'It looks like there\'s no data available at the moment. Please make an action and check back later!',
+    'load_more' => 'Load more',
+    'scheduled_media' => 'View scheduled media',
+    'no_scheduled_media_found'  => 'There are no media scheduled at this time',
+    'confirm_delete_scheduled_post'  => 'Are you sure you want to delete this scheduled post ?',
+    'confirm_delete_scheduled_media'  => 'Are you sure you want to delete this scheduled media ?',
 ];
