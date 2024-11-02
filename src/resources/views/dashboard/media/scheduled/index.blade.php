@@ -52,13 +52,14 @@
                                         <td>{{ trans(sprintf('global.%s', $media->scheduled_frequency ?? 'instantly')) }}</td>
                                         <td>
                                             <div class="avatar-list avatar-list-stacked">
-                                                @foreach (array_slice($media->files, 0, 5) as $file)
+                                                @php($files = array_slice($media->files, 0, 5))
+                                                @foreach ($files as $file)
                                                 @if(($file['type'] ?? '') !== 'image')
                                                 @continue
                                                 @endif
                                                 <span class="avatar avatar-s rounded" style="background-image: url({{ asset($file['path'] ?? '#') }})"></span>
                                                 @endforeach
-                                                <span class="avatar avatar-s rounded">+{{ sizeof($media->files ?? []) }}</span>
+                                                <span class="avatar avatar-s rounded">+{{ sizeof($media->files ?? []) - sizeof($files) }}</span>
                                             </div>
                                         </td>
                                         <td>{{ $media->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}
