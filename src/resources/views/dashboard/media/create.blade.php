@@ -128,9 +128,11 @@
                         this.removeAllFiles();
                     }
 
+                    let scheduledDate = $('input[name=scheduled_date]').val();
+
                     $('#upload-media-form').trigger('reset');
 
-                    if ($('input[name=id]').val().length > 0 || $('input[name=scheduled_date]').val().length > 0) {
+                    if (scheduledDate.length > 0) {
                         alert("{{ trans('global.scheduled_media_saved') }}");
                         window.location.replace('{{ route('dashboard.scheduled.media') }}');
 

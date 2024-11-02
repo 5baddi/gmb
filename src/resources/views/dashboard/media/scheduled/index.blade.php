@@ -51,13 +51,15 @@
                                     <tr>
                                         <td>{{ trans(sprintf('global.%s', $media->scheduled_frequency ?? 'instantly')) }}</td>
                                         <td>
-                                            @foreach (array_slice($media->files, 0, 5) as $file)
-                                            @php($mediaName = preg_replace('/\d+_/', '', basename($file['path']), 1))
-                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $mediaName }}">
-                                                {{ Str::substr($mediaName, 0, 100) }}&nbsp;{{ Str::length($mediaName) > 100 ? '...' : '' }}
-                                            </span>
-                                            <br/>
-                                            @endforeach
+                                            <div class="avatar-list avatar-list-stacked">
+                                                @foreach (array_slice($media->files, 0, 5) as $file)
+                                                @if(($file['type'] ?? '') !== 'image')
+                                                @continue
+                                                @endif
+                                                <span class="avatar avatar-s rounded" style="background-image: url({{ asset($file['path'] ?? '#') }})"></span>
+                                                @endforeach
+                                                <span class="avatar avatar-s rounded">+{{ sizeof($media->files ?? []) }}</span>
+                                            </div>
                                         </td>
                                         <td>{{ $media->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}
                                         </td>

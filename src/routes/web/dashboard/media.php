@@ -20,5 +20,5 @@ Route::middleware(['auth'])
         Route::delete('/{id}', DeleteMediaController::class)->name('.delete');
 
         Route::get('/new', NewMediaController::class)->name('.new');
-        Route::post('/new/{id?}', UploadMediaController::class)->name('.upload');
+        Route::post('/new', UploadMediaController::class)->name('.upload');
     });
