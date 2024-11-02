@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Throwable;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
@@ -86,7 +87,7 @@ class AutoPostScheduledMediaCommand extends Command
                             $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
 
                             foreach (($files ?? []) as $file) {
-                                if (! Storage::exists($file)) {
+                                if (! Arr::has($file, 'path') || ! Storage::exists($file['path'])) {
                                     continue;
                                 }
 
@@ -95,7 +96,7 @@ class AutoPostScheduledMediaCommand extends Command
                                         'category'          => 'ADDITIONAL',
                                     ],
                                     'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
-                                    'sourceUrl'             => URL::asset($file),
+                                    'sourceUrl'             => URL::asset($file['path']),
                                 ]);
                             }
 
