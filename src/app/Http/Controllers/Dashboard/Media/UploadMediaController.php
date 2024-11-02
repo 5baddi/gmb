@@ -10,7 +10,6 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 
 use Throwable;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -22,14 +21,14 @@ use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class UploadMediaController extends DashboardController
 {
-    public function __invoke(ScheduledMediaRequest $request, ?string $id = null): void
+    public function __invoke(ScheduledMediaRequest $request): void
     {
         try {
             DB::beginTransaction();
 
-            if (Str::isUuid($id)) {
-                $scheduledMedia = ScheduledMedia::query()
-                    ->find($id)
+            if ($request->has('id')) {
+                ScheduledMedia::query()
+                    ->find($request->input('id'))
                     ->forceDelete();
             }
 
