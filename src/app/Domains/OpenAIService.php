@@ -21,6 +21,11 @@ class OpenAIService extends Service
 
     public const string TEXT_GENERATION_ENDPOINT = '/v1/chat/completions';
 
+    public const SUPPORTED_PROMPTS = [
+        'review_reply_prompt',
+        'generate_gmb_post_summary_prompt',
+    ];
+
     private Client $client;
 
     public function __construct()

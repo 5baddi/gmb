@@ -78,4 +78,10 @@ return [
     'instantly' => 'Instantly',
     'scheduled_media_posted' => 'Your media has been posted successfully',
     'scheduled_media_saved'  => 'Your media has been scheduled successfully',
+    'generate' => 'Generate',
+    'enter_your_topic' => 'Enter your topic',
+    'generate_gmb_post_summary_prompt' => 'Write a professional google my business post description based on following topic in the same language it is written in',
+    'missing_gmb_post_summary' => 'Please enter your topic',
+    'review_reply_prompt' => 'Write a professional reply to the following customer review in the same language it is written in',
+    'unable_generate_gmb_post_summary' => 'Unable to generate a summary. please try with another topic',
 ];

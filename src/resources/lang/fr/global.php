@@ -78,4 +78,8 @@ return [
     'instantly' => 'Instantanément',
     'scheduled_media_posted' => 'Votre média a été publié avec succès',
     'scheduled_media_saved'  => 'Votre média a été programmé avec succès',
+    'generate' => 'Générer',
+    'enter_your_topic' => 'Entrez votre sujet',
+    'missing_gmb_post_summary' => 'Veuillez entrer votre sujet',
+    'unable_generate_gmb_post_summary' => 'Impossible de générer un résumé. Veuillez essayer avec un autre sujet',
 ];

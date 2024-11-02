@@ -102,7 +102,7 @@
             autoProcessQueue: false,
             acceptedFiles: 'image/jpeg, image/png, image/gif, image/bmp, image/tiff, image/webp, video/mp4, video/quicktime, video/x-msvideo, video/mpeg, video/x-ms-wmv',
             headers: {
-                'X-CSRF-TOKEN': $('#upload-media-btn input[name="_token"]').val()
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             init: function() {
                 let myDropzone = this;

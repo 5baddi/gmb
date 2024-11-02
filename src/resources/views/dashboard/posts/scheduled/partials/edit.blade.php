@@ -38,10 +38,16 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Résumé&nbsp;<span class="form-label-description" id="summary-length">0/1500</span></label>
-                    <textarea name="summary" maxlength="1500" onkeyup="calculateTextLength(event, '#summary-length', '/1500')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="Summary">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
+                    <textarea name="summary" maxlength="1500" onkeyup="calculateTextLength(event, '#summary-length', '/1500')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="{{ trans('global.enter_your_topic') }}">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
                     @if ($errors->has('summary'))
                         <div class="invalid-feedback">{{ $errors->first('summary') }}</div>
                     @endif
+                    <div class="mt-3">
+                        <button type="button" id="generate-summary" class="btn btn-pill btn-default">
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wand"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 21l15 -15l-3 -3l-15 15l3 3" /><path d="M15 6l3 3" /><path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /></svg>
+                            &nbsp;{{ trans('global.generate') }}
+                        </button>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-4">
@@ -127,7 +133,7 @@
             uploadMultiple: true,
             acceptedFiles: 'image/jpeg, image/png, image/gif, image/bmp, image/tiff, image/webp, video/mp4, video/quicktime, video/x-msvideo, video/mpeg, video/x-ms-wmv',
             headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             init: function () {
                 this.on('removedfile', function(file) {
@@ -137,8 +143,9 @@
                             method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
+                            credentials: 'same-origin',
                             body: JSON.stringify({ filename: file.name })
                         }
                     );
@@ -167,5 +174,53 @@
                 dropzoneInstance.addFile(file);
             } catch {}
         }
+
+        $('#generate-summary').on('click', async () => {
+            try {
+                let topic = $('textarea[name=summary]textarea[name=summary]').val();
+                if (topic.length === 0) {
+                    alert("{{ trans('global.missing_gmb_post_summary') }}");
+
+                    return;
+                }
+
+                $('textarea[name=summary]').attr('disabled', true);
+                $('#generate-summary').attr('disabled', true);
+
+                let response = await fetch(
+                    '{{ route('dashboard.ai.generate.text') }}',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            prompt: '{{ trans('global.generate_gmb_post_summary_prompt') }}',
+                            topic 
+                        })
+                    }
+                );
+
+                $('textarea[name=summary]').attr('disabled', false);
+                $('#generate-summary').attr('disabled', false);
+
+                if (! response.ok) {
+                    alert("{{ trans('global.unable_generate_gmb_post_summary') }}");
+
+                    return;
+                }
+
+                let data = await response.json();
+
+                $('textarea[name=summary]').val(data.text || '');
+            } catch (error) {
+                $('textarea[name=summary]').attr('disabled', false);
+                $('#generate-summary').attr('disabled', false);
+
+                alert("{{ trans('global.unable_generate_gmb_post_summary') }}");
+            }
+        });
     })
 @endsection
