@@ -13,6 +13,7 @@
         <div class="col-12">
             <form id="upload-media-form" class="card" method="POST" action="{{ route('dashboard.media.upload') }}" enctype="multipart/form-data">
                 @csrf
+                <input name="id" value="{{ $scheduledMedia?->id ?? null }}" hidden/>
                 <div class="card-header">
                     <h3 class="card-title">{{ $title }}</h3>
                 </div>
@@ -43,14 +44,14 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <label class="form-label">{{ trans('global.scheduled_date') }}</label>
-                                            <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ old('scheduled_date') }}"/>
+                                            <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ $scheduledMedia?->scheduled_at?->format('Y-m-d') ?? ('scheduled_date') }}"/>
                                             @if ($errors->has('scheduled_date'))
                                                 <div class="invalid-feedback">{{ $errors->first('scheduled_date') }}</div>
                                             @endif
                                         </div>
                                         <div class="col-4">
                                             <label class="form-label">{{ trans('global.scheduled_time') }}</label>
-                                            <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ old('scheduled_time') }}"/>
+                                            <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ $scheduledMedia?->scheduled_at?->format('H:i') ?? old('scheduled_time') }}"/>
                                             @if ($errors->has('scheduled_time'))
                                                 <div class="invalid-feedback">{{ $errors->first('scheduled_time') }}</div>
                                             @endif
@@ -58,9 +59,9 @@
                                         <div class="col-4">
                                             <label class="form-label">{{ trans('global.frequency') }}</label>
                                             <select name="scheduled_frequency" class="form-select @if ($errors->has('scheduled_frequency')) is-invalid @endif">
-                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === 'daily' || empty(($scheduledPost?->frequency ?? old('frequency')))) selected @endif value="daily">{{ trans('global.daily') }}</option>
-                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === '3_days') selected @endif value="3_days">{{ trans('global.3_days') }}</option>
-                                                <option @if (($scheduledPost?->frequency ?? old('frequency')) === 'weekly') selected @endif value="weekly">{{ trans('global.weekly') }}</option>
+                                                <option @if (($scheduledMedia?->scheduled_frequency ?? old('scheduled_frequency')) === 'daily' || empty(($scheduledMedia?->scheduled_frequency ?? old('scheduled_frequency')))) selected @endif value="daily">{{ trans('global.daily') }}</option>
+                                                <option @if (($scheduledMedia?->scheduled_frequency ?? old('scheduled_frequency')) === '3_days') selected @endif value="3_days">{{ trans('global.3_days') }}</option>
+                                                <option @if (($scheduledMedia?->scheduled_frequency ?? old('scheduled_frequency')) === 'weekly') selected @endif value="weekly">{{ trans('global.weekly') }}</option>
                                             </select>
                                             @if ($errors->has('scheduled_frequency'))
                                                 <div class="invalid-feedback">{{ $errors->first('scheduled_frequency') }}</div>
@@ -88,14 +89,16 @@
 @endsection
 
 @section('script')
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", async () => {
         let dropzoneInstance = new Dropzone("#upload-media", {
             url: '{{ route('dashboard.media.upload') }}',
             dictRemoveFile: '{{ trans('global.remove_file') }}',
-            dictCancelUpload: 'Annuler le téléchargement',
-            dictCancelUploadConfirmation: 'Êtes-vous sûr de vouloir annuler ce téléchargement ?',
+            dictCancelUpload: '{{ trans('global.cancel_upload') }}',
+            dictCancelUploadConfirmation: '{{ trans('global.confirm_cancel_upload') }}',
             addRemoveLinks: true,
             uploadMultiple: true,
+            parallelUploads: 100,
+            maxFiles: 100,
             autoProcessQueue: false,
             acceptedFiles: 'image/jpeg, image/png, image/gif, image/bmp, image/tiff, image/webp, video/mp4, video/quicktime, video/x-msvideo, video/mpeg, video/x-ms-wmv',
             headers: {
@@ -110,28 +113,54 @@
                     myDropzone.processQueue();
                 });
 
-                this.on('sending', function(file, xhr, formData) {
+                this.on('sendingmultiple', function(file, xhr, formData) {
                     let data = $('#upload-media-form').serializeArray();
 
                     $.each(data, function(key, el) {
                         formData.append(el.name, el.value);
                     });
                 });
-            },
-            complete: function (file) {
-                // Check if all files have been uploaded
-                if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    // Clear all files from the form
-                    this.removeAllFiles();
-                }
+                
+                this.on('successmultiple', function(files, response) {
+                    // Check if all files have been uploaded
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        // Clear all files from the form
+                        this.removeAllFiles();
+                    }
 
-                $('#upload-media-form').trigger('reset');
-            },
-            error: function (file, error, xhr) {
-                if (file.accepted === false) {
+                    $('#upload-media-form').trigger('reset');
+
+                    if ($('input[name=id]').val().length > 0 || $('input[name=scheduled_date]').val().length > 0) {
+                        alert("{{ trans('global.scheduled_media_saved') }}");
+                        window.location.replace('{{ route('dashboard.scheduled.media') }}');
+
+                        return;
+                    }
+                    
+                    alert("{{ trans('global.scheduled_media_posted') }}");
+                });
+                
+                this.on('errormultiple', function(files, response) {
                     alert("{{ trans('global.unsupported_file_format') }}");
-                }
+                });
             }
         });
+
+        let urls = {!! json_encode(array_map(fn ($media) => asset($media['path'] ?? ''), $scheduledMedia?->files ?? [])) !!};
+
+        for (const url of urls) {
+            if (typeof url !== 'string' || url.length === 0) {
+                continue;
+            }
+
+            try {
+                let response = await fetch(url);
+                let blob = await response.blob();
+                let fileName = url.split('/').pop();
+                let file = new File([blob], fileName, { type: blob.type });
+
+                dropzoneInstance.addFile(file);
+            } catch {}
+        }
     })
 @endsection

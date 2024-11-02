@@ -8,10 +8,11 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Services\UserService;
-use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Domains\GoogleService;
+use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
 use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
 
@@ -82,15 +83,21 @@ class AutoPostScheduledMediaCommand extends Command
                                 $scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN)
                             );
 
-                            $googleMyBusinessService->createBusinessLocationMedia([
-                                'locationAssociation'   => [
-                                    'category'          => 'ADDITIONAL',
-                                ],
-                                'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
-                                'sourceUrl'             => URL::asset(
-                                    $scheduledMedia->getAttribute(ScheduledMedia::PATH_COLUMN)
-                                ),
-                            ]);
+                            $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
+
+                            foreach (($files ?? []) as $file) {
+                                if (! Storage::exists($file)) {
+                                    continue;
+                                }
+
+                                $googleMyBusinessService->createBusinessLocationMedia([
+                                    'locationAssociation'   => [
+                                        'category'          => 'ADDITIONAL',
+                                    ],
+                                    'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
+                                    'sourceUrl'             => URL::asset($file),
+                                ]);
+                            }
 
                             $scheduledMedia->forceDelete();
                         } catch (Throwable $e) {

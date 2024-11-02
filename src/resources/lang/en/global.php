@@ -23,6 +23,8 @@ return [
     'reviews'           => 'Reviews',
     'create_new'        => 'Create new',
     'remove_file'       => 'Remove file',
+    'cancel_upload'     => 'Cancel the upload',
+    'confirm_cancel_upload'     => 'Are you sure you want to cancel this download?',
     'auto_posting'      => 'Auto posting',
     'scheduled_date'    => 'Scheduled date',
     'scheduled_time'    => 'Scheduled time',
@@ -73,4 +75,7 @@ return [
     'confirm_delete_scheduled_media'  => 'Are you sure you want to delete this scheduled media ?',
     'scheduled_media_deleted' => 'Scheduled media has been deleted successfully.',
     'scheduled_post_deleted' => 'Scheduled post has been deleted successfully.',
+    'instantly' => 'Instantly',
+    'scheduled_media_posted' => 'Your media has been posted successfully',
+    'scheduled_media_saved'  => 'Your media has been scheduled successfully',
 ];

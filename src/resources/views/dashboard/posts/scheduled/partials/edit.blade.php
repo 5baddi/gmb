@@ -83,14 +83,14 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <label class="form-label">{{ trans('global.scheduled_date') }}</label>
-                                        <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ old('scheduled_date') }}"/>
+                                        <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('Y-m-d') ?? old('scheduled_date') }}"/>
                                         @if ($errors->has('scheduled_date'))
                                             <div class="invalid-feedback">{{ $errors->first('scheduled_date') }}</div>
                                         @endif
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">{{ trans('global.scheduled_time') }}</label>
-                                        <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ old('scheduled_time') }}"/>
+                                        <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('H:i') ?? old('scheduled_time') }}"/>
                                         @if ($errors->has('scheduled_time'))
                                             <div class="invalid-feedback">{{ $errors->first('scheduled_time') }}</div>
                                         @endif
@@ -121,8 +121,8 @@
         let dropzoneInstance = new Dropzone("#upload-scheduled-post-media", {
             url: '{{ route('dashboard.scheduled.posts.upload.media', ['id' => $id]) }}',
             dictRemoveFile: '{{ trans('global.remove_file') }}',
-            dictCancelUpload: 'Annuler le téléchargement',
-            dictCancelUploadConfirmation: 'Êtes-vous sûr de vouloir annuler ce téléchargement ?',
+            dictCancelUpload: '{{ trans('global.cancel_upload') }}',
+            dictCancelUploadConfirmation: '{{ trans('global.confirm_cancel_upload') }}',
             addRemoveLinks: true,
             uploadMultiple: true,
             acceptedFiles: 'image/jpeg, image/png, image/gif, image/bmp, image/tiff, image/webp, video/mp4, video/quicktime, video/x-msvideo, video/mpeg, video/x-ms-wmv',
@@ -154,6 +154,10 @@
         let urls = {!! json_encode(array_map(fn ($media) => $media['url'] ?? '#', $scheduledPost?->media->toArray() ?? [])) !!};
 
         for (const url of urls) {
+            if (typeof url !== 'string' || url.length === 0) {
+                continue;
+            }
+            
             try {
                 let response = await fetch(url);
                 let blob = await response.blob();

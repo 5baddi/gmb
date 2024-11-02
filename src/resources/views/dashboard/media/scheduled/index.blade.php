@@ -33,6 +33,7 @@
                     <table class="table table-vcenter table-mobile-md card-table">
                         <thead>
                             <tr>
+                                <th>{{ trans('global.frequency') }}</th>
                                 <th>{{ trans('global.media') }}</th>
                                 <th>{{ trans('dashboard.event.scheduled_at') }}</th>
                                 <th>État</th>
@@ -47,11 +48,16 @@
                                 </tr>
                             @else
                                 @foreach ($scheduledMedia as $media)
-                                    @php($mediaName = preg_replace('/\d+_/', '', basename($media->path), 1))
                                     <tr>
+                                        <td>{{ trans(sprintf('global.%s', $media->scheduled_frequency ?? 'instantly')) }}</td>
                                         <td>
-                                            <span data-bs-toggle="tooltip" data-bs-placement="top"
-                                                title="{{ $mediaName }}">{{ Str::substr($mediaName, 0, 100) }}&nbsp;{{ Str::length($mediaName) > 100 ? '...' : '' }}</span>
+                                            @foreach (array_slice($media->files, 0, 5) as $file)
+                                            @php($mediaName = preg_replace('/\d+_/', '', basename($file['path']), 1))
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" title="{{ $mediaName }}">
+                                                {{ Str::substr($mediaName, 0, 100) }}&nbsp;{{ Str::length($mediaName) > 100 ? '...' : '' }}
+                                            </span>
+                                            <br/>
+                                            @endforeach
                                         </td>
                                         <td>{{ $media->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}
                                         </td>

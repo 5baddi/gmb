@@ -8,16 +8,24 @@
 
 namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 
+use Illuminate\Support\Str;
+use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class NewMediaController extends DashboardController
 {
-    public function __invoke()
+    public function __invoke(?string $id = null)
     {
+        if (Str::isUuid($id)) {
+            $scheduledMedia = ScheduledMedia::query()
+                ->find($id);
+        }
+
         return $this->render(
             'dashboard.media.create',
             [
-                'title' => 'Télécharger de nouveaux médias',
+                'title'             => trans('global.upload_new_media'),
+                'scheduledMedia'    => $scheduledMedia ?? null,
             ]
         );
     }

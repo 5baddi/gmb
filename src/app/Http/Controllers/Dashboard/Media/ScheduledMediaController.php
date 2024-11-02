@@ -11,8 +11,8 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
-use BADDIServices\ClnkGO\Http\Filters\ScheduledMediaQueryFilter;
 use BADDIServices\ClnkGO\Repositories\ScheduledMediaRepository;
+use BADDIServices\ClnkGO\Http\Filters\ScheduledMediaQueryFilter;
 
 class ScheduledMediaController extends DashboardController
 {

@@ -17,7 +17,7 @@ class ScheduledMedia extends ModelEntity
     public const string USER_ID_COLUMN = 'user_id';
     public const string ACCOUNT_ID_COLUMN = 'account_id';
     public const string LOCATION_ID_COLUMN = 'location_id';
-    public const string PATH_COLUMN = 'path';
+    public const string FILES_COLUMN = 'files';
     public const string TYPE_COLUMN = 'type';
     public const string STATE_COLUMN = 'state';
     public const string REASON_COLUMN = 'reason';
@@ -52,6 +52,10 @@ class ScheduledMedia extends ModelEntity
 
     protected $dates = [
         self::SCHEDULED_AT_COLUMN,
+    ];
+
+    protected $casts = [
+        self::FILES_COLUMN => 'array',
     ];
 
     public function user(): BelongsTo

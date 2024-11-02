@@ -7,10 +7,10 @@
  */
 
 use Illuminate\Support\Facades\Route;
+use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media\NewMediaController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media\ScheduledMediaController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts\ScheduledPostsController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts\SaveScheduledPostController;
-use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media\EditScheduledMediaController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts\EditScheduledPostsController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts\DeleteScheduledPostController;
 use BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media\DeleteScheduledMediaController;
@@ -40,7 +40,7 @@ Route::middleware(['auth'])
             ->prefix('/media')
             ->group(function() {
                 Route::get('/', ScheduledMediaController::class);
-                Route::get('/{id}', EditScheduledMediaController::class)->name('.edit');
+                Route::get('/{id}', NewMediaController::class)->name('.edit');
                 Route::delete('/{id}', DeleteScheduledMediaController::class)->name('.delete');
             });
     });
