@@ -104,7 +104,7 @@ class UploadMediaController extends DashboardController
             DB::commit();
         } catch (Throwable $e){
             DB::rollBack();
-
+dd($e);
             AppLogger::error(
                 $e,
                 'scheduled-media:upload-new-media',
