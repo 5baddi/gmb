@@ -54,7 +54,7 @@
                                             <div class="avatar-list avatar-list-stacked">
                                                 @php($files = array_slice($media->files, 0, 5))
                                                 @foreach ($files as $file)
-                                                @if(($file['type'] ?? '') !== 'image')
+                                                @if(($file['type'] ?? '') !== 'PHOTO')
                                                 @continue
                                                 @endif
                                                 <span class="avatar avatar-s rounded" style="background-image: url({{ asset($file['path'] ?? '#') }})"></span>

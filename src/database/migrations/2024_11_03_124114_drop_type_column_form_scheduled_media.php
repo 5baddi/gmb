@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFilesFieldToScheduledMedia extends Migration
+class DropTypeColumnFormScheduledMedia extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddFilesFieldToScheduledMedia extends Migration
     public function up()
     {
         Schema::table('scheduled_media', function (Blueprint $table) {
-            $table->longText('files')->nullable()->after('location_id');
+            $table->dropColumn('path');
+            $table->dropColumn('type');
         });
     }
 
@@ -23,10 +24,5 @@ class AddFilesFieldToScheduledMedia extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::table('scheduled_media', function (Blueprint $table) {
-            $table->dropColumn('files');
-        });
-    }
+    public function down() {}
 }

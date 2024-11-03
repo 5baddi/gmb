@@ -18,11 +18,13 @@ class ScheduledMedia extends ModelEntity
     public const string ACCOUNT_ID_COLUMN = 'account_id';
     public const string LOCATION_ID_COLUMN = 'location_id';
     public const string FILES_COLUMN = 'files';
-    public const string TYPE_COLUMN = 'type';
     public const string STATE_COLUMN = 'state';
     public const string REASON_COLUMN = 'reason';
     public const string SCHEDULED_AT_COLUMN = 'scheduled_at';
     public const string SCHEDULED_FREQUENCY_COLUMN = 'scheduled_frequency';
+
+    public const string TYPE = 'type';
+    public const string PATH = 'path';
 
     public const string PHOTO_TYPE = 'photo';
     public const string VIDEO_TYPE = 'video';

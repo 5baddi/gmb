@@ -82,9 +82,13 @@ class UploadMediaController extends DashboardController
                     }
                 }
 
+                $type = explode('/', $file->getClientMimeType())[0] ?? null;
+
                 $paths[] = [
-                    'path'  => sprintf('uploads/%s', $fileName),
-                    'type'  => explode('/', $file->getClientMimeType())[0] ?? null,
+                    ScheduledMedia::PATH  => sprintf('uploads/%s', $fileName),
+                    ScheduledMedia::TYPE  => $type === 'image'
+                        ? ScheduledMedia::PHOTO_TYPE
+                        : ScheduledMedia::VIDEO_TYPE,
                 ];
             }
 
@@ -93,7 +97,6 @@ class UploadMediaController extends DashboardController
                     ScheduledMedia::USER_ID_COLUMN      => $this->user->getId(),
                     ScheduledMedia::ACCOUNT_ID_COLUMN   => $this->user->googleCredentials->getAccountId(),
                     ScheduledMedia::LOCATION_ID_COLUMN  => $this->user->googleCredentials->getMainLocationId(),
-                    ScheduledMedia::TYPE_COLUMN         => ScheduledMedia::PHOTO_TYPE,
                     ScheduledMedia::FILES_COLUMN        => $paths,
                     ScheduledMedia::STATE_COLUMN        => ScheduledMedia::UNSPECIFIED_STATE,
                     ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt->toISOString(),

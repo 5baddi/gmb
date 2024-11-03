@@ -87,7 +87,7 @@ class AutoPostScheduledMediaCommand extends Command
                             $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
 
                             foreach (($files ?? []) as $file) {
-                                if (! Arr::has($file, 'path') || ! Storage::exists($file['path'])) {
+                                if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                                     continue;
                                 }
 
@@ -95,8 +95,8 @@ class AutoPostScheduledMediaCommand extends Command
                                     'locationAssociation'   => [
                                         'category'          => 'ADDITIONAL',
                                     ],
-                                    'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
-                                    'sourceUrl'             => URL::asset($file['path']),
+                                    'mediaFormat'           => $file[ScheduledMedia::TYPE],
+                                    'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
                                 ]);
                             }
 
