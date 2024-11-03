@@ -57,6 +57,8 @@ class DashboardController extends BaseController
                 && (
                     ! $this->user->googleCredentials instanceof UserGoogleCredentials
                     || $this->user->googleCredentials->isExpired()
+                    || empty($this->user->googleCredentials->getAccountId())
+                    || empty($this->user->googleCredentials->getMainLocationId())
                 )
             ) {
                 return Redirect::route('dashboard.errors.unauthenticated_gmb_access');
