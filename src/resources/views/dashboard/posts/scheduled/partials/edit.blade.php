@@ -89,7 +89,7 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <label class="form-label">{{ trans('global.scheduled_date') }}</label>
-                                        <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('Y-m-d') ?? old('scheduled_date') }}"/>
+                                        <input type="date" name="scheduled_date" min="{{ date('Y-m-d', time()) }}" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('Y-m-d') ?? old('scheduled_date') }}"/>
                                         @if ($errors->has('scheduled_date'))
                                             <div class="invalid-feedback">{{ $errors->first('scheduled_date') }}</div>
                                         @endif
