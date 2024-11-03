@@ -95,7 +95,7 @@ class AutoPostScheduledMediaCommand extends Command
                                     'locationAssociation'   => [
                                         'category'          => 'ADDITIONAL',
                                     ],
-                                    'mediaFormat'           => $file[ScheduledMedia::TYPE],
+                                    'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::PHOTO_TYPE,
                                     'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
                                 ]);
                             }
