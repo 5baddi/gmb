@@ -10,12 +10,14 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 
 use Throwable;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
@@ -24,24 +26,27 @@ class UploadMediaController extends DashboardController
 {
     public function __invoke(ScheduledMediaRequest $request): void
     {
+        $files = $request->file('file', []);
+            
+        abort_if(empty($files), Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        abort_if(
+            empty($this->user->googleCredentials?->getAccountId())
+            || empty($this->user->googleCredentials?->getMainLocationId()),
+            Response::HTTP_BAD_REQUEST
+        );
+
         try {
             DB::beginTransaction();
 
             if (Str::isUuid($request->input('id'))) {
-                ScheduledMedia::query()
-                    ->find($request->input('id'))
-                    ->forceDelete();
+                $existsScheduledMedia = ScheduledMedia::query()
+                    ->find($request->input('id'));
+
+                $oldFiles = $existsScheduledMedia?->files ?? [];
+                    
+                $existsScheduledMedia?->forceDelete();
             }
-
-            $files = $request->file('file', []);
-            
-            abort_if(empty($files), Response::HTTP_UNPROCESSABLE_ENTITY);
-
-            abort_if(
-                empty($this->user->googleCredentials?->getAccountId())
-                || empty($this->user->googleCredentials?->getMainLocationId()),
-                Response::HTTP_BAD_REQUEST
-            );
 
             $isInstantly = empty($request->input('scheduled_date'));
 
@@ -57,7 +62,7 @@ class UploadMediaController extends DashboardController
 
             $paths = [];
 
-            foreach ($files as $index => $file) {
+            foreach ($files as $file) {
                 if (! $file instanceof UploadedFile) {
                     continue;
                 }
@@ -88,6 +93,14 @@ class UploadMediaController extends DashboardController
                 ]);
 
             DB::commit();
+
+            array_walk($oldFiles ?? [], function ($file) {
+                if (! Arr::has($file, [ScheduledMedia::PATH]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
+                    return;
+                }
+    
+                Storage::delete($file);
+            });
         } catch (Throwable $e){
             DB::rollBack();
 

@@ -16,6 +16,7 @@ use BADDIServices\ClnkGO\Domains\GoogleService;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
 use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
+use Illuminate\Support\Facades\DB;
 
 class AutoPostScheduledMediaCommand extends Command
 {
@@ -61,6 +62,8 @@ class AutoPostScheduledMediaCommand extends Command
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
                         try {
+                            DB::beginTransaction();
+
                             $user = $this->userService->findById(
                                 $scheduledMedia->getAttribute(ScheduledMedia::USER_ID_COLUMN)
                             );
@@ -85,36 +88,50 @@ class AutoPostScheduledMediaCommand extends Command
                             );
 
                             $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
-                            switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
+                            $file = Arr::first($files, null, []);
+
+                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
+                                $scheduledMedia->forceDelete();
+
+                                continue;
+                            }
+
+                            $googleMyBusinessService->createBusinessLocationMedia([
+                                'locationAssociation'   => [
+                                    'category'          => 'ADDITIONAL',
+                                ],
+                                'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::PHOTO_TYPE,
+                                'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
+                            ]);
+
+                            $scheduledAt = $scheduledMedia->getAttribute(ScheduledMedia::SCHEDULED_AT_COLUMN);
+
+                            switch ($scheduledMedia->getAttribute(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
                                 case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
-                                    $scheduledAt = $scheduledAt->addDay();
+                                    $scheduledAt = $scheduledAt?->addDay();
         
                                     break;
                                 case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
-                                    $scheduledAt = $scheduledAt->addDays(3);
+                                    $scheduledAt = $scheduledAt?->addDays(3);
         
                                     break;
                                 case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
-                                    $scheduledAt = $scheduledAt->addWeek();
+                                    $scheduledAt = $scheduledAt?->addWeek();
         
                                     break;
-                            }//TODO
-                            foreach (($files ?? []) as $file) {
-                                if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
-                                    continue;
-                                }
-
-                                $googleMyBusinessService->createBusinessLocationMedia([
-                                    'locationAssociation'   => [
-                                        'category'          => 'ADDITIONAL',
-                                    ],
-                                    'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::PHOTO_TYPE,
-                                    'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
-                                ]);
                             }
 
-                            $scheduledMedia->forceDelete();
+                            $scheduledMedia->update([
+                                ScheduledMedia::FILES_COLUMN        => array_shift($files),
+                                ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
+                            ]);
+
+                            DB::commit();
+
+                            Storage::delete($file[ScheduledMedia::PATH]);
                         } catch (Throwable $e) {
+                            DB::rollBack();
+
                             $scheduledMedia->update([
                                 ScheduledMedia::STATE_COLUMN     => ScheduledMedia::REJECTED_STATE,
                                 ScheduledMedia::REASON_COLUMN    => $e->getMessage(),
