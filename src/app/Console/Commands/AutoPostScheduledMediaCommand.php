@@ -85,7 +85,20 @@ class AutoPostScheduledMediaCommand extends Command
                             );
 
                             $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
-
+                            switch ($request->input(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
+                                case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt->addDay();
+        
+                                    break;
+                                case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt->addDays(3);
+        
+                                    break;
+                                case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt->addWeek();
+        
+                                    break;
+                            }//TODO
                             foreach (($files ?? []) as $file) {
                                 if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                                     continue;
