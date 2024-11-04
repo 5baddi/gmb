@@ -103,7 +103,7 @@ class UploadMediaController extends DashboardController
             });
         } catch (Throwable $e){
             DB::rollBack();
-
+dd($e);
             AppLogger::error(
                 $e,
                 'scheduled-media:upload-new-media',
