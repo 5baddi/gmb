@@ -16,6 +16,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
@@ -39,12 +40,9 @@ class UploadMediaController extends DashboardController
             DB::beginTransaction();
 
             if (Str::isUuid($request->input('id'))) {
-                $existsScheduledMedia = ScheduledMedia::query()
-                    ->find($request->input('id'));
-
-                $oldFiles = $existsScheduledMedia?->files ?? [];
-                    
-                $existsScheduledMedia?->forceDelete();
+                ScheduledMedia::query()
+                    ->find($request->input('id'))
+                    ?->forceDelete();
             }
 
             $isInstantly = empty($request->input('scheduled_date'));
@@ -67,7 +65,7 @@ class UploadMediaController extends DashboardController
                 }
 
                 $fileName = sprintf('%d_%s', time(), $file->getClientOriginalName());
-                $file->move(public_path('uploads'), $fileName);
+                $file->move(Storage::path('uploads'), $fileName);
 
                 $type = explode('/', $file->getClientMimeType())[0] ?? null;
 

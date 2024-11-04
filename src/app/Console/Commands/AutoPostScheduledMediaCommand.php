@@ -97,7 +97,6 @@ class AutoPostScheduledMediaCommand extends Command
                             }
 
                             $file = Arr::first($files, null, []);
-                            dd(Storage::exists($file[ScheduledMedia::PATH]));
                             if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                                 $scheduledMedia->update([
                                     ScheduledMedia::FILES_COLUMN => Arr::forget($files, array_key_first($files)),

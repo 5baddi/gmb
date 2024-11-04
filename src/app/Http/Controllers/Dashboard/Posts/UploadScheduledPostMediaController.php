@@ -11,6 +11,7 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts;
 use Throwable;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Models\ScheduledPostMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
@@ -41,7 +42,7 @@ class UploadScheduledPostMediaController extends DashboardController
                 }
 
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
-                $file->move(public_path('uploads'), $fileName);
+                $file->move(Storage::path('uploads'), $fileName);
 
                 ScheduledPostMedia::query()
                     ->firstOrCreate(
