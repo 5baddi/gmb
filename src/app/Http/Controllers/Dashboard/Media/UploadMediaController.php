@@ -96,7 +96,7 @@ class UploadMediaController extends DashboardController
             DB::commit();
 
             array_walk($oldFiles, function ($file) {
-                if (! Arr::has($file, [ScheduledMedia::PATH]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
+                if (! Arr::has($file, [ScheduledMedia::PATH]) || ! Storage::exists(Storage::path($file[ScheduledMedia::PATH]))) {
                     return;
                 }
     

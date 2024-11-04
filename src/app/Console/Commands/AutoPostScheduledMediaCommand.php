@@ -91,14 +91,18 @@ class AutoPostScheduledMediaCommand extends Command
                             if (empty($files ?? [])) {
                                 $scheduledMedia->forceDelete();
 
+                                DB::commit();
+
                                 return true;
                             }
 
                             $file = Arr::first($files, null, []);
-                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
+                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists(Storage::path($file[ScheduledMedia::PATH]))) {
                                 $scheduledMedia->update([
                                     ScheduledMedia::FILES_COLUMN => array_shift($files),
                                 ]);
+
+                                DB::commit();
 
                                 return true;
                             }
@@ -143,6 +147,8 @@ class AutoPostScheduledMediaCommand extends Command
                                 ScheduledMedia::STATE_COLUMN     => ScheduledMedia::REJECTED_STATE,
                                 ScheduledMedia::REASON_COLUMN    => $e->getMessage(),
                             ]);
+
+                            DB::commit();
                         }
 
                         return true;
