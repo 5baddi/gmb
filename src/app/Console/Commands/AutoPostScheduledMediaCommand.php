@@ -109,7 +109,7 @@ class AutoPostScheduledMediaCommand extends Command
                                 }
 
                                 $scheduledMedia->update([
-                                    ScheduledMedia::FILES_COLUMN => $files,
+                                    ScheduledMedia::FILES_COLUMN => array_values($files),
                                 ]);
 
                                 DB::commit();
@@ -153,7 +153,7 @@ class AutoPostScheduledMediaCommand extends Command
                             }
 
                             $scheduledMedia->update([
-                                ScheduledMedia::FILES_COLUMN        => $files,
+                                ScheduledMedia::FILES_COLUMN        => array_values($files),
                                 ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
                             ]);
 
