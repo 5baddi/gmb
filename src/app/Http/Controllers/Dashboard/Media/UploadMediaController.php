@@ -10,14 +10,12 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Media;
 
 use Throwable;
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
@@ -68,7 +66,7 @@ class UploadMediaController extends DashboardController
                     continue;
                 }
 
-                $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
+                $fileName = sprintf('%d_%s', time(), $file->getClientOriginalName());
                 $file->move(public_path('uploads'), $fileName);
 
                 $type = explode('/', $file->getClientMimeType())[0] ?? null;
@@ -94,14 +92,6 @@ class UploadMediaController extends DashboardController
                 ]);
 
             DB::commit();
-
-            array_walk($oldFiles, function ($file) {
-                if (! Arr::has($file, [ScheduledMedia::PATH]) || ! Storage::exists(Storage::path($file[ScheduledMedia::PATH]))) {
-                    return;
-                }
-    
-                Storage::delete($file);
-            });
         } catch (Throwable $e){
             DB::rollBack();
 
