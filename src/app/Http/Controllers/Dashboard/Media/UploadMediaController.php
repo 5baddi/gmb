@@ -65,7 +65,7 @@ class UploadMediaController extends DashboardController
                 }
 
                 $fileName = sprintf('%d_%s', time(), $file->getClientOriginalName());
-                $file->move(Storage::path('uploads'), $fileName);
+                $file->storePubliclyAs(Storage::path('uploads'), $fileName);
 
                 $type = explode('/', $file->getClientMimeType())[0] ?? null;
 

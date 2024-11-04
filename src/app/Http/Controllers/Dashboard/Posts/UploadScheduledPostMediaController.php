@@ -42,7 +42,7 @@ class UploadScheduledPostMediaController extends DashboardController
                 }
 
                 $fileName = sprintf('%d%d_%s', time(), rand(1,99), $file->getClientOriginalName());
-                $file->move(Storage::path('uploads'), $fileName);
+                $file->storePubliclyAs(Storage::path('uploads'), $fileName);
 
                 ScheduledPostMedia::query()
                     ->firstOrCreate(
