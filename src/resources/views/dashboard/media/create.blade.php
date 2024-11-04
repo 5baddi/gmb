@@ -110,6 +110,8 @@
                 $('#upload-media-btn').on("click", function (e) {
                     e.preventDefault();
 
+                    $('#upload-media-btn').attr('disabled', true);
+
                     myDropzone.processQueue();
                 });
 
@@ -122,6 +124,8 @@
                 });
                 
                 this.on('successmultiple', function(files, response) {
+                    $('#upload-media-btn').attr('disabled', false);
+
                     // Check if all files have been uploaded
                     if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                         // Clear all files from the form
@@ -143,6 +147,8 @@
                 });
                 
                 this.on('errormultiple', function(files, response) {
+                    $('#upload-media-btn').attr('disabled', false);
+
                     alert("{{ trans('global.unsupported_file_format') }}");
                 });
             }
