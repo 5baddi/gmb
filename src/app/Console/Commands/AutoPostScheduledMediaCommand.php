@@ -98,13 +98,19 @@ class AutoPostScheduledMediaCommand extends Command
 
                             $file = Arr::first($files, null, []);
                             if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! File::exists(public_path($file[ScheduledMedia::PATH]))) {
-                                $scheduledMedia->update([
-                                    ScheduledMedia::FILES_COLUMN => Arr::forget($files, array_key_first($files)),
-                                ]);
+                                Arr::forget($files, array_key_first($files));
 
                                 if (sizeof($files) === 0) {
                                     $scheduledMedia->delete();
+
+                                    DB::commit();
+
+                                    return true;
                                 }
+
+                                $scheduledMedia->update([
+                                    ScheduledMedia::FILES_COLUMN => $files,
+                                ]);
 
                                 DB::commit();
 
@@ -136,8 +142,18 @@ class AutoPostScheduledMediaCommand extends Command
                                     break;
                             }
 
+                            Arr::forget($files, array_key_first($files));
+
+                            if (sizeof($files) === 0) {
+                                $scheduledMedia->delete();
+
+                                DB::commit();
+
+                                return true;
+                            }
+
                             $scheduledMedia->update([
-                                ScheduledMedia::FILES_COLUMN        => Arr::forget($files, array_key_first($files)),
+                                ScheduledMedia::FILES_COLUMN        => $files,
                                 ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
                             ]);
 
