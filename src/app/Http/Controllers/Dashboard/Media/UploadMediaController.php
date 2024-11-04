@@ -27,6 +27,7 @@ class UploadMediaController extends DashboardController
     public function __invoke(ScheduledMediaRequest $request): void
     {
         $files = $request->file('file', []);
+        $oldFiles = [];
             
         abort_if(empty($files), Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -94,7 +95,7 @@ class UploadMediaController extends DashboardController
 
             DB::commit();
 
-            array_walk($oldFiles ?? [], function ($file) {
+            array_walk($oldFiles, function ($file) {
                 if (! Arr::has($file, [ScheduledMedia::PATH]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                     return;
                 }
@@ -103,7 +104,7 @@ class UploadMediaController extends DashboardController
             });
         } catch (Throwable $e){
             DB::rollBack();
-dd($e);
+
             AppLogger::error(
                 $e,
                 'scheduled-media:upload-new-media',
