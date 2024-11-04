@@ -61,7 +61,7 @@
                                                 @endforeach
                                                 @php($moreImagesCount = sizeof($media->files ?? []) - sizeof($files))
                                                 @if($moreImagesCount > 0)
-                                                <span class="avatar avatar-s rounded">+{{  }}</span>
+                                                <span class="avatar avatar-s rounded">+{{ $moreImagesCount }}</span>
                                                 @endif
                                             </div>
                                         </td>
