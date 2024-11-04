@@ -46,7 +46,7 @@ class OpenAIService extends Service
                         'content'   => sprintf('%s: %s', $prompt, $text),
                     ]
                 ],
-                'max_tokens'    => 150,
+                'max_tokens'    => 500,
             ];
 
             if (! empty($userId)) {
