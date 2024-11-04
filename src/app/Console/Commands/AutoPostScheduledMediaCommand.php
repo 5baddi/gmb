@@ -102,6 +102,10 @@ class AutoPostScheduledMediaCommand extends Command
                                     ScheduledMedia::FILES_COLUMN => Arr::forget($files, array_key_first($files)),
                                 ]);
 
+                                if (sizeof($files) === 0) {
+                                    $scheduledMedia->delete();
+                                }
+
                                 DB::commit();
 
                                 return true;
@@ -136,6 +140,10 @@ class AutoPostScheduledMediaCommand extends Command
                                 ScheduledMedia::FILES_COLUMN        => Arr::forget($files, array_key_first($files)),
                                 ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
                             ]);
+
+                            if (sizeof($files) === 0) {
+                                $scheduledMedia->delete();
+                            }
 
                             DB::commit();
                         } catch (Throwable $e) {
