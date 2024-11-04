@@ -89,7 +89,7 @@ class AutoPostScheduledMediaCommand extends Command
 
                             $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
                             $file = Arr::first($files, null, []);
-
+dd($file);
                             if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                                 $scheduledMedia->forceDelete();
 
