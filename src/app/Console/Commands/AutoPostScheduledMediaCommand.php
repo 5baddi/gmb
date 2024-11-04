@@ -96,10 +96,8 @@ class AutoPostScheduledMediaCommand extends Command
 
                             $file = Arr::first($files, null, []);
                             if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
-                                $scheduledMedia->forceDelete();
-
                                 $scheduledMedia->update([
-                                    ScheduledMedia::FILES_COLUMN        => array_shift($files),
+                                    ScheduledMedia::FILES_COLUMN => array_shift($files),
                                 ]);
 
                                 return true;
@@ -109,7 +107,7 @@ class AutoPostScheduledMediaCommand extends Command
                                 'locationAssociation'   => [
                                     'category'          => 'ADDITIONAL',
                                 ],
-                                'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::PHOTO_TYPE,
+                                'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::TYPES[ScheduledMedia::PHOTO_TYPE],
                                 'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
                             ]);
 
