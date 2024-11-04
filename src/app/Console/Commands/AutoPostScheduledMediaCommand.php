@@ -93,7 +93,7 @@ class AutoPostScheduledMediaCommand extends Command
                             if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
                                 $scheduledMedia->forceDelete();
 
-                                continue;
+                                return true;
                             }
 
                             $googleMyBusinessService->createBusinessLocationMedia([
