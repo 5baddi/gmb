@@ -59,7 +59,10 @@
                                                 @endif
                                                 <span class="avatar avatar-s rounded" style="background-image: url({{ asset($file['path'] ?? '#') }})"></span>
                                                 @endforeach
-                                                <span class="avatar avatar-s rounded">+{{ sizeof($media->files ?? []) - sizeof($files) }}</span>
+                                                @php($moreImagesCount = sizeof($media->files ?? []) - sizeof($files))
+                                                @if($moreImagesCount > 0)
+                                                <span class="avatar avatar-s rounded">+{{  }}</span>
+                                                @endif
                                             </div>
                                         </td>
                                         <td>{{ $media->scheduled_at?->setTimezone(session('timezone', 'UTC'))->format('d M Y H:i') }}
