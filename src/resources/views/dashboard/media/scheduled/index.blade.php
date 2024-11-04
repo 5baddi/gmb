@@ -1,5 +1,6 @@
 @php
     use Illuminate\Support\Str;
+    use Illuminate\Support\Facades\Storage;
     use BADDIServices\ClnkGO\Models\ScheduledPost;
 @endphp
 
@@ -52,12 +53,12 @@
                                         <td>{{ trans(sprintf('global.%s', $media->scheduled_frequency ?? 'instantly')) }}</td>
                                         <td>
                                             <div class="avatar-list avatar-list-stacked">
-                                                @php($files = array_slice($media->files, 0, 5))
+                                                @php($files = array_slice($media->files ?? [], 0, 5))
                                                 @foreach ($files as $file)
                                                 @if(($file['type'] ?? '') !== 'photo')
                                                 @continue
                                                 @endif
-                                                <span class="avatar avatar-s rounded" style="background-image: url({{ asset($file['path'] ?? '#') }})"></span>
+                                                <span class="avatar avatar-s rounded" style="background-image: url({{ Storage::get($file['path'] ?? '#') }})"></span>
                                                 @endforeach
                                                 <span class="avatar avatar-s rounded">+{{ sizeof($media->files ?? []) - sizeof($files) }}</span>
                                             </div>
