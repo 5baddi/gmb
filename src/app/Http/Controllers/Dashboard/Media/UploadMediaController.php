@@ -16,7 +16,6 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Http\Requests\ScheduledMediaRequest;
 use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
@@ -65,7 +64,7 @@ class UploadMediaController extends DashboardController
                 }
 
                 $fileName = sprintf('%d_%s', time(), $file->getClientOriginalName());
-                $file->storePubliclyAs(Storage::path('uploads'), $fileName);
+                $file->move(public_path('uploads'), $fileName);
 
                 $type = explode('/', $file->getClientMimeType())[0] ?? null;
 

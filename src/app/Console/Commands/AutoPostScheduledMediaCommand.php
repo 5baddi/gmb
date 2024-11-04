@@ -10,7 +10,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Services\UserService;
 use BADDIServices\ClnkGO\Domains\GoogleService;
@@ -97,7 +97,7 @@ class AutoPostScheduledMediaCommand extends Command
                             }
 
                             $file = Arr::first($files, null, []);
-                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! Storage::exists($file[ScheduledMedia::PATH])) {
+                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! File::exists(public_path($file[ScheduledMedia::PATH]))) {
                                 $scheduledMedia->update([
                                     ScheduledMedia::FILES_COLUMN => Arr::forget($files, array_key_first($files)),
                                 ]);
