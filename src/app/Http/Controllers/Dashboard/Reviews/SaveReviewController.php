@@ -67,7 +67,7 @@ class SaveReviewController extends DashboardController
         }
 
         $choices = $this->openAIService->generateTextCompletions(
-            trans('dashboard.review_reply_prompt'),
+            trans('global.review_reply_prompt'),
             $request->input('review'),
             $this->user->getId()
         );

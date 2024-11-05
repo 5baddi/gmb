@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @if(sizeof($posts) > 0)
+    @if(sizeof($posts ?? []) > 0)
         <div class="row row-cards row-deck" id="posts-container">
             @include('dashboard.posts.partials.gallery')
         </div>
@@ -24,11 +24,13 @@
                             <path d="M12 5l0 14"/>
                             <path d="M5 12l14 0"/>
                         </svg>
-                        &nbsp;Charger plus
+                        &nbsp;{{ trans('global.load_more') }}
                     </a>
                 </div>
             </div>
         @endif
+    @else
+    @include('dashboard.errors.empty')
     @endif
 @endsection
 

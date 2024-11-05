@@ -15,7 +15,7 @@
 @section('content')
 <div class="row row-cards">
     <div class="col-12">
-        <form class="card" method="POST" action="{{ route('dashboard.scheduled-posts.save', ['type' => $type]) }}" enctype="multipart/form-data">
+        <form class="card" method="POST" action="{{ route('dashboard.scheduled.posts.save', ['type' => $type]) }}" enctype="multipart/form-data">
             @csrf
             <input name="id" value="{{ $id }}" hidden/>
             <div class="card-header">
@@ -38,10 +38,16 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Résumé&nbsp;<span class="form-label-description" id="summary-length">0/1500</span></label>
-                    <textarea name="summary" maxlength="1500" onkeyup="calculateTextLength(event, '#summary-length', '/1500')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="Summary">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
+                    <textarea name="summary" maxlength="1500" onkeyup="calculateTextLength(event, '#summary-length', '/1500')" class="form-control @if ($errors->has('summary')) is-invalid @endif" rows="5" placeholder="{{ trans('global.enter_your_topic') }}">{{ $scheduledPost?->summary ?? old('summary') }}</textarea>
                     @if ($errors->has('summary'))
                         <div class="invalid-feedback">{{ $errors->first('summary') }}</div>
                     @endif
+                    <div class="mt-3">
+                        <button type="button" id="generate-summary" class="btn btn-pill btn-default">
+                            <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-wand"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 21l15 -15l-3 -3l-15 15l3 3" /><path d="M15 6l3 3" /><path d="M9 3a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /><path d="M19 13a2 2 0 0 0 2 2a2 2 0 0 0 -2 2a2 2 0 0 0 -2 -2a2 2 0 0 0 2 -2" /></svg>
+                            &nbsp;{{ trans('global.generate') }}
+                        </button>
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-4">
@@ -83,14 +89,14 @@
                                 <div class="row">
                                     <div class="col-8">
                                         <label class="form-label">{{ trans('global.scheduled_date') }}</label>
-                                        <input type="date" name="scheduled_date" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ old('scheduled_date') }}"/>
+                                        <input type="date" name="scheduled_date" min="{{ date('Y-m-d', time()) }}" class="form-control @if ($errors->has('scheduled_date')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('Y-m-d') ?? old('scheduled_date') }}"/>
                                         @if ($errors->has('scheduled_date'))
                                             <div class="invalid-feedback">{{ $errors->first('scheduled_date') }}</div>
                                         @endif
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label">{{ trans('global.scheduled_time') }}</label>
-                                        <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ old('scheduled_time') }}"/>
+                                        <input type="time" name="scheduled_time" class="form-control @if ($errors->has('scheduled_time')) is-invalid @endif" value="{{ $scheduledPost?->scheduled_at?->format('H:i') ?? old('scheduled_time') }}"/>
                                         @if ($errors->has('scheduled_time'))
                                             <div class="invalid-feedback">{{ $errors->first('scheduled_time') }}</div>
                                         @endif
@@ -119,26 +125,27 @@
 @section('script')
     document.addEventListener("DOMContentLoaded", async () => {
         let dropzoneInstance = new Dropzone("#upload-scheduled-post-media", {
-            url: '{{ route('dashboard.scheduled-posts.upload.media', ['id' => $id]) }}',
+            url: '{{ route('dashboard.scheduled.posts.upload.media', ['id' => $id]) }}',
             dictRemoveFile: '{{ trans('global.remove_file') }}',
-            dictCancelUpload: 'Annuler le téléchargement',
-            dictCancelUploadConfirmation: 'Êtes-vous sûr de vouloir annuler ce téléchargement ?',
+            dictCancelUpload: '{{ trans('global.cancel_upload') }}',
+            dictCancelUploadConfirmation: '{{ trans('global.confirm_cancel_upload') }}',
             addRemoveLinks: true,
             uploadMultiple: true,
             acceptedFiles: 'image/jpeg, image/png, image/gif, image/bmp, image/tiff, image/webp, video/mp4, video/quicktime, video/x-msvideo, video/mpeg, video/x-ms-wmv',
             headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             init: function () {
                 this.on('removedfile', function(file) {
                     fetch(
-                        '{{ route('dashboard.scheduled-posts.delete.media', ['id' => $id]) }}',
+                        '{{ route('dashboard.scheduled.posts.delete.media', ['id' => $id]) }}',
                         {
                             method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': $('input[name="_token"]').val()
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
                             },
+                            credentials: 'same-origin',
                             body: JSON.stringify({ filename: file.name })
                         }
                     );
@@ -154,6 +161,10 @@
         let urls = {!! json_encode(array_map(fn ($media) => $media['url'] ?? '#', $scheduledPost?->media->toArray() ?? [])) !!};
 
         for (const url of urls) {
+            if (typeof url !== 'string' || url.length === 0) {
+                continue;
+            }
+            
             try {
                 let response = await fetch(url);
                 let blob = await response.blob();
@@ -163,5 +174,54 @@
                 dropzoneInstance.addFile(file);
             } catch {}
         }
+
+        $('#generate-summary').on('click', async () => {
+            try {
+                let topic = $('textarea[name=summary]textarea[name=summary]').val();
+                if (topic.length === 0) {
+                    alert("{{ trans('global.missing_gmb_post_summary') }}");
+
+                    return;
+                }
+
+                $('textarea[name=summary]').attr('disabled', true);
+                $('#generate-summary').attr('disabled', true);
+
+                let response = await fetch(
+                    '{{ route('dashboard.ai.generate.text') }}',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({
+                            prompt: '{{ trans('global.generate_gmb_post_summary_prompt') }}',
+                            topic 
+                        })
+                    }
+                );
+
+                $('textarea[name=summary]').attr('disabled', false);
+                $('#generate-summary').attr('disabled', false);
+
+                if (! response.ok) {
+                    alert("{{ trans('global.unable_generate_gmb_post_summary') }}");
+
+                    return;
+                }
+
+                let data = await response.json();
+
+                $('textarea[name=summary]').val(data.text || '');
+                $('textarea[name=summary]').trigger('keyup');
+            } catch (error) {
+                $('textarea[name=summary]').attr('disabled', false);
+                $('#generate-summary').attr('disabled', false);
+
+                alert("{{ trans('global.unable_generate_gmb_post_summary') }}");
+            }
+        });
     })
 @endsection

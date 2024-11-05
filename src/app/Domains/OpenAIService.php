@@ -21,6 +21,11 @@ class OpenAIService extends Service
 
     public const string TEXT_GENERATION_ENDPOINT = '/v1/chat/completions';
 
+    public const SUPPORTED_PROMPTS = [
+        'review_reply_prompt',
+        'generate_gmb_post_summary_prompt',
+    ];
+
     private Client $client;
 
     public function __construct()
@@ -41,7 +46,7 @@ class OpenAIService extends Service
                         'content'   => sprintf('%s: %s', $prompt, $text),
                     ]
                 ],
-                'max_tokens'    => 150,
+                'max_tokens'    => 500,
             ];
 
             if (! empty($userId)) {

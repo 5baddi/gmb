@@ -5,10 +5,11 @@ namespace App\Console\Commands;
 use Throwable;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Models\ScheduledPost;
 use BADDIServices\ClnkGO\Services\UserService;
@@ -89,8 +90,8 @@ class AutoPostScheduledPostsCommand extends Command
 
                             $media = array_map(function ($file) {
                                 if (
-                                    empty($file[ScheduledPostMedia::TYPE_COLUMN] ?? null)
-                                    || empty($file[ScheduledPostMedia::PATH_COLUMN] ?? null)
+                                    ! Arr::has($file ?? [], [ScheduledPostMedia::TYPE_COLUMN, ScheduledPostMedia::PATH_COLUMN])
+                                    || ! File::exists(public_path($file[ScheduledPostMedia::PATH_COLUMN]))
                                 ) {
                                     return null;
                                 }
@@ -126,7 +127,7 @@ class AutoPostScheduledPostsCommand extends Command
                                     return true;
                                 }
 
-                                Storage::delete($path);
+                                File::delete(public_path($path));
 
                                 $file->forceDelete();
 

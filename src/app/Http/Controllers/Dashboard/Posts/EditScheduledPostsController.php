@@ -10,7 +10,6 @@ namespace BADDIServices\ClnkGO\Http\Controllers\Dashboard\Posts;
 
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Contracts\View\Factory;
@@ -19,7 +18,7 @@ use BADDIServices\ClnkGO\Http\Controllers\DashboardController;
 
 class EditScheduledPostsController extends DashboardController
 {
-    public function __invoke(Request $request, string $type, ?string $id = null): View|Factory
+    public function __invoke(string $type, ?string $id = null): View|Factory
     {
         abort_unless(Arr::has(ScheduledPost::TYPES, $type), Response::HTTP_NOT_FOUND);
 

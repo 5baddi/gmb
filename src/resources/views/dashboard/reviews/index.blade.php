@@ -11,6 +11,7 @@
                 {{ trans('global.reviews') }}
             </h2>
         </div>
+        @if(sizeof($reviews['reviews'] ?? []) > 0)
         <div class="col-auto ms-auto d-print-none">
             <div class="btn-list">
                 <span class="form-check-label">{{ trans('global.answered') }}</span>
@@ -21,12 +22,17 @@
                 </form>
             </div>
         </div>
+        @endif
     </div>
+    @if(sizeof($reviews['reviews'] ?? []) > 0)
     <div class="row row-cards mt-2">
         <div class="space-y" id="reviews-container">
             @include('dashboard.reviews.partials.list')
         </div>
     </div>
+    @else
+    @include('dashboard.errors.empty')
+    @endif
     @if(! empty($reviews['nextPageToken']))
         <input name="gmb_next" type="hidden" value="{{ $reviews['nextPageToken'] }}"/>
         <div class="row mt-3">

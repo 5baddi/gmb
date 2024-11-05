@@ -5,13 +5,16 @@ namespace App\Console\Commands;
 use Throwable;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use BADDIServices\ClnkGO\AppLogger;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Collection;
 use BADDIServices\ClnkGO\Services\UserService;
-use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Domains\GoogleService;
+use BADDIServices\ClnkGO\Models\ScheduledMedia;
 use BADDIServices\ClnkGO\Models\UserGoogleCredentials;
 use BADDIServices\ClnkGO\Domains\GoogleMyBusinessService;
 
@@ -59,6 +62,8 @@ class AutoPostScheduledMediaCommand extends Command
                 ->chunkById(10, function (Collection $scheduledMedias) {
                     $scheduledMedias->each(function (ScheduledMedia $scheduledMedia) {
                         try {
+                            DB::beginTransaction();
+
                             $user = $this->userService->findById(
                                 $scheduledMedia->getAttribute(ScheduledMedia::USER_ID_COLUMN)
                             );
@@ -82,22 +87,90 @@ class AutoPostScheduledMediaCommand extends Command
                                 $scheduledMedia->getAttribute(ScheduledMedia::LOCATION_ID_COLUMN)
                             );
 
+                            $files = $scheduledMedia->getAttribute(ScheduledMedia::FILES_COLUMN);
+                            if (empty($files ?? [])) {
+                                $scheduledMedia->forceDelete();
+
+                                DB::commit();
+
+                                return true;
+                            }
+
+                            $file = Arr::first($files, null, []);
+                            if (! Arr::has($file, [ScheduledMedia::PATH, ScheduledMedia::TYPE]) || ! File::exists(public_path($file[ScheduledMedia::PATH]))) {
+                                Arr::forget($files, array_key_first($files));
+
+                                if (sizeof($files) === 0) {
+                                    $scheduledMedia->delete();
+
+                                    DB::commit();
+
+                                    return true;
+                                }
+
+                                $scheduledMedia->update([
+                                    ScheduledMedia::FILES_COLUMN => array_values($files),
+                                ]);
+
+                                DB::commit();
+
+                                return true;
+                            }
+
                             $googleMyBusinessService->createBusinessLocationMedia([
                                 'locationAssociation'   => [
                                     'category'          => 'ADDITIONAL',
                                 ],
-                                'mediaFormat'           => ScheduledMedia::PHOTO_TYPE,
-                                'sourceUrl'             => URL::asset(
-                                    $scheduledMedia->getAttribute(ScheduledMedia::PATH_COLUMN)
-                                ),
+                                'mediaFormat'           => ScheduledMedia::TYPES[$file[ScheduledMedia::TYPE]] ?? ScheduledMedia::TYPES[ScheduledMedia::PHOTO_TYPE],
+                                'sourceUrl'             => URL::asset($file[ScheduledMedia::PATH]),
                             ]);
 
-                            $scheduledMedia->forceDelete();
+                            $scheduledAt = $scheduledMedia->getAttribute(ScheduledMedia::SCHEDULED_AT_COLUMN);
+
+                            switch ($scheduledMedia->getAttribute(ScheduledMedia::SCHEDULED_FREQUENCY_COLUMN)) {
+                                case ScheduledMedia::DAILY_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt?->addDay();
+        
+                                    break;
+                                case ScheduledMedia::EVERY_3_DAYS_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt?->addDays(3);
+        
+                                    break;
+                                case ScheduledMedia::WEEKLY_SCHEDULED_FREQUENCY:
+                                    $scheduledAt = $scheduledAt?->addWeek();
+        
+                                    break;
+                            }
+
+                            Arr::forget($files, array_key_first($files));
+
+                            if (sizeof($files) === 0) {
+                                $scheduledMedia->delete();
+
+                                DB::commit();
+
+                                return true;
+                            }
+
+                            $scheduledMedia->update([
+                                ScheduledMedia::FILES_COLUMN        => array_values($files),
+                                ScheduledMedia::SCHEDULED_AT_COLUMN => $scheduledAt,
+                            ]);
+
+                            if (sizeof($files) === 0) {
+                                $scheduledMedia->delete();
+                            }
+
+                            DB::commit();
                         } catch (Throwable $e) {
+                            DB::rollBack();
+
                             $scheduledMedia->update([
                                 ScheduledMedia::STATE_COLUMN     => ScheduledMedia::REJECTED_STATE,
                                 ScheduledMedia::REASON_COLUMN    => $e->getMessage(),
                             ]);
+
+                            DB::commit();
                         }
 
                         return true;

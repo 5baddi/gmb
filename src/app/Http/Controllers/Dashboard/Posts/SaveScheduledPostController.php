@@ -29,7 +29,7 @@ class SaveScheduledPostController extends DashboardController
             || empty($this->user->googleCredentials?->getMainLocationId())
         ) {
             return redirect()
-                ->route('dashboard.scheduled-posts.edit', ['type' => $type])
+                ->route('dashboard.scheduled.posts.edit', ['type' => $type])
                 ->with(
                     'alert',
                     new Alert(trans('global.main_location_not_set'))
@@ -110,7 +110,7 @@ class SaveScheduledPostController extends DashboardController
                     ]
                 );
 
-            return redirect()->route('dashboard.scheduled-posts')
+            return redirect()->route('dashboard.scheduled.posts')
                 ->with(
                     'alert',
                     new Alert(
@@ -124,7 +124,7 @@ class SaveScheduledPostController extends DashboardController
             $validationErrors = $exception?->errors ?? [];
 
             $response = redirect()
-                ->route('dashboard.scheduled-posts.edit', ['type' => $type])
+                ->route('dashboard.scheduled.posts.edit', ['type' => $type])
                 ->withErrors($validationErrors)
                 ->withInput();
 
