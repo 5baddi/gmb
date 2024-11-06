@@ -214,7 +214,7 @@
 
                 let data = await response.json();
 
-                $('textarea[name=summary]').val(data.text || '');
+                $('textarea[name=summary]').val(data.text || topic || '');
                 $('textarea[name=summary]').trigger('keyup');
             } catch (error) {
                 $('textarea[name=summary]').attr('disabled', false);
