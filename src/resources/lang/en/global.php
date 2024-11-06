@@ -82,6 +82,6 @@ return [
     'enter_your_topic' => 'Enter your topic',
     'generate_gmb_post_summary_prompt' => 'Write a professional Google My Business summary based on the following topic. The summary should be more than 1500 characters and written in the same language as the topic provided. Ensure the summary is engaging, informative, and highlights key aspects relevant to the topic.',
     'missing_gmb_post_summary' => 'Please enter your topic',
-    'review_reply_prompt' => 'Write a professional reply to the following customer review. The reply should be more than 1500 characters and written in the same language as the review. Ensure the response is respectful, addresses any concerns raised, and highlights the positive aspects of the customer\'s experience.',
+    'review_reply_prompt' => 'Write a professional reply to the following customer review. The reply should be less than or equal 1500 characters and written in the same language as the review. Ensure the response is respectful, addresses any concerns raised, and highlights the positive aspects of the customer\'s experience.',
     'unable_generate_gmb_post_summary' => 'Unable to generate a summary. please try with another topic',
 ];
